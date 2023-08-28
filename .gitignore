@@ -35,6 +35,7 @@ appsettings.Production.json
 *.sln.docstates
 *.resharper
 *.vscode
+.vs/*
 
 # Backup and temp files
 *~
