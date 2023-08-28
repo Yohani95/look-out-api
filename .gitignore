@@ -1,0 +1,42 @@
+# .NET 6 Core and Entity Framework project specific .gitignore
+
+# Binaries
+bin/
+obj/
+publish/
+
+# Entity Framework Migrations
+Migrations/
+
+# User-specific files
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+*.config
+
+# Logs and trace files
+*.log
+*.trace
+*.pid
+
+# NuGet packages
+.nuget/
+*.nuget.*
+/packages/
+
+# Temp files
+[Tt]emp/
+[Oo]bj/
+[Cc]ache/
+
+# Visual Studio and JetBrains files
+*.suo
+*.user
+*.sln.docstates
+*.resharper
+*.vscode
+
+# Backup and temp files
+*~
+*#
+.#*
