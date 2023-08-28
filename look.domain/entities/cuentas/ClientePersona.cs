@@ -1,6 +1,7 @@
 ﻿using look.domain.entities.admin;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
@@ -10,6 +11,8 @@ namespace look.domain.entities.cuentas
 {
     public class ClientePersona
     {
+        [Key]
+        public long MyRowId { get; set; }
         public int? CliId { get; set; }
 
         public int? PerId { get; set; }

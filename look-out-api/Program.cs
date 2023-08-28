@@ -10,6 +10,8 @@ using System.Reflection;
 using YourNamespace.Configuration;
 using look.Application.interfaces;
 using look.domain.interfaces;
+using look.Application.services;
+using look.domain.interfaces.unitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<LookDbContext>(options =>
@@ -23,7 +25,7 @@ builder.Services.AddDbContext<LookDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices();
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 //builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 

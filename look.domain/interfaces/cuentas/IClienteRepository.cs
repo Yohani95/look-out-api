@@ -9,6 +9,7 @@ namespace look.domain.interfaces.cuentas
 {
     public interface IClienteRepository:IRepository<Cliente>
     {
-        Task<List<Cliente>> GetAllWithEntites();
+        Task<List<Cliente>> GetAllWithEntities();
+        Task<Boolean> CreateWithEntities(Cliente cliente);
     }
 }

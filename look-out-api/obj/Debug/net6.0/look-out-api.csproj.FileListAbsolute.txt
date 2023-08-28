@@ -49,3 +49,7 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\refint\loo
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.pdb
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.genruntimeconfig.cache
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\ref\look-out-api.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.MvcApplicationPartsAssemblyInfo.cs

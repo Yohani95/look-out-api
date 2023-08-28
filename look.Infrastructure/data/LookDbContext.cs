@@ -348,11 +348,16 @@ namespace look.Infrastructure.data
                     .HasNoKey()
                     .ToTable("cliente_persona");
 
+                entity.HasKey(e => e.MyRowId); // Debes definir esta propiedad en tu clase ClientePersona
+
                 entity.HasIndex(e => e.CarId, "FK_cliente_persona_Car");
-
                 entity.HasIndex(e => e.CliId, "FK_cliente_persona_Cliente");
-
                 entity.HasIndex(e => e.PerId, "FK_cliente_persona_Persona");
+
+                entity.Property(e => e.MyRowId)
+                    .HasColumnType("bigint unsigned") // Asegúrate que el tipo de datos sea el mismo que en la base de datos
+                    .HasColumnName("my_row_id")
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CarId)
                     .HasColumnType("int(11)")

@@ -17,7 +17,12 @@ namespace look.Infrastructure.repository.Cuentas
         {
         }
 
-        public async Task<List<Cliente>> GetAllWithEntites()
+        public Task<bool> CreateWithEntities(Cliente cliente)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Cliente>> GetAllWithEntities()
         {
             return await _dbContext.Cliente
                        .Include(c => c.EstadoCliente)

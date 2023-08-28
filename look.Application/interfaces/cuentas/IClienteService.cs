@@ -1,4 +1,5 @@
 ﻿using look.Application.services;
+using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using Microsoft.AspNetCore.Mvc;
 using System;
