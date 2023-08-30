@@ -1,5 +1,6 @@
 ﻿using look.Application.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace look_out_api.Controllers
 {

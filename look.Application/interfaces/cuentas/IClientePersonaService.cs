@@ -1,4 +1,5 @@
-﻿using look.domain.entities.cuentas;
+﻿using look.domain.entities.Common;
+using look.domain.entities.cuentas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace look.Application.interfaces.cuentas
 {
     public interface IClientePersonaService:IService<ClientePersona>
     {
+        Task<List<ClientePersona>> FindByClient(int id);
+        Task DeleteByClient(int id);
     }
 }

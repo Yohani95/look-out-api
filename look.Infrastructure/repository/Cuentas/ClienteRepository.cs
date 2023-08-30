@@ -31,5 +31,6 @@ namespace look.Infrastructure.repository.Cuentas
                         .ThenInclude(p => p.Lenguaje)
                         .Include(c => c.SectorComercial).ToListAsync();
         }
+     
     }
 }

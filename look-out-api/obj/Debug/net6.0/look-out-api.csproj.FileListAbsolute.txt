@@ -1,9 +1,3 @@
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.csproj.AssemblyReference.cache
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.AssemblyInfoInputs.cache
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.AssemblyInfo.cs
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.csproj.CoreCompileInputs.cache
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\appsettings.json
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look-out-api.exe
@@ -11,6 +5,7 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look-out-a
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look-out-api.runtimeconfig.json
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look-out-api.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look-out-api.pdb
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
@@ -19,12 +14,14 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.OpenApi.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\MySqlConnector.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -35,6 +32,13 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look.Infra
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look.Application.pdb
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look.Infrastructure.pdb
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\look.domain.pdb
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.csproj.AssemblyReference.cache
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.AssemblyInfoInputs.cache
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.AssemblyInfo.cs
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.csproj.CoreCompileInputs.cache
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\staticwebassets\msbuild.look-out-api.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\staticwebassets\msbuild.build.look-out-api.props
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.look-out-api.props
@@ -49,7 +53,5 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\refint\loo
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.pdb
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.genruntimeconfig.cache
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\ref\look-out-api.dll
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Newtonsoft.Json.dll
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Serilog.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Serilog.Sinks.File.dll

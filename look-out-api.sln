@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "look-out-api", "look-out-api\look-out-api.csproj", "{EF11D5A1-3B00-467C-9BF2-55B54BD68536}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "look-out-api", "look-out-api\look-out-api.csproj", "{EF11D5A1-3B00-467C-9BF2-55B54BD68536}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "look.domain", "look.domain\look.domain.csproj", "{3740E313-FF40-413D-9D63-4C4FD430ABF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "look.domain", "look.domain\look.domain.csproj", "{3740E313-FF40-413D-9D63-4C4FD430ABF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "look.Application", "look.Application\look.Application.csproj", "{DCA6805E-6F81-43F7-BAB4-BA6B6F1B0456}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "look.Application", "look.Application\look.Application.csproj", "{DCA6805E-6F81-43F7-BAB4-BA6B6F1B0456}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "look.Infrastructure", "look.Infrastructure\look.Infrastructure.csproj", "{8215F4D5-D4B8-4EE2-94A1-B606C61C64F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "look.Infrastructure", "look.Infrastructure\look.Infrastructure.csproj", "{8215F4D5-D4B8-4EE2-94A1-B606C61C64F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

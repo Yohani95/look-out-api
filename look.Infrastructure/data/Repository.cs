@@ -18,10 +18,11 @@ namespace MyApp.Infrastructure.Data
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            var entry = await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+            return entry.Entity; 
         }
 
         public async Task UpdateAsync(T entity)

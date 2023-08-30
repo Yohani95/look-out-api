@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "v58cSAG3xwe3rH/WER1NZArd6wkiIENr+zQgAOPEj4Ze4P0gmGcJeq4UhY6QtjA3/TyV1k66zYn5rQOp4pgovA==",
+  "dgSpecHash": "c6AmRPPlNcGaOQ2YJKI/ovmLXiLn64v3ZIKr8/2wqEGCDNIJL+eHP5jzruXQXF+lic8l9M8USwPqPK9hmefiAg==",
   "success": true,
   "projectFilePath": "C:\\Users\\KPaz\\source\\repos\\look-out-api\\look-out-api\\look-out-api.csproj",
   "expectedPackageFiles": [
@@ -48,6 +48,8 @@
     "C:\\Users\\KPaz\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512",
     "C:\\Users\\KPaz\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\7.0.0\\pomelo.entityframeworkcore.mysql.7.0.0.nupkg.sha512",
     "C:\\Users\\KPaz\\.nuget\\packages\\runtime.native.system\\4.0.0\\runtime.native.system.4.0.0.nupkg.sha512",
+    "C:\\Users\\KPaz\\.nuget\\packages\\serilog\\3.0.1\\serilog.3.0.1.nupkg.sha512",
+    "C:\\Users\\KPaz\\.nuget\\packages\\serilog.sinks.file\\5.0.0\\serilog.sinks.file.5.0.0.nupkg.sha512",
     "C:\\Users\\KPaz\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\KPaz\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\KPaz\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",

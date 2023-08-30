@@ -16,10 +16,10 @@ namespace look_out_api.Controllers.admin
         {
             _personaService = service;
         }
-        [HttpGet("kam/{id}")]
+        [HttpGet("tipoPersona/{id}")]
         public async Task<ActionResult<IEnumerable<Persona>>> GetPersonaByKam(int id)
         {
-            var persona = await _personaService.GetAllByType(2);
+            var persona = await _personaService.GetAllByType(id);
 
             if (persona == null)
             {

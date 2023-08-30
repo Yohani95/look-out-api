@@ -1,0 +1,15 @@
+2023-08-30 00:01:45.663 -04:00 [INF]   Iniciando Servicio de Backend . net 6 look-out
+2023-08-30 00:01:45.757 -04:00 [INF]   Cargando inyección de dependencias
+2023-08-30 00:01:45.811 -04:00 [INF]   Esperando Solicitudes.....
+2023-08-30 00:11:10.971 -04:00 [INF]   Solicitud Delete ClienteId: 436
+2023-08-30 00:11:50.316 -04:00 [INF]   Solicitud Delete ClienteId: 436
+2023-08-30 00:44:39.473 -04:00 [INF]   Iniciando Servicio de Backend . net 6 look-out
+2023-08-30 00:44:39.567 -04:00 [INF]   Cargando inyección de dependencias
+2023-08-30 00:44:39.623 -04:00 [INF]   Esperando Solicitudes.....
+2023-08-30 00:45:28.457 -04:00 [INF]   Iniciando Servicio de Backend . net 6 look-out
+2023-08-30 00:45:28.530 -04:00 [INF]   Cargando inyección de dependencias
+2023-08-30 00:45:28.543 -04:00 [INF]   Esperando Solicitudes.....
+2023-08-30 00:57:53.789 -04:00 [INF]   Solicitud Delete ClienteId: 436
+2023-08-30 14:44:50.268 -04:00 [INF]   Solicitud Delete ClienteId: 14
+2023-08-30 14:45:15.302 -04:00 [INF]   Solicitud Delete ClienteId: 14
+2023-08-30 14:45:37.472 -04:00 [INF]   Solicitud Delete ClienteId: 14

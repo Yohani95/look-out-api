@@ -12,7 +12,7 @@ namespace look.domain.entities.cuentas
     public class ClientePersona
     {
         [Key]
-        public long MyRowId { get; set; }
+        public int MyRowId { get; set; }
         public int? CliId { get; set; }
 
         public int? PerId { get; set; }

@@ -3,6 +3,7 @@ using look.Application.services.admin;
 using look.domain.entities.admin;
 using look.domain.interfaces.admin;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,6 +23,7 @@ namespace look_out_api.Controllers.admin
         [HttpGet]
         public async Task<IActionResult> GetAllUsuarios()
         {
+            Log.Information("Solicitud GetAll usuarios");
             var usuarios = await _usuarioService.ListComplete();
             return Ok(usuarios);
         }

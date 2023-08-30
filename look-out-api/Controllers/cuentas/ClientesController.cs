@@ -3,6 +3,7 @@ using look.Application.interfaces.cuentas;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace look_out_api.Controllers.cuentas
 {
@@ -27,10 +28,11 @@ namespace look_out_api.Controllers.cuentas
 
             return persona;
         }
-        [HttpPost("CreateWithEntities/{idPerson}")]
-        public async Task<IActionResult> CreateWithEntities(Cliente cliente, int idPerson)
+        [HttpPost("CreateWithEntities")]
+        public async Task<IActionResult> CreateWithEntities(ClienteWithIds clienteWithIds)
         {
-            var result = await _clienteService.CreateWithEntities(cliente, idPerson);
+            Log.Information(clienteWithIds.ToString());
+            var result = await _clienteService.CreateWithEntities(clienteWithIds.Cliente, clienteWithIds.IdPerson);
 
             switch (result.MessageCode)
             {
@@ -43,6 +45,60 @@ namespace look_out_api.Controllers.cuentas
                 default:
                     return StatusCode(500, result);
             }
+        }
+        [HttpPut("UpdateWithEntities/{id}")]
+        public async Task<IActionResult> UpdateWithEntities(int id,ClienteWithIds clienteWithIds)
+        {
+            Log.Information("Solicitud Delete ClienteId: " + id);
+            var result = await _clienteService.EditWithEntities(id,clienteWithIds.Cliente, clienteWithIds.IdPerson);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        [HttpDelete("DeleteWithEntities/{id}")]
+        public async Task<IActionResult> DeleteWithEntities(int id)
+        {
+            Log.Information("Solicitud Delete ClienteId: "+id);
+            var client = await _clienteService.GetByIdAsync(id);
+            if(client == null)
+            {
+                return NotFound(id);
+            }
+            var result = await _clienteService.DeleteWithEntities(client);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+
+        [HttpGet("GetAllWithContactAndKam/{clientId}")]
+        public async Task<IActionResult> GetAllWithContactAndKam(int clientId)
+        {
+            ResponseGeneric<List<int>> response = await _clienteService.GetAllWithContactandKam(clientId);
+
+            if (!response.serviceResult.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }
 
         protected override int GetEntityId(Cliente entity)

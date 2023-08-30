@@ -9,5 +9,7 @@ namespace look.domain.interfaces.cuentas
 {
     public interface IClientePersonaRepository:IRepository<ClientePersona>
     {
+        Task DeleteByClient(int id);
+        Task<List<ClientePersona>> FindByClient(int id);
     }
 }

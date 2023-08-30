@@ -174,7 +174,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.EclId, "FK_ecl_cl");
 
                 entity.Property(e => e.CliId)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnType("int(11)")
                     .HasColumnName("cli_id");
                 entity.Property(e => e.CliDescripcion)
@@ -198,6 +198,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.SecId)
                     .HasColumnType("int(11)")
                     .HasColumnName("sec_id");
+                entity.Property(e => e.CliNif)
+                   .HasMaxLength(100)
+                   .HasColumnName("cli_nif");
 
                 entity.HasOne(d => d.EstadoCliente).WithMany()
                     .HasForeignKey(d => d.EclId)
@@ -344,19 +347,18 @@ namespace look.Infrastructure.data
             });
             modelBuilder.Entity<ClientePersona>(entity =>
             {
-                entity
-                    .HasNoKey()
-                    .ToTable("cliente_persona");
+                    entity.HasKey(e => e.MyRowId).HasName("PRIMARY");
+                entity.ToTable("cliente_persona");
 
-                entity.HasKey(e => e.MyRowId); // Debes definir esta propiedad en tu clase ClientePersona
+                entity.HasKey(e => e.MyRowId); 
 
                 entity.HasIndex(e => e.CarId, "FK_cliente_persona_Car");
                 entity.HasIndex(e => e.CliId, "FK_cliente_persona_Cliente");
                 entity.HasIndex(e => e.PerId, "FK_cliente_persona_Persona");
 
                 entity.Property(e => e.MyRowId)
-                    .HasColumnType("bigint unsigned") // Asegúrate que el tipo de datos sea el mismo que en la base de datos
-                    .HasColumnName("my_row_id")
+                    .HasColumnType("int(11)") //  tipo de datos sea el mismo que en la base de datos
+                    .HasColumnName("id")
                     .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CarId)
