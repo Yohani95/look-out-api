@@ -1,0 +1,2 @@
+2023-08-31 00:01:12.864 -04:00 [INF]   look.domain.entities.cuentas.ClienteWithIds
+2023-08-31 00:38:26.611 -04:00 [INF]   Solicitud Delete ClienteId: 14

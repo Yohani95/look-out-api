@@ -36,5 +36,6 @@ namespace look.domain.entities.cuentas
         public virtual Pais? Pais { get; set; } = null!;
 
         public virtual SectorComercial? SectorComercial { get; set; }
+
     }
 }

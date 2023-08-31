@@ -13,10 +13,11 @@ namespace look.Application.interfaces.cuentas
     public interface IClienteService:IService<Cliente>
     {
         Task<List<Cliente>> GetAllWithEntities();
-        Task<ServiceResult> CreateWithEntities(Cliente cliente,List<int> idPerson);
+        Task<ServiceResult> CreateWithEntities(Cliente cliente,List<int> idPerson,int kamId);
         Task<ServiceResult> DeleteWithEntities(Cliente cliente);
-        Task<ServiceResult> EditWithEntities(int clientId, Cliente cliente, List<int> idPersons);
-        Task<ResponseGeneric<List<int>>> GetAllWithContactandKam(int clientId);
+        Task<ServiceResult> EditWithEntities(int clientId, Cliente cliente, List<int> idPersons, int kamId);
+        Task<ResponseGeneric<List<int>>> GetAllIdWithContact(int clientId);
+        Task<ResponseGeneric<ClienteWithIds>> GetByIdWithKamAndContact(int clientId);
 
     }
 }

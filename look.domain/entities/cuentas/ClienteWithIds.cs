@@ -10,6 +10,7 @@ namespace look.domain.entities.cuentas
     {
         public Cliente Cliente { get; set; }
         public List<int>? IdPerson { get; set; }
+        public int ? kamIdPerson { get; set; }
 
-            }
+    }
 }

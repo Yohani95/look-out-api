@@ -41,5 +41,17 @@ namespace look.Application.services.cuentas
                 return null;
             }
         }
+
+        public async Task<ClientePersona> FindByClientKam(int id)
+        {
+            try
+            {
+                return await _repository.FindByClientKam(id);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

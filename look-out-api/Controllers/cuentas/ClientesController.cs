@@ -32,7 +32,7 @@ namespace look_out_api.Controllers.cuentas
         public async Task<IActionResult> CreateWithEntities(ClienteWithIds clienteWithIds)
         {
             Log.Information(clienteWithIds.ToString());
-            var result = await _clienteService.CreateWithEntities(clienteWithIds.Cliente, clienteWithIds.IdPerson);
+            var result = await _clienteService.CreateWithEntities(clienteWithIds.Cliente, clienteWithIds.IdPerson,(int)clienteWithIds.kamIdPerson);
 
             switch (result.MessageCode)
             {
@@ -50,7 +50,7 @@ namespace look_out_api.Controllers.cuentas
         public async Task<IActionResult> UpdateWithEntities(int id,ClienteWithIds clienteWithIds)
         {
             Log.Information("Solicitud Delete ClienteId: " + id);
-            var result = await _clienteService.EditWithEntities(id,clienteWithIds.Cliente, clienteWithIds.IdPerson);
+            var result = await _clienteService.EditWithEntities(id,clienteWithIds.Cliente, clienteWithIds.IdPerson,(int)clienteWithIds.kamIdPerson);
 
             switch (result.MessageCode)
             {
@@ -88,10 +88,10 @@ namespace look_out_api.Controllers.cuentas
             }
         }
 
-        [HttpGet("GetAllWithContactAndKam/{clientId}")]
-        public async Task<IActionResult> GetAllWithContactAndKam(int clientId)
+        [HttpGet("GetAllIdWithContact/{clientId}")]
+        public async Task<IActionResult> GetAllIdWithContact(int clientId)
         {
-            ResponseGeneric<List<int>> response = await _clienteService.GetAllWithContactandKam(clientId);
+            ResponseGeneric<List<int>> response = await _clienteService.GetAllIdWithContact(clientId);
 
             if (!response.serviceResult.IsSuccess)
             {
@@ -100,7 +100,18 @@ namespace look_out_api.Controllers.cuentas
 
             return Ok(response);
         }
+        [HttpGet("GetByIdWithKamAndContact/{clientId}")]
+        public async Task<IActionResult> GetByIdWithKamAndContact(int clientId)
+        {
+            ResponseGeneric<ClienteWithIds> response = await _clienteService.GetByIdWithKamAndContact(clientId);
 
+            if (!response.serviceResult.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
         protected override int GetEntityId(Cliente entity)
         {
             return entity.CliId;

@@ -1,4 +1,5 @@
 ﻿using look.Application.interfaces.cuentas;
+using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using look.domain.interfaces;
@@ -25,7 +26,7 @@ namespace look.Application.services.cuentas
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResult> CreateWithEntities(Cliente cliente, List<int> idPersons)
+        public async Task<ServiceResult> CreateWithEntities(Cliente cliente, List<int> idPersons,int kamId)
         {
             try
             {
@@ -48,7 +49,14 @@ namespace look.Application.services.cuentas
                     };
                     await _clientePersonaService.AddAsync(personaCliente);
                 }
-
+                var kam = new ClientePersona
+                {
+                    CarId = null,
+                    CliId = user.CliId,
+                    CliVigente = (sbyte?)user.EclId,
+                    PerId = kamId// Usar el ID de la persona actual
+                };
+                await _clientePersonaService.AddAsync(kam);
                 await _unitOfWork.CommitAsync();
 
                 return new ServiceResult
@@ -65,7 +73,7 @@ namespace look.Application.services.cuentas
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
         }
-        public async Task<ServiceResult> EditWithEntities(int clientId, Cliente cliente, List<int> idPersons)
+        public async Task<ServiceResult> EditWithEntities(int clientId, Cliente cliente, List<int> idPersons,int kamId)
         {
             try
             {
@@ -84,7 +92,16 @@ namespace look.Application.services.cuentas
                 }
 
                 // Actualizar propiedades del cliente con los valores del cliente proporcionado
-                await _repository.UpdateAsync(cliente);
+                existingCliente.CliDescripcion = cliente.CliDescripcion;
+                existingCliente.CliNif= cliente.CliNif;
+                existingCliente.PaiId = cliente.PaiId;
+                existingCliente.GirId= cliente.GirId;
+                existingCliente.SectorComercial = cliente.SectorComercial;
+                existingCliente.CliNombre = cliente.CliNombre;
+                existingCliente.CliSitioWeb = cliente.CliSitioWeb;
+                existingCliente.EclId = cliente.EclId;
+
+                await _repository.UpdateAsync(existingCliente);
 
                 // Actualizar o eliminar las instancias existentes de ClientePersona según los idPersons proporcionados
                 var existingPersonas = await _clientePersonaService.FindByClient(existingCliente.CliId);
@@ -110,7 +127,23 @@ namespace look.Application.services.cuentas
                         await _clientePersonaService.AddAsync(personaCliente);
                     }
                 }
-
+                var kam = await _clientePersonaService.FindByClientKam(existingCliente.CliId);
+                if (kam != null)
+                {
+                    kam.PerId = kamId;
+                    await _clientePersonaService.UpdateAsync(kam);
+                }
+                else
+                {
+                    var personaCliente = new ClientePersona
+                    {
+                        CarId = null,
+                        CliId = existingCliente.CliId,
+                        CliVigente = (sbyte?)existingCliente.EclId,
+                        PerId = kamId
+                    };
+                    await _clientePersonaService.AddAsync(personaCliente);
+                }
                 await _unitOfWork.CommitAsync();
 
                 return new ServiceResult
@@ -163,7 +196,7 @@ namespace look.Application.services.cuentas
             return await _repository.GetAllWithEntities();
         }
 
-        public async Task<ResponseGeneric<List<int>>> GetAllWithContactandKam(int clientId)
+        public async Task<ResponseGeneric<List<int>>> GetAllIdWithContact(int clientId)
         {
             try
             {
@@ -214,6 +247,71 @@ namespace look.Application.services.cuentas
                 };
 
                 return new ResponseGeneric<List<int>>
+                {
+                    serviceResult = errorResult,
+                    Data = null // Puedes dejar la lista vacía o null según tu necesidad
+                };
+            }
+        }
+
+        public async Task<ResponseGeneric<ClienteWithIds>> GetByIdWithKamAndContact(int clientId)
+        {
+            try
+            {
+                var client = await _repository.GetByIdAsync(clientId);
+                if (client == null)
+                {
+                    var invalidInputResult = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.InvalidInput,
+                        Message = "El cliente proporcionado es nulo."
+                    };
+
+                    return new ResponseGeneric<ClienteWithIds>
+                    {
+                        serviceResult = invalidInputResult,
+                        Data = null // Puedes dejar la lista vacía o null según tu necesidad,
+                    };
+                }
+
+                await _unitOfWork.BeginTransactionAsync();
+                var existingPersonas = await _clientePersonaService.FindByClient(client.CliId);
+                await _unitOfWork.CommitAsync();
+                var personaIds = existingPersonas.Select(persona => persona.PerId).ToList();
+
+                var kam = await _clientePersonaService.FindByClientKam(client.CliId);
+
+                ClienteWithIds clientNew = new ClienteWithIds 
+                { 
+                    IdPerson= personaIds.Select(id => id.GetValueOrDefault()).ToList(),
+                    kamIdPerson= kam != null ? kam.PerId : 0,
+                    Cliente = client
+                };
+                var successResult = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = "Solicitud Exitosa de clientes"
+                };
+                return new ResponseGeneric<ClienteWithIds>
+                {
+                    serviceResult = successResult,
+                    Data = clientNew
+                };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                };
+
+                return new ResponseGeneric<ClienteWithIds>
                 {
                     serviceResult = errorResult,
                     Data = null // Puedes dejar la lista vacía o null según tu necesidad

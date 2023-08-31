@@ -33,7 +33,19 @@ namespace look.Infrastructure.repository.Cuentas
             try
             {
                 return await _dbContext.ClientePersona.Where(p => p.CliId == id).ToListAsync();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public async Task<ClientePersona> FindByClientKam(int id)
+        {
+            try
+            {
+                return await _dbContext.ClientePersona.Include(cp => cp.Persona).Where(cp => cp.CliId == id && cp.Persona.TpeId == 2).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
             {
                 throw new NotImplementedException();
             }
