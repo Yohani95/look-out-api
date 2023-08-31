@@ -53,5 +53,57 @@ namespace look.Application.services.cuentas
                 return null;
             }
         }
+
+        public async Task<ResponseGeneric<List<ClientePersona>>> GetAllClientRelations()
+        {
+            try
+            {
+                var client = await _repository.GetAllClientRelations();
+                if (client == null)
+                {
+                    var invalidInputResult = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.InvalidInput,
+                        Message = "Sin clientes, nulo."
+                    };
+
+                    return new ResponseGeneric<List<ClientePersona>>
+                    {
+                        serviceResult = invalidInputResult,
+                        Data = null // Puedes dejar la lista vacía o null según tu necesidad,
+                    };
+                }
+
+              
+                var successResult = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = "Solicitud Exitosa de clientes"
+                };
+                return new ResponseGeneric<List<ClientePersona>>
+                {
+                    serviceResult = successResult,
+                    Data = client
+                };
+            }
+            catch (Exception ex)
+            {
+
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                };
+
+                return new ResponseGeneric<List<ClientePersona>>
+                {
+                    serviceResult = errorResult,
+                    Data = null // Puedes dejar la lista vacía o null según tu necesidad
+                };
+            }
+        }
     }
 }

@@ -285,7 +285,7 @@ namespace look.Application.services.cuentas
                 ClienteWithIds clientNew = new ClienteWithIds 
                 { 
                     IdPerson= personaIds.Select(id => id.GetValueOrDefault()).ToList(),
-                    kamIdPerson= kam != null ? kam.PerId : 0,
+                    kamIdPerson= kam.Persona ?? null,
                     Cliente = client
                 };
                 var successResult = new ServiceResult

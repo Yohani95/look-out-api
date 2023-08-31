@@ -32,7 +32,7 @@ namespace look_out_api.Controllers.cuentas
         public async Task<IActionResult> CreateWithEntities(ClienteWithIds clienteWithIds)
         {
             Log.Information(clienteWithIds.ToString());
-            var result = await _clienteService.CreateWithEntities(clienteWithIds.Cliente, clienteWithIds.IdPerson,(int)clienteWithIds.kamIdPerson);
+            var result = await _clienteService.CreateWithEntities(clienteWithIds.Cliente, clienteWithIds.IdPerson,(int)clienteWithIds.kamIdPerson.Id);
 
             switch (result.MessageCode)
             {
@@ -50,7 +50,7 @@ namespace look_out_api.Controllers.cuentas
         public async Task<IActionResult> UpdateWithEntities(int id,ClienteWithIds clienteWithIds)
         {
             Log.Information("Solicitud Delete ClienteId: " + id);
-            var result = await _clienteService.EditWithEntities(id,clienteWithIds.Cliente, clienteWithIds.IdPerson,(int)clienteWithIds.kamIdPerson);
+            var result = await _clienteService.EditWithEntities(id,clienteWithIds.Cliente, clienteWithIds.IdPerson,(int)clienteWithIds.kamIdPerson.Id);
 
             switch (result.MessageCode)
             {

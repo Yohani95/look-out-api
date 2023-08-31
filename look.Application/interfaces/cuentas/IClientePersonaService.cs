@@ -13,5 +13,6 @@ namespace look.Application.interfaces.cuentas
         Task<List<ClientePersona>> FindByClient(int id);
         Task DeleteByClient(int id);
         Task<ClientePersona> FindByClientKam(int id);
+        Task<ResponseGeneric<List<ClientePersona>>> GetAllClientRelations();
     }
 }

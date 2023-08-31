@@ -1,4 +1,5 @@
-﻿using System;
+﻿using look.domain.entities.admin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace look.domain.entities.cuentas
     {
         public Cliente Cliente { get; set; }
         public List<int>? IdPerson { get; set; }
-        public int ? kamIdPerson { get; set; }
+        public Persona?  kamIdPerson { get; set; }
 
     }
 }

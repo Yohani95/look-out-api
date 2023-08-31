@@ -59,7 +59,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+builder.Services.ConfigureSwaggerGen(setup =>
+{
+    setup.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "look-out-api",
+        Version = "v1"
+    });
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

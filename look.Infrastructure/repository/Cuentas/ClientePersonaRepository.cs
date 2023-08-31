@@ -50,5 +50,13 @@ namespace look.Infrastructure.repository.Cuentas
                 throw new NotImplementedException();
             }
         }
+
+        public async Task<List<ClientePersona>> GetAllClientRelations()
+        {
+            return await _dbContext.ClientePersona.Include(cp => cp.Persona)
+                .Include(cp => cp.Cliente)
+                .ThenInclude(c=>c.Pais)
+                .Where(cp=>cp.Persona.TpeId==2).ToListAsync();
+        }
     }
 }

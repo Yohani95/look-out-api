@@ -12,5 +12,6 @@ namespace look.domain.interfaces.cuentas
         Task DeleteByClient(int id);
         Task<List<ClientePersona>> FindByClient(int id);
         Task<ClientePersona> FindByClientKam(int id);
+        Task<List<ClientePersona>> GetAllClientRelations();
     }
 }

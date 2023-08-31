@@ -12,11 +12,11 @@ namespace look.domain.entities.admin
 
         public string? PerIdNacional { get; set; }
 
-        public string PerNombres { get; set; } = null!;
+        public string? PerNombres { get; set; } = null!;
 
-        public string PerApellidoPaterno { get; set; } = null!;
+        public string? PerApellidoPaterno { get; set; } = null!;
 
-        public string PerApellidoMaterno { get; set; } = null!;
+        public string? PerApellidoMaterno { get; set; } = null!;
 
         public int? PaiId { get; set; }
 
