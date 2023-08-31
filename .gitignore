@@ -41,3 +41,8 @@ appsettings.Production.json
 *~
 *#
 .#*
+
+*.pdb
+
+# Logs
+logs/

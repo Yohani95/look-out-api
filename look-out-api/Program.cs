@@ -43,14 +43,7 @@ Log.Information("Esperando Solicitudes.....");
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.ConfigureSwaggerGen(setup =>
-{
-    setup.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "look-out-api",
-        Version = "v1"
-    });
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 var allowedOrigins = app.Configuration.GetSection("AllowedOrigins").Get<string[]>();
