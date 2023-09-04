@@ -64,7 +64,7 @@ namespace look.Application.services.cuentas
                     var invalidInputResult = new ServiceResult
                     {
                         IsSuccess = false,
-                        MessageCode = ServiceResultMessage.InvalidInput,
+                        MessageCode = ServiceResultMessage.NotFound,
                         Message = "Sin clientes, nulo."
                     };
 

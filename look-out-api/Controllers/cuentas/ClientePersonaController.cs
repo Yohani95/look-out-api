@@ -18,12 +18,12 @@ namespace look_out_api.Controllers.cuentas
             _clientePersonaService = service;
         }
         [HttpGet("GetAllClientRelations")]
-        public async Task<IActionResult> UpdateWithEntities()
+        public async Task<IActionResult> GetAllClientRelations()
         {
-            return Ok();
-            //Log.Information("Solicitud Get ClientePersona");
+            Log.Information("Solicitud Get ClientePersona");
 
-            //var result =  _clientePersonaService.GetAllClientRelations();
+            var result = _clientePersonaService.GetAllClientRelations();
+            return Ok(result);
             //switch (result.serviceResult.MessageCode)
             //{
             //    case ServiceResultMessage.Success:
