@@ -29,6 +29,7 @@ namespace look.Infrastructure.repository.Cuentas
                         .Include(c => c.Giro)
                         .Include(c => c.Pais)
                         .ThenInclude(p => p.Lenguaje)
+                        .OrderBy(c => c.CliId)
                         .Include(c => c.SectorComercial).ToListAsync();
         }
      

@@ -788,6 +788,10 @@
         }
       },
       "look.domain/1.0.0": {
+        "dependencies": {
+          "Serilog": "3.0.1",
+          "Serilog.Sinks.File": "5.0.0"
+        },
         "runtime": {
           "look.domain.dll": {}
         }

@@ -22,5 +22,7 @@ namespace look.Infrastructure.repository.admin
             return await _dbContext.Persona.Include(p=>p.TipoPersona)
                 .Where(p => p.TpeId == typePersonId).ToListAsync();
         }
+
+
     }
 }

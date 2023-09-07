@@ -1,4 +1,5 @@
-﻿using look.domain.entities.Common;
+﻿using look.domain.dto.admin;
+using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace look.Application.interfaces.cuentas
         Task DeleteByClient(int id);
         Task<ClientePersona> FindByClientKam(int id);
         Task<ResponseGeneric<List<ClientePersona>>> GetAllClientRelations();
+        Task<ResponseGeneric<PersonaDTO>> GetPersonaDTOById(int id);
     }
 }

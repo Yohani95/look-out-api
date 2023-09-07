@@ -1,6 +1,8 @@
 ﻿using look.Application.interfaces;
 using look.Application.interfaces.admin;
+using look.domain.dto.admin;
 using look.domain.entities.admin;
+using look.domain.entities.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +30,54 @@ namespace look_out_api.Controllers.admin
 
             return persona;
         }
-
+        [HttpPost("createWithEntities")]
+        public async Task<IActionResult> Create(PersonaDTO personaDTO)
+        {
+            var result=await  _personaService.Create(personaDTO);
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        [HttpPut("editWithEntities/{id}")]
+        public async Task<IActionResult> Edit(int id,PersonaDTO personaDTO)
+        {
+            var result = await _personaService.Edit(id,personaDTO);
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        [HttpDelete("deleteWithEntities/{id}")]
+        public async Task<ActionResult<ServiceResult>> DeleteEntities(int id)
+        {
+            var result = await _personaService.Delete(id);
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
         protected override int GetEntityId(Persona entity)
         {
            return entity.Id;

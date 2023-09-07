@@ -23,6 +23,8 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Microsoft.
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\MySqlConnector.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Serilog.dll
+C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Serilog.Sinks.File.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -53,5 +55,3 @@ C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\refint\loo
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.pdb
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\look-out-api.genruntimeconfig.cache
 C:\Users\KPaz\source\repos\look-out-api\look-out-api\obj\Debug\net6.0\ref\look-out-api.dll
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Serilog.dll
-C:\Users\KPaz\source\repos\look-out-api\look-out-api\bin\Debug\net6.0\Serilog.Sinks.File.dll
