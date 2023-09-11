@@ -47,7 +47,3 @@ appsettings.Production.json
 
 # Logs
 logs/
-
-#idea
-.idea
-.idea/*
