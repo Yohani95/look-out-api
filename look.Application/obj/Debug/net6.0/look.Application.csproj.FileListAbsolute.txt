@@ -13,3 +13,18 @@ C:\Users\KPaz\source\repos\look-out-api\look.Application\obj\Debug\net6.0\look.A
 C:\Users\KPaz\source\repos\look-out-api\look.Application\obj\Debug\net6.0\refint\look.Application.dll
 C:\Users\KPaz\source\repos\look-out-api\look.Application\obj\Debug\net6.0\look.Application.pdb
 C:\Users\KPaz\source\repos\look-out-api\look.Application\obj\Debug\net6.0\ref\look.Application.dll
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\bin\Debug\net6.0\look.Application.deps.json
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\bin\Debug\net6.0\look.Application.dll
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\bin\Debug\net6.0\look.Application.pdb
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\bin\Debug\net6.0\look.domain.dll
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\bin\Debug\net6.0\look.domain.pdb
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.csproj.AssemblyReference.cache
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.AssemblyInfoInputs.cache
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.AssemblyInfo.cs
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.csproj.CoreCompileInputs.cache
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.csproj.CopyComplete
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.dll
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\refint\look.Application.dll
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\look.Application.pdb
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\obj\Debug\net6.0\ref\look.Application.dll
