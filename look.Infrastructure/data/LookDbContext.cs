@@ -29,6 +29,7 @@ namespace look.Infrastructure.data
         public DbSet<Cliente>? Cliente { get; set; }
         public DbSet<Comuna>? Comuna { get; set; }
         public DbSet<ClientePersona> ClientePersona { get; set; }
+        public DbSet<Rol> Rol { get; set; } 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -386,6 +387,24 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_cliente_persona_Persona");
             });
+            modelBuilder.Entity<Rol>(entity =>
+            {
+                entity.HasKey(e => e.RolId).HasName("PRIMARY");
+
+                entity.ToTable("rol");
+
+                entity.Property(e => e.RolId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("rol_id");
+                entity.Property(e => e.RolDescripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("rol_descripcion");
+                entity.Property(e => e.RolNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("rol_nombre");
+            });
+
 
 
         }

@@ -21,7 +21,7 @@ namespace look_out_api.Controllers.world
         protected override int GetEntityId(Pais entity)
         {
             // Implementa la lógica para obtener el ID de la entidad Pais
-            return entity.PaiId; // Asume que la propiedad de ID en Pais se llama "Id"
+            return entity.PaiId; 
         }
     }
 }
