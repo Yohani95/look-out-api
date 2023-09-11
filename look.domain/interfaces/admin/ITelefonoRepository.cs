@@ -1,6 +1,9 @@
-namespace look.domain.interfaces.admin;
+using look.domain.entities.admin;
 
-public interface ITelefonoRepository
+namespace look.domain.interfaces.admin
 {
-    
+    public interface ITelefonoRepository:IRepository<Telefono>
+    {
+        Task<List<Telefono>> GetComplete();
+    }
 }

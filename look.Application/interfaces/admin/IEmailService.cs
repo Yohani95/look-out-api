@@ -1,5 +1,4 @@
-﻿using look.Application.services;
-using look.domain.entities.admin;
+﻿using look.domain.entities.admin;
 
 namespace look.Application.interfaces.admin
 {

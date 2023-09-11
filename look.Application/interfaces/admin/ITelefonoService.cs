@@ -1,6 +1,11 @@
-namespace look.Application.interfaces.admin;
+using look.domain.entities.admin;
 
-public class ITelefonoService
+namespace look.Application.interfaces.admin
 {
-    
+    public interface ITelefonoService: IService<Telefono>
+    {
+        Task<List<Telefono>> ListComplete();
+    }
+
 }
+
