@@ -21,3 +21,4 @@ C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.domain\obj\Debug\net6.0\
 C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.domain\obj\Debug\net6.0\refint\look.domain.dll
 C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.domain\obj\Debug\net6.0\look.domain.pdb
 C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.domain\obj\Debug\net6.0\ref\look.domain.dll
+C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.domain\obj\Debug\net6.0\look.domain.csproj.AssemblyReference.cache

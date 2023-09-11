@@ -3,6 +3,7 @@ using look.Application.interfaces.admin;
 using look.domain.entities.admin;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace look_out_api.Controllers.admin
 {
@@ -16,11 +17,19 @@ namespace look_out_api.Controllers.admin
         {
             _emailService = service;
         }
+        
+        [HttpGet("getAllEmail")]
+        public async Task<IActionResult> GetAllEmail()
+        {
+            Log.Information("Solicitud GetAll email");
+            var email = await _emailService.ListComplete();
+            return Ok(email);
+        }
 
 
         protected override int GetEntityId(Email entity)
         {
-            throw new NotImplementedException();
+            return entity.emailId;
         }
     }
 }

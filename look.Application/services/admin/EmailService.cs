@@ -13,10 +13,9 @@ namespace look.Application.services.admin
             _emailRepository = repository;
         }
 
-
-        public async Task<List<Email>> GetAllEmail()
+        public async Task<List<Email>> ListComplete()
         {
-            return await _emailRepository.GetAllAsync();
+            return await _emailRepository.GetComplete();
         }
     }
 }

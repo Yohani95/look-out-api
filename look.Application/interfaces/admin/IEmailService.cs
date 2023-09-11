@@ -5,7 +5,7 @@ namespace look.Application.interfaces.admin
 {
     public interface IEmailService: IService<Email>
     {
-        Task<List<Email>> GetAllEmail();
+        Task<List<Email>> ListComplete();
     }
 }
 
