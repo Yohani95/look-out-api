@@ -46,3 +46,6 @@ appsettings.Production.json
 
 # Logs
 logs/
+
+#intelIdea
+.idea/*
