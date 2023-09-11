@@ -36,6 +36,7 @@ appsettings.Production.json
 *.resharper
 *.vscode
 .vs/*
+*.v2
 
 # Backup and temp files
 *~
