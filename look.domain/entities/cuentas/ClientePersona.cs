@@ -21,8 +21,8 @@ namespace look.domain.entities.cuentas
 
         public sbyte? CliVigente { get; set; }
 
-       // public virtual Car? Car { get; set; }
-
+        // public virtual Car? Car { get; set; }
+        
         public virtual Cliente? Cliente { get; set; }
 
         public virtual Persona? Persona { get; set; }
