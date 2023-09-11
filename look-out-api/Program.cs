@@ -1,19 +1,9 @@
 using look.Infrastructure.data;
-using System;
-
 using Microsoft.EntityFrameworkCore;
-using look.Infrastructure.repository.admin;
-using look.domain.interfaces.admin;
-using look.Application.interfaces.admin;
-using look.Application.services.admin;
-using System.Reflection;
 using YourNamespace.Configuration;
-using look.Application.interfaces;
-using look.domain.interfaces;
-using look.Application.services;
 using look.domain.interfaces.unitOfWork;
-using Microsoft.Extensions.Logging;
 using Serilog;
+using look.domain.entities.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<LookDbContext>(options =>
@@ -22,24 +12,16 @@ builder.Services.AddDbContext<LookDbContext>(options =>
     var serverVersion = ServerVersion.AutoDetect(connectionString); // Detectar automáticamente la versión del servidor
     options.UseMySql(connectionString, serverVersion);
 });
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug() // Nivel mínimo de log
-    .WriteTo.File("../logs/log-.txt", rollingInterval: RollingInterval.Day,
-    retainedFileCountLimit: 7,
-    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {SourceContext}  {Message:lj}{NewLine}{Exception}"
-    ) // Archivo de log
-    .CreateLogger();
-// Add services to the container.
+Logger.InitializeLogger();
+
+var logger = Logger.GetLogger();
+Log.Logger = logger;
 Log.Information("Iniciando Servicio de Backend . net 6 look-out");
 builder.Services.AddControllers();
 Log.Information("Cargando inyección de dependencias");
 builder.Services.AddApplicationServices();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 Log.Information("Esperando Solicitudes.....");
-
-//builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-//builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

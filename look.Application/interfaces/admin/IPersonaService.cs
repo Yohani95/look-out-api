@@ -1,10 +1,14 @@
-﻿using look.domain.entities.admin;
-
+﻿using look.domain.dto.admin;
+using look.domain.entities.admin;
+using look.domain.entities.Common;
 
 namespace look.Application.interfaces.admin
 {
     public interface IPersonaService:IService<Persona>
     {
         Task<List<Persona>> GetAllByType(int typePersonId);
+        Task<ServiceResult> Create(PersonaDTO personaDTO);
+        Task<ServiceResult> Edit(int id,PersonaDTO personaDTO);
+        Task<ServiceResult> Delete(int id);
     }
 }

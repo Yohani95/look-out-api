@@ -1,19 +1,16 @@
-﻿using look.Application.interfaces.cuentas;
+﻿using look.Application.interfaces.admin;
+using look.Application.interfaces.cuentas;
+using look.domain.dto.admin;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
-using look.domain.interfaces;
 using look.domain.interfaces.cuentas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Serilog;
 namespace look.Application.services.cuentas
 {
     public class ClientePersonaService : Service<ClientePersona>, IClientePersonaService
     {
         private readonly IClientePersonaRepository _repository;
+        private readonly ILogger _logger = Logger.GetLogger();
         public ClientePersonaService(IClientePersonaRepository repository) : base(repository)
         {
             _repository = repository;
@@ -102,6 +99,63 @@ namespace look.Application.services.cuentas
                 {
                     serviceResult = errorResult,
                     Data = null // Puedes dejar la lista vacía o null según tu necesidad
+                };
+            }
+        }
+
+        public  async Task<ResponseGeneric<PersonaDTO>> GetPersonaDTOById(int id)
+        {
+            try
+            {
+                var result =await _repository.GetClientePersonaDTOById(id);
+                if (result.Persona == null)
+                {
+                    var invalidInputResult = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.InvalidInput,
+                        Message = "El ClientePersona proporcionado es nulo."
+                    };
+
+                    return new ResponseGeneric<PersonaDTO>
+                    {
+                        serviceResult = invalidInputResult,
+                        Data = null //  dejar la lista vacía o null según tu necesidad
+                    };
+                }
+
+                var persondto = new PersonaDTO
+                {
+                    Persona = result.Persona,
+                    IdCliente = result.Cliente==null? 0 : result.Cliente.CliId,
+                };
+
+                var successResult = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = "Solicitud Exitosa de clientes"
+                };
+
+                return new ResponseGeneric<PersonaDTO>
+                {
+                    serviceResult = successResult,
+                    Data =persondto
+                };
+            }
+            catch(Exception ex)
+            {
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                };
+                _logger.Error(errorResult.Message);
+                return new ResponseGeneric<PersonaDTO>
+                {
+                    serviceResult = errorResult,
+                    Data = null // dejar la lista vacía o null según tu necesidad
                 };
             }
         }
