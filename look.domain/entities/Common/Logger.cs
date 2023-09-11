@@ -8,7 +8,7 @@ namespace look.domain.entities.Common
 {
     public class Logger
     {
-        private static ILogger _logger;
+        private static ILogger? _logger;
 
         public static void InitializeLogger()
         {
