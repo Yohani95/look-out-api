@@ -7,6 +7,7 @@ using Serilog;
 
 namespace look_out_api.Controllers.admin
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class EmailController :BaseController<Email>
