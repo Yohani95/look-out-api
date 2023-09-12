@@ -2,8 +2,8 @@
 {
     public class TipoEmail
     {
-        public int? temId { get; set; }
+        public int temId { get; set; }
         public string? temNombre { get; set; }
-        public int? temVigente { get; set; }
+        public sbyte? temVigente { get; set; }
     }
 }
