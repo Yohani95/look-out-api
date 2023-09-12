@@ -131,31 +131,49 @@ namespace look.Infrastructure.data
             });
             modelBuilder.Entity<Email>(entity =>
             {
-                entity.HasKey(e => e.emailId).HasName("PRIMARY");
+                entity.HasKey(e => e.EmaId).HasName("PRIMARY");
+
                 entity.ToTable("email");
-                entity.HasIndex(e => e.cliId, "FK_Email_Cliente");
-                entity.HasIndex(e => e.perId, "FK_Email_Persona");
-                entity.HasIndex(e => e.temId, "FK_Email_Tipo_Email");
-                entity.Property(e => e.emailId)
+
+                entity.HasIndex(e => e.CliId, "FK_Email_Cliente");
+
+                entity.HasIndex(e => e.PerId, "FK_Email_Persona");
+
+                entity.HasIndex(e => e.TemId, "FK_Email_Tipo_Email");
+
+                entity.Property(e => e.EmaId)
                     .ValueGeneratedNever()
-                    .HasColumnType("int")
+                    .HasColumnType("int(11)")
                     .HasColumnName("ema_id");
-                entity.Property(e => e.cliId)
-                    .HasColumnType("int")
+                entity.Property(e => e.CliId)
+                    .HasColumnType("int(11)")
                     .HasColumnName("cli_id");
-                entity.Property(e => e.perId)
-                    .HasColumnType("int")
-                    .HasColumnName("per_id");
-                entity.Property(e => e.emaEmail)
+                entity.Property(e => e.EmaEmail)
                     .HasMaxLength(100)
                     .HasColumnName("ema_email");
-                entity.Property(e => e.temId)
-                    .HasColumnType("int")
-                    .HasColumnName("tem_id");
-                entity.Property(e => e.emaVigente)
-                    .HasColumnType("tinyint")
+                entity.Property(e => e.EmaVigente)
+                    .HasColumnType("tinyint(4)")
                     .HasColumnName("ema_vigente");
+                entity.Property(e => e.PerId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("per_id");
+                entity.Property(e => e.TemId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tem_id");
+
+                entity.HasOne(d => d.Cli).WithMany()
+                    .HasForeignKey(d => d.CliId)
+                    .HasConstraintName("FK_Email_Cliente");
+
+                entity.HasOne(d => d.Per).WithMany()
+                    .HasForeignKey(d => d.PerId)
+                    .HasConstraintName("FK_Email_Persona");
+
+                entity.HasOne(d => d.Tem).WithMany()
+                    .HasForeignKey(d => d.TemId)
+                    .HasConstraintName("FK_Email_Tipo_Email");
             });
+
             modelBuilder.Entity<TipoEmail>(entity =>
             {
                 entity.HasKey(e => e.temId).HasName("PRIMARY");

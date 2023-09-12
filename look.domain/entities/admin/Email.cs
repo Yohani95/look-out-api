@@ -10,20 +10,24 @@ namespace look.domain.entities.admin
 {
     public class Email
     {
-        public int emailId { get; set; }
-        public int cliId { get; set; }
-        public int perId { get; set; }
-        public string? emaEmail { get; set; }
-        public int temId { get; set; }
-        public sbyte? emaVigente { get; set; }
-        
-        [JsonIgnore]
-        public virtual TipoEmail? tipoEmail { get; set;}
-        [JsonIgnore]
-        public virtual Persona? persona { get; set;}
-        [JsonIgnore]
-        public virtual Cliente? cliente { get; set;}
-        
-        
+        public int EmaId { get; set; }
+
+        public int? CliId { get; set; }
+
+        public int? PerId { get; set; }
+
+        public string? EmaEmail { get; set; }
+
+        public int? TemId { get; set; }
+
+        public sbyte? EmaVigente { get; set; }
+
+        public virtual Cliente? Cli { get; set; }
+
+        public virtual Persona? Per { get; set; }
+
+        public virtual TipoEmail? Tem { get; set; }
+
+
     }
 }

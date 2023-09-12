@@ -32,7 +32,7 @@ namespace look_out_api.Controllers.admin
 
         protected override int GetEntityId(Email entity)
         {
-            return entity.emailId;
+            return entity.EmaId;
         }
     }
 }
