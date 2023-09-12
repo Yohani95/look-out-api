@@ -30,7 +30,10 @@ namespace look.Infrastructure.data
         public DbSet<Comuna>? Comuna { get; set; }
         public DbSet<ClientePersona> ClientePersona { get; set; }
         public DbSet<Email> Email { get; set; }
-        public DbSet<Rol> Rol { get; set; } 
+        public DbSet<TipoEmail> TipoEmail { get; set; }
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<Telefono> Telefono { get; set; }
+        public DbSet<TipoTelefono> TipoTelefono { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -128,39 +131,30 @@ namespace look.Infrastructure.data
             });
             modelBuilder.Entity<Email>(entity =>
             {
-                entity.HasKey(e => e.temId).HasName("PRIMARY");
+                entity.HasKey(e => e.emailId).HasName("PRIMARY");
                 entity.ToTable("email");
                 entity.HasIndex(e => e.cliId, "FK_Email_Cliente");
-                entity.HasIndex(e => e.emailId, "FK_Email_Persona");
+                entity.HasIndex(e => e.perId, "FK_Email_Persona");
                 entity.HasIndex(e => e.temId, "FK_Email_Tipo_Email");
                 entity.Property(e => e.emailId)
                     .ValueGeneratedNever()
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int")
                     .HasColumnName("ema_id");
                 entity.Property(e => e.cliId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int")
                     .HasColumnName("cli_id");
+                entity.Property(e => e.perId)
+                    .HasColumnType("int")
+                    .HasColumnName("per_id");
                 entity.Property(e => e.emaEmail)
                     .HasMaxLength(100)
                     .HasColumnName("ema_email");
-                entity.Property(e => e.emaVigente)
-                    .HasColumnType("tinyint(4)")
-                    .HasColumnName("ema_vigente");
-                entity.Property(e => e.perId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("per_id");
                 entity.Property(e => e.temId)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int")
                     .HasColumnName("tem_id");
-                entity.HasOne(d => d.cliente).WithMany()
-                    .HasForeignKey(d => d.cliId)
-                    .HasConstraintName("FK_Email_Cliente");
-                entity.HasOne(d => d.persona).WithMany()
-                    .HasForeignKey(d => d.perId)
-                    .HasConstraintName("FK_Email_Persona");
-                entity.HasOne(d => d.tipoEmail).WithMany()
-                    .HasForeignKey(d => d.temId)
-                    .HasConstraintName("FK_Email_Tipo_Email");
+                entity.Property(e => e.emaVigente)
+                    .HasColumnType("tinyint")
+                    .HasColumnName("ema_vigente");
             });
             modelBuilder.Entity<TipoEmail>(entity =>
             {
@@ -168,14 +162,65 @@ namespace look.Infrastructure.data
                 entity.ToTable("tipo_email");
                 entity.Property(e => e.temId)
                     .ValueGeneratedNever()
-                    .HasColumnType("int(11)")
+                    .HasColumnType("int")
                     .HasColumnName("tem_id");
                 entity.Property(e => e.temNombre)
                     .HasMaxLength(50)
                     .HasColumnName("tem_nombre");
                 entity.Property(e => e.temVigente)
-                    .HasColumnType("tinyint(4)")
+                    .HasColumnType("tinyint")
                     .HasColumnName("tem_vigente");
+            });
+            modelBuilder.Entity<Telefono>(entity =>
+            {
+                entity.HasKey(e => e.telId).HasName("PRIMARY");
+                entity.ToTable("telefono");
+                entity.HasIndex(e => e.cliId, "FK_Telefono_Cliente");
+                entity.HasIndex(e => e.perId, "FK_Telefono_Persona");
+                entity.HasIndex(e => e.tteId, "FK_Telefono_Tipo_Telefono");
+                entity.Property(e => e.telId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tel_id");
+                entity.Property(e => e.cliId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("cli_id");
+                entity.Property(e => e.telNumero)
+                    .HasMaxLength(100)
+                    .HasColumnName("tel_numero");
+                entity.Property(e => e.telVigente)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("tel_vigente");
+                entity.Property(e => e.perId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("per_id");
+                entity.Property(e => e.tteId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tte_id");
+                entity.HasOne(d => d.cliente).WithMany()
+                    .HasForeignKey(d => d.cliId)
+                    .HasConstraintName("FK_Telefono_Cliente");
+                entity.HasOne(d => d.persona).WithMany()
+                    .HasForeignKey(d => d.perId)
+                    .HasConstraintName("FK_Telefono_Persona");
+                entity.HasOne(d => d.tipoTelefono).WithMany()
+                    .HasForeignKey(d => d.tteId)
+                    .HasConstraintName("FK_Telefono_Tipo_Telefono");
+            });
+            modelBuilder.Entity<TipoTelefono>(entity =>
+            {
+                entity.HasKey(e => e.tteId).HasName("PRIMARY");
+                entity.ToTable("tipo_telefono");
+                entity.Property(e => e.tteId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int")
+                    .HasColumnName("tte_id");
+                entity.Property(e => e.tteNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("tte_nombre");
+                entity.Property(e => e.tteVigente)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("tte_vigente");
             });
             modelBuilder.Entity<Persona>(entity =>
             {
