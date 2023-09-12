@@ -29,7 +29,7 @@ namespace look_out_api.Controllers.admin
             return Ok(email);
         }
         [HttpPost("create")]
-        public async Task<IActionResult> Create(Email email)
+        public async Task<IActionResult> CreateEmail(Email email)
         {
             Log.Information("Solicitud Create email");
             var result = await _emailService.Create(email);
@@ -46,6 +46,7 @@ namespace look_out_api.Controllers.admin
             }
         }
         [HttpPut("Edit")]
+        
         public async Task<IActionResult> Edit(Email email)
         {
             Log.Information("Solicitud Create email");
