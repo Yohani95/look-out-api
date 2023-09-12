@@ -7,6 +7,6 @@ namespace look.Application.interfaces.admin
     {
         Task<List<Email>> ListComplete();
         Task<ServiceResult> Create(Email email);
-        Task<ServiceResult> Edit(Email email);
+        Task<ServiceResult> Edit(Email email, int id);
     }
 }

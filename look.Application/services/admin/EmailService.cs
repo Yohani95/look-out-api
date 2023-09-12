@@ -62,7 +62,7 @@ namespace look.Application.services.admin
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
         }
-        public async Task<ServiceResult> Edit(Email email)
+        public async Task<ServiceResult> Edit(Email email, int id)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace look.Application.services.admin
 
                 await _unitOfWork.BeginTransactionAsync();
 
-                var existingEmail = await _emailRepository.GetByIdAsync(email.EmaId); 
+                var existingEmail = await _emailRepository.GetByIdAsync(id); 
 
                 if (existingEmail == null)
                 {

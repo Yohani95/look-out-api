@@ -47,11 +47,11 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
-        [HttpPut("Edit")]
-        public async Task<IActionResult> Edit(Email email)
+        [HttpPut("Edit/{id}")]
+        public async Task<IActionResult> Edit(Email email,int id)
         {
             Log.Information("Solicitud Create email");
-            var result = await _emailService.Edit(email);
+            var result = await _emailService.Edit(email,id);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
