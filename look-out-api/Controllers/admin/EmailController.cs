@@ -41,12 +41,13 @@ namespace look_out_api.Controllers.admin
                     return BadRequest(result);
                 case ServiceResultMessage.NotFound:
                     return NotFound(result);
+                case ServiceResultMessage.Conflict:
+                    return UnprocessableEntity(result);
                 default:
                     return StatusCode(500, result);
             }
         }
         [HttpPut("Edit")]
-        
         public async Task<IActionResult> Edit(Email email)
         {
             Log.Information("Solicitud Create email");
@@ -59,6 +60,8 @@ namespace look_out_api.Controllers.admin
                     return BadRequest(result);
                 case ServiceResultMessage.NotFound:
                     return NotFound(result);
+                case ServiceResultMessage.Conflict:
+                    return UnprocessableEntity(result);
                 default:
                     return StatusCode(500, result);
             }

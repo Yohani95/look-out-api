@@ -12,6 +12,7 @@ namespace look.domain.entities.Common
         InvalidInput,
         NotFound,
         InternalServerError,
+        Conflict,
         // Agrega más mensajes según tus necesidades
     }
 }

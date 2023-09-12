@@ -41,7 +41,7 @@ namespace look.Application.services.admin
                 bool emailExists = emails.Any(e => e.EmaEmail == email.EmaEmail);
                 if (emailExists)
                 {
-                    return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "El email ya existe en la base de datos." };
+                    return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.Conflict, Message = "El email ya existe en la base de datos." };
                 }
 
                 email.CliId = clientId.CliId;
