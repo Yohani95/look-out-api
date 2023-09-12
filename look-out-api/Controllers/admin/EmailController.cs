@@ -2,6 +2,7 @@
 using look.Application.interfaces.admin;
 using look.domain.dto.admin;
 using look.domain.entities.admin;
+using look.domain.entities.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -27,8 +28,40 @@ namespace look_out_api.Controllers.admin
             var email = await _emailService.ListComplete();
             return Ok(email);
         }
-
-
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(Email email)
+        {
+            Log.Information("Solicitud Create email");
+            var result = await _emailService.Create(email);
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        [HttpPut("Edit")]
+        public async Task<IActionResult> Edit(Email email)
+        {
+            Log.Information("Solicitud Create email");
+            var result = await _emailService.Edit(email);
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
 
         protected override int GetEntityId(Email entity)
         {
