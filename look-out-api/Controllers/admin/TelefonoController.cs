@@ -20,7 +20,7 @@ namespace look_out_api.Controllers.admin
         [HttpGet("getAllTelefonos")]
         public async Task<IActionResult> GetAllEmail()
         {
-            Log.Information("Solicitud GetAll email");
+            Log.Information("Solicitud GetAll telefono");
             var email = await _telefonoService.ListComplete();
             return Ok(email);
         }
@@ -28,7 +28,7 @@ namespace look_out_api.Controllers.admin
         [HttpPost("create")]
         public async Task<IActionResult> CreateEmail(Telefono telefono)
         {
-            Log.Information("Solicitud Create email");
+            Log.Information("Solicitud Create telefono");
             var result = await _telefonoService.Create(telefono);
             switch (result.MessageCode)
             {
@@ -47,7 +47,7 @@ namespace look_out_api.Controllers.admin
         [HttpPut("Edit/{id}")]
         public async Task<IActionResult> Edit(Telefono telefono,int id)
         {
-            Log.Information("Solicitud Create email");
+            Log.Information("Solicitud Create telefono");
             var result = await _telefonoService.Edit(telefono,id);
             switch (result.MessageCode)
             {
