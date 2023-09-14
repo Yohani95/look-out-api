@@ -16,16 +16,6 @@ namespace look_out_api.Controllers.admin
             _tipoEmailService = service;
         }
 
-        [HttpGet("getAllEmail")]
-        public async Task<IActionResult> GetAllEmail()
-        {
-            Log.Information("Solicitud GetAll email");
-            var email = await _tipoEmailService.ListComplete();
-            return Ok(email);
-        }
-
-
-
         protected override int GetEntityId(TipoEmail entity)
         {
             return entity.temId;

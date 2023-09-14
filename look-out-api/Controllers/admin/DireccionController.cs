@@ -1,4 +1,5 @@
-﻿using look.domain.entities.Common;
+﻿using look.Application.interfaces.admin;
+using look.domain.entities.Common;
 using look.domain.entities.world;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -10,18 +11,18 @@ namespace look_out_api.Controllers.admin
     [ApiController]
     public class DireccionController: BaseController<Direccion>
     {
-        private readonly ITelefonoService _telefonoService;
+        private readonly IDireccionService _direccionService;
 
-        public DireccionController(ITelefonoService service) : base(service)
+        public DireccionController(IDireccionService service) : base(service)
         {
-            _telefonoService = service;
+            _direccionService = service;
         }
         
-        [HttpGet("getAllTelefonos")]
-        public async Task<IActionResult> GetAllEmail()
+        [HttpGet("getAllDireccion")]
+        public async Task<IActionResult> GetAllDireccion()
         {
             Log.Information("Solicitud GetAll Direccion");
-            var email = await _telefonoService.ListComplete();
+            var email = await _direccionService.ListComplete();
             return Ok(email);
         }
         
@@ -29,7 +30,7 @@ namespace look_out_api.Controllers.admin
         public async Task<IActionResult> CreateEmail(Direccion telefono)
         {
             Log.Information("Solicitud Create email");
-            var result = await _telefonoService.Create(telefono);
+            var result = await _direccionService.Create(telefono);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -45,10 +46,10 @@ namespace look_out_api.Controllers.admin
             }
         }
         [HttpPut("Edit/{id}")]
-        public async Task<IActionResult> Edit(Direccion telefono,int id)
+        public async Task<IActionResult> Edit(Direccion direccion,int id)
         {
             Log.Information("Solicitud Create direccion");
-            var result = await _telefonoService.Edit(telefono,id);
+            var result = await _direccionService.Edit(direccion,id);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -65,7 +66,7 @@ namespace look_out_api.Controllers.admin
         }
         protected override int GetEntityId(Direccion entity)
         {
-            return entity.TdiId;
+            return entity.DirId;
         }
     }
     

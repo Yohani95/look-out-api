@@ -13,7 +13,5 @@ namespace look.domain.entities.world
         public int? TdiNombre { get; set; }
 
         public sbyte? TdiVigente { get; set; }
-
-        public virtual ICollection<Direccion> Direccions { get; set; } = new List<Direccion>();
     }
 }
