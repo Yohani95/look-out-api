@@ -7,15 +7,15 @@ namespace look.Application.services.admin;
 
 public class TipoDireccionService: Service<TipoDireccion>, ITipoDireccionService
 {
-    private readonly ITipoDireccionRepository _direccionRepository;
+    private readonly ITipoDireccionRepository _tipoDireccionRepository;
         
     public TipoDireccionService(ITipoDireccionRepository repository) : base(repository)
     {
-        _direccionRepository = repository;
+        _tipoDireccionRepository = repository;
     }
 
     public async Task<List<TipoDireccion>> ListComplete()
     {
-        return await _direccionRepository.GetComplete();
+        return await _tipoDireccionRepository.GetComplete();
     }
 }

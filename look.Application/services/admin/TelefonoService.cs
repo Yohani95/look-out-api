@@ -11,9 +11,9 @@ namespace look.Application.services.admin
     public class TelefonoService: Service<Telefono>, ITelefonoService
     {
         private readonly ITelefonoRepository _telefonoRepository;
-        private readonly ILogger _logger = Logger.GetLogger();
-        private readonly IClientePersonaRepository _clientePersonaRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IClientePersonaRepository _clientePersonaRepository;
+        private readonly ILogger _logger = Logger.GetLogger();
         
         public TelefonoService(ITelefonoRepository repository) : base(repository)
         {

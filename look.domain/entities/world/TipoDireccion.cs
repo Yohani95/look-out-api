@@ -10,7 +10,7 @@ namespace look.domain.entities.world
     {
         public int TdiId { get; set; }
 
-        public int? TdiNombre { get; set; }
+        public String? TdiNombre { get; set; }
 
         public sbyte? TdiVigente { get; set; }
     }

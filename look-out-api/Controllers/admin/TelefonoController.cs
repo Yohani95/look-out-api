@@ -18,7 +18,7 @@ namespace look_out_api.Controllers.admin
         }
         
         [HttpGet("getAllTelefonos")]
-        public async Task<IActionResult> GetAllEmail()
+        public async Task<IActionResult> GetAllTelefono()
         {
             Log.Information("Solicitud GetAll telefono");
             var email = await _telefonoService.ListComplete();
@@ -26,7 +26,7 @@ namespace look_out_api.Controllers.admin
         }
         
         [HttpPost("create")]
-        public async Task<IActionResult> CreateEmail(Telefono telefono)
+        public async Task<IActionResult> CreateTelefono(Telefono telefono)
         {
             Log.Information("Solicitud Create telefono");
             var result = await _telefonoService.Create(telefono);

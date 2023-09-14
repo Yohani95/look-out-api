@@ -528,13 +528,13 @@ namespace look.Infrastructure.data
 
                 entity.ToTable("direccion");
 
-                entity.HasIndex(e => e.Cli, "FK_Direccion_Cliente");
+                entity.HasIndex(e => e.CliId, "FK_Direccion_Cliente");
 
                 entity.HasIndex(e => e.PerId, "FK_Direccion_Persona");
 
-                entity.HasIndex(e => e.Tdi, "FK_Direccion_Tipo_Direccion");
+                entity.HasIndex(e => e.TdiId, "FK_Direccion_Tipo_Direccion");
                 
-                entity.HasIndex(e => e.Com, "FK_Direccion_Comuna");
+                entity.HasIndex(e => e.ComId, "FK_Direccion_Comuna");
 
                 entity.Property(e => e.DirId)
                     .ValueGeneratedNever()
@@ -591,7 +591,7 @@ namespace look.Infrastructure.data
                     .HasMaxLength(50)
                     .HasColumnName("tdi_nombre");
                 entity.Property(e => e.TdiVigente)
-                    .HasColumnType("tinyint")
+                    .HasColumnType("tinyint(4)")
                     .HasColumnName("tdi_vigente");
             });
 
