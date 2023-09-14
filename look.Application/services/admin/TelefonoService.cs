@@ -1,4 +1,5 @@
 using look.Application.interfaces.admin;
+using look.Application.interfaces.cuentas;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.interfaces.admin;
@@ -15,9 +16,11 @@ namespace look.Application.services.admin
         private readonly IClientePersonaRepository _clientePersonaRepository;
         private readonly ILogger _logger = Logger.GetLogger();
         
-        public TelefonoService(ITelefonoRepository repository) : base(repository)
+        public TelefonoService(ITelefonoRepository repository,IUnitOfWork unitOfWork,IClientePersonaRepository clientePersonaRepository) : base(repository)
         {
             _telefonoRepository = repository;
+            _unitOfWork = unitOfWork;
+            _clientePersonaRepository = clientePersonaRepository;
         }
 
         public async Task<List<Telefono>> ListComplete()
