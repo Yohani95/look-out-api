@@ -16,16 +16,6 @@ namespace look_out_api.Controllers.admin
             _tipoTelefonoService = service;
         }
 
-        [HttpGet("getAllEmail")]
-        public async Task<IActionResult> GetAllEmail()
-        {
-            Log.Information("Solicitud GetAll email");
-            var email = await _tipoTelefonoService.ListComplete();
-            return Ok(email);
-        }
-
-
-
         protected override int GetEntityId(TipoTelefono entity)
         {
             return entity.tteId;

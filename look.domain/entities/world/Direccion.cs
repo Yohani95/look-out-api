@@ -12,7 +12,6 @@ namespace look.domain.entities.world
 {
     public class Direccion
     {
-        [Key]
         public int DirId { get; set; }
 
         public int? PerId { get; set; }
@@ -28,14 +27,10 @@ namespace look.domain.entities.world
         public string? DirBlock { get; set; }
 
         public int? TdiId { get; set; }
-        [JsonIgnore]
-
+        
         public virtual Cliente? Cli { get; set; }
-        [JsonIgnore]
         public virtual Comuna? Com { get; set; }
-        [JsonIgnore]
         public virtual Persona? Per { get; set; }
-        [JsonIgnore]
         public virtual TipoDireccion? Tdi { get; set; }
     }
 }

@@ -34,6 +34,8 @@ namespace look.Infrastructure.data
         public DbSet<Rol> Rol { get; set; }
         public DbSet<Telefono> Telefono { get; set; }
         public DbSet<TipoTelefono> TipoTelefono { get; set; }
+        public DbSet<Direccion> Direccion { get; set; }
+        public DbSet<TipoDireccion> TipoDireccion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -519,6 +521,78 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.RolNombre)
                     .HasMaxLength(50)
                     .HasColumnName("rol_nombre");
+            });
+            modelBuilder.Entity<Direccion>(entity =>
+            {
+                entity.HasKey(e => e.DirId).HasName("PRIMARY");
+
+                entity.ToTable("direccion");
+
+                entity.HasIndex(e => e.CliId, "FK_Direccion_Cliente");
+
+                entity.HasIndex(e => e.PerId, "FK_Direccion_Persona");
+
+                entity.HasIndex(e => e.TdiId, "FK_Direccion_Tipo_Direccion");
+                
+                entity.HasIndex(e => e.ComId, "FK_Direccion_Comuna");
+
+                entity.Property(e => e.DirId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dir_id");
+                entity.Property(e => e.PerId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("per_id");
+                entity.Property(e => e.CliId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("cli_id");
+                entity.Property(e => e.DirCalle)
+                    .HasMaxLength(50)
+                    .HasColumnName("dir_calle");
+                entity.Property(e => e.DirNumero)
+                    .HasMaxLength(50)
+                    .HasColumnName("dir_numero");
+                entity.Property(e => e.ComId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("com_id");
+                entity.Property(e => e.DirBlock)
+                    .HasMaxLength(50)
+                    .HasColumnName("dir_block");
+                entity.Property(e => e.TdiId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tdi_id");
+
+                entity.HasOne(d => d.Cli).WithMany()
+                    .HasForeignKey(d => d.CliId)
+                    .HasConstraintName("FK_Direccion_Cliente");
+
+                entity.HasOne(d => d.Per).WithMany()
+                    .HasForeignKey(d => d.PerId)
+                    .HasConstraintName("FK_Direccion_Persona");
+
+                entity.HasOne(d => d.Tdi).WithMany()
+                    .HasForeignKey(d => d.TdiId)
+                    .HasConstraintName("FK_Direccion_Tipo_Direccion");
+                
+                entity.HasOne(d => d.Com).WithMany()
+                    .HasForeignKey(d => d.ComId)
+                    .HasConstraintName("FK_Direccion_Comuna");
+            });
+
+            modelBuilder.Entity<TipoDireccion>(entity =>
+            {
+                entity.HasKey(e => e.TdiId).HasName("PRIMARY");
+                entity.ToTable("tipo_direccion");
+                entity.Property(e => e.TdiId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int")
+                    .HasColumnName("tdi_id");
+                entity.Property(e => e.TdiNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("tdi_nombre");
+                entity.Property(e => e.TdiVigente)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("tdi_vigente");
             });
 
 

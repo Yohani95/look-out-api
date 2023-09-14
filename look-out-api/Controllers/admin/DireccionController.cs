@@ -1,35 +1,36 @@
-using look.Application.interfaces.admin;
-using look.domain.entities.admin;
+﻿using look.Application.interfaces.admin;
 using look.domain.entities.Common;
+using look.domain.entities.world;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace look_out_api.Controllers.admin
 {
+    
     [Route("api/[controller]")]
     [ApiController]
-    public class TelefonoController: BaseController<Telefono>
+    public class DireccionController: BaseController<Direccion>
     {
-        private readonly ITelefonoService _telefonoService;
+        private readonly IDireccionService _direccionService;
 
-        public TelefonoController(ITelefonoService service) : base(service)
+        public DireccionController(IDireccionService service) : base(service)
         {
-            _telefonoService = service;
+            _direccionService = service;
         }
         
-        [HttpGet("getAllTelefonos")]
-        public async Task<IActionResult> GetAllTelefono()
+        [HttpGet("getAllDireccion")]
+        public async Task<IActionResult> GetAllDireccion()
         {
-            Log.Information("Solicitud GetAll telefono");
-            var email = await _telefonoService.ListComplete();
+            Log.Information("Solicitud GetAll Direccion");
+            var email = await _direccionService.ListComplete();
             return Ok(email);
         }
         
         [HttpPost("create")]
-        public async Task<IActionResult> CreateTelefono(Telefono telefono)
+        public async Task<IActionResult> CreateEmail(Direccion telefono)
         {
-            Log.Information("Solicitud Create telefono");
-            var result = await _telefonoService.Create(telefono);
+            Log.Information("Solicitud Create email");
+            var result = await _direccionService.Create(telefono);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -45,10 +46,10 @@ namespace look_out_api.Controllers.admin
             }
         }
         [HttpPut("Edit/{id}")]
-        public async Task<IActionResult> Edit(Telefono telefono,int id)
+        public async Task<IActionResult> Edit(Direccion direccion,int id)
         {
-            Log.Information("Solicitud Create telefono");
-            var result = await _telefonoService.Edit(telefono,id);
+            Log.Information("Solicitud Create direccion");
+            var result = await _direccionService.Edit(direccion,id);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -63,12 +64,11 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
-
-
-        protected override int GetEntityId(Telefono entity)
+        protected override int GetEntityId(Direccion entity)
         {
-            return entity.telId;
+            return entity.DirId;
         }
     }
+    
 }
 
