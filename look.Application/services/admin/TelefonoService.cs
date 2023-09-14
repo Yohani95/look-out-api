@@ -54,13 +54,13 @@ namespace look.Application.services.admin
                 {
                     IsSuccess = true,
                     MessageCode = ServiceResultMessage.Success,
-                    Message = "El email Creado con éxito"
+                    Message = "El telefono Creado con éxito"
                 };
 
             }
             catch (Exception ex)
             {
-                _logger.Error("Error al crear Email para la persona ID:" + telefono.perId);
+                _logger.Error("Error al crear telefono para la persona ID:" + telefono.perId);
                 await _unitOfWork.RollbackAsync();    
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
@@ -70,7 +70,7 @@ namespace look.Application.services.admin
         {
             try
             {
-                _logger.Information("Editando Email para la persona ID:" + telefono.perId);
+                _logger.Information("Editando telefono para la persona ID:" + telefono.perId);
                 if (telefono == null)
                 {
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "El telefono proporcionado es nulo." };
