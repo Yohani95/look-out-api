@@ -1,4 +1,6 @@
-﻿using look.domain.entities.cuentas;
+﻿using look.domain.dto.cuentas;
+using look.domain.entities.admin;
+using look.domain.entities.cuentas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,6 @@ namespace look.domain.interfaces.cuentas
     {
         Task<List<Cliente>> GetAllWithEntities();
         Task<Boolean> CreateWithEntities(Cliente cliente);
+        Task<List<CuentaDTO>> GetAllClientDTO();
     }
 }

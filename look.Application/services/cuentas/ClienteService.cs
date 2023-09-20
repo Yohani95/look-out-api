@@ -1,4 +1,5 @@
 ﻿using look.Application.interfaces.cuentas;
+using look.domain.dto.cuentas;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
@@ -317,6 +318,11 @@ namespace look.Application.services.cuentas
                     Data = null // Puedes dejar la lista vacía o null según tu necesidad
                 };
             }
+        }
+
+        public async Task<List<CuentaDTO>> GetAllClientDTO()
+        {
+            return await _repository.GetAllClientDTO();
         }
     }
 }

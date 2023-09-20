@@ -27,7 +27,7 @@ namespace look.domain.entities.cuentas
         public int? GirId { get; set; }
 
         public string? CliSitioWeb { get; set; }
-        public string? CliNif { get; set; }
+        public string? CliNif { get; set; } 
 
         public virtual EstadoCliente? EstadoCliente { get; set; }
 

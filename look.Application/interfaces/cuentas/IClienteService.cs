@@ -1,4 +1,6 @@
 ﻿using look.Application.services;
+using look.domain.dto.cuentas;
+using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ namespace look.Application.interfaces.cuentas
         Task<ServiceResult> EditWithEntities(int clientId, Cliente cliente, List<int> idPersons, int kamId);
         Task<ResponseGeneric<List<int>>> GetAllIdWithContact(int clientId);
         Task<ResponseGeneric<ClienteWithIds>> GetByIdWithKamAndContact(int clientId);
+        Task<List<CuentaDTO>> GetAllClientDTO();
 
     }
 }

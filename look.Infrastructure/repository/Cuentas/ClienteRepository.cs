@@ -1,4 +1,6 @@
-﻿using look.domain.entities.cuentas;
+﻿using look.domain.dto.cuentas;
+using look.domain.entities.admin;
+using look.domain.entities.cuentas;
 using look.domain.interfaces.cuentas;
 using look.Infrastructure.data;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,20 @@ namespace look.Infrastructure.repository.Cuentas
                         .OrderBy(c => c.CliId)
                         .Include(c => c.SectorComercial).ToListAsync();
         }
-     
+        public async Task<List<CuentaDTO>> GetAllClientDTO()
+        {
+            var query = from c in _dbContext.Cliente.Include(c => c.SectorComercial).Include(c => c.Pais)
+                        join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
+                        on c.CliId equals e.CliId into emailGroup
+                        from email in emailGroup.DefaultIfEmpty()
+                        select new CuentaDTO
+                        {
+                            Cliente = c,
+                            email = email.EmaEmail,
+                        };
+
+            var result = await query.OrderBy(dto => dto.Cliente.CliId).ToListAsync();
+            return result;
+        }
     }
 }

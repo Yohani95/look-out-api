@@ -112,6 +112,19 @@ namespace look_out_api.Controllers.cuentas
 
             return Ok(response);
         }
+
+        [HttpGet("GetDTOClient")]
+        public async Task<IActionResult> GetByIdWithKamAndContact()
+        {
+            var response = await _clienteService.GetAllClientDTO();
+
+            if (response==null)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
         protected override int GetEntityId(Cliente entity)
         {
             return entity.CliId;
