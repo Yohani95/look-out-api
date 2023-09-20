@@ -36,6 +36,7 @@ namespace look.Infrastructure.data
         public DbSet<TipoTelefono> TipoTelefono { get; set; }
         public DbSet<Direccion> Direccion { get; set; }
         public DbSet<TipoDireccion> TipoDireccion { get; set; }
+        public DbSet<Moneda> Moneda { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -604,6 +605,50 @@ namespace look.Infrastructure.data
                     .HasColumnName("tdi_vigente");
             });
 
+
+            modelBuilder.Entity<Moneda>(entity =>
+
+            {
+
+                entity.HasKey(e => e.MonId).HasName("PRIMARY");
+
+                entity.ToTable("moneda");
+
+                entity.HasIndex(e => e.PaiId, "FK_Moneda_Pais");
+
+                entity.Property(e => e.MonId)
+
+                    .ValueGeneratedNever()
+
+                    .HasColumnType("int(11)")
+
+                    .HasColumnName("mon_id");
+
+                entity.Property(e => e.MonNombre)
+
+                    .HasColumnType("int(11)")
+
+                    .HasColumnName("mon_nombre");
+
+                entity.Property(e => e.MonVigente)
+
+                    .HasColumnType("tinyint(4)")
+
+                    .HasColumnName("mon_vigente");
+
+                entity.Property(e => e.PaiId)
+
+                    .HasColumnType("int(11)")
+
+                    .HasColumnName("pai_id");
+
+                entity.HasOne(d => d.Pais).WithMany()
+
+                    .HasForeignKey(d => d.PaiId)
+
+                    .HasConstraintName("FK_Moneda_Pais");
+
+            });
 
 
         }
