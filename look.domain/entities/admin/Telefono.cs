@@ -11,6 +11,7 @@ namespace look.domain.entities.admin
         public String? telNumero { get; set; }
         public int? tteId { get; set; }
         public int? telVigente { get; set; }
+        public int? TelPrincipal { get; set; }
         
         public TipoTelefono? tipoTelefono { get; set;}
         public Cliente? cliente { get; set;}

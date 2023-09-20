@@ -19,6 +19,7 @@ namespace look.domain.entities.admin
         public string? EmaEmail { get; set; }
 
         public int? TemId { get; set; }
+        public int? EmaPrincipal { get; set; }
 
         public sbyte? EmaVigente { get; set; }
 

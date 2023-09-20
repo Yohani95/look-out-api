@@ -162,6 +162,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.TemId)
                     .HasColumnType("int(11)")
                     .HasColumnName("tem_id");
+                entity.Property(e => e.EmaPrincipal)
+                  .HasColumnType("int(11)")
+                  .HasColumnName("ema_principal");
 
                 entity.HasOne(d => d.Cli).WithMany()
                     .HasForeignKey(d => d.CliId)
@@ -217,6 +220,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.tteId)
                     .HasColumnType("int(11)")
                     .HasColumnName("tte_id");
+                entity.Property(e => e.TelPrincipal)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tel_principal");
                 entity.HasOne(d => d.cliente).WithMany()
                     .HasForeignKey(d => d.cliId)
                     .HasConstraintName("FK_Telefono_Cliente");
@@ -561,6 +567,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.TdiId)
                     .HasColumnType("int(11)")
                     .HasColumnName("tdi_id");
+                entity.Property(e => e.DirPrincipal)
+                 .HasColumnType("int(11)")
+                 .HasColumnName("dir_principal");
 
                 entity.HasOne(d => d.Cli).WithMany()
                     .HasForeignKey(d => d.CliId)

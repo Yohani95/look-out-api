@@ -27,6 +27,7 @@ namespace look.domain.entities.world
         public string? DirBlock { get; set; }
 
         public int? TdiId { get; set; }
+        public int? DirPrincipal { get; set; }
         
         public virtual Cliente? Cli { get; set; }
         public virtual Comuna? Com { get; set; }
