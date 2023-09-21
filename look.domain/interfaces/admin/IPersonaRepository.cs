@@ -11,6 +11,7 @@ namespace look.domain.interfaces.admin
     public interface IPersonaRepository:IRepository<Persona>
     {
         Task<List<Persona>> GetAllByType(int typePersonId);
+        Task<List<PersonaDTO>> GetAllContactEnteties();
 
     }
 }

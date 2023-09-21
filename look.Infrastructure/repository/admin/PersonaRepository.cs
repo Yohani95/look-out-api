@@ -1,10 +1,12 @@
-﻿using look.domain.entities.admin;
+﻿using look.domain.dto.admin;
+using look.domain.entities.admin;
 using look.domain.interfaces.admin;
 using look.Infrastructure.data;
 using Microsoft.EntityFrameworkCore;
 using MyApp.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,32 @@ namespace look.Infrastructure.repository.admin
                 .Where(p => p.TpeId == typePersonId).ToListAsync();
         }
 
+        public async Task<List<PersonaDTO>> GetAllContactEnteties()
+        {
+            var query = from p in _dbContext.Persona
+                        join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
+                        on p.Id equals e.PerId into emailGroup
+                        from email in emailGroup.DefaultIfEmpty()
+                        join tel in _dbContext.Telefono.Where(tel => tel.TelPrincipal == 1)
+                        on p.Id equals tel.perId into telGroup
+                        from telefono in telGroup.DefaultIfEmpty()
+                        join cp in _dbContext.ClientePersona
+                        on p.Id equals cp.PerId into clientePersonaGroup
+                        from clientePersona in clientePersonaGroup.DefaultIfEmpty()
+                        join cl in _dbContext.Cliente
+                        on clientePersona.CliId equals cl.CliId into clienteGroup
+                        from cliente in clienteGroup.DefaultIfEmpty()
+                        where p == null || p.TpeId == 3
+                        orderby p.Id
+                        select new PersonaDTO
+                        {
+                            Email= email.EmaEmail,
+                            Telefono=telefono.telNumero,
+                            Persona=p,
+                            Cuenta=cliente != null ? cliente.CliNombre : null,
+                        };
 
+            return await query.ToListAsync();
+        }
     }
 }

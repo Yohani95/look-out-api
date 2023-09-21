@@ -6,6 +6,7 @@ using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using look.domain.interfaces.admin;
 using look.domain.interfaces.unitOfWork;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace look.Application.services.admin
@@ -172,6 +173,59 @@ namespace look.Application.services.admin
             {
                 _logger.Error("Error interno del servidor: " + ex.ToString());
                 return null;
+            }
+        }
+
+        public async Task<ResponseGeneric<List<PersonaDTO>>> GetAllContactEnteties()
+        {
+            _logger.Information("Listando contactos con sus entidades");
+            try
+            {
+                var contact = await _personaRepository.GetAllContactEnteties();
+
+                if (contact == null)
+                {
+                    var invalidInputResult = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.InvalidInput,
+                        Message = "Sin Datos."
+                    };
+
+                    return new ResponseGeneric<List<PersonaDTO>>
+                    {
+                        serviceResult = invalidInputResult,
+                        Data = null 
+                    };
+                }
+                var result = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = "Listaado de Contactos."
+                };
+                return new ResponseGeneric<List<PersonaDTO>>
+                {
+                    serviceResult = result,
+                    Data = contact 
+                };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error("Error interno del servidor: " + ex.ToString());
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                };
+
+                return new ResponseGeneric<List<PersonaDTO>>
+                {
+                    serviceResult = errorResult,
+                    Data = null // Puedes dejar la lista vacía o null según tu necesidad
+                };
             }
         }
     }
