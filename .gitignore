@@ -47,3 +47,4 @@ appsettings.Production.json
 
 # Logs
 logs/
+look-out-api/look-out-api.csproj.user

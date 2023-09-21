@@ -1,5 +1,6 @@
 ﻿﻿using look.domain.entities.admin;
 using look.domain.entities.cuentas;
+using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,6 +38,8 @@ namespace look.Infrastructure.data
         public DbSet<Direccion> Direccion { get; set; }
         public DbSet<TipoDireccion> TipoDireccion { get; set; }
         public DbSet<Moneda> Moneda { get; set; }
+        public DbSet<Documento> Documento { get; set; }
+        public DbSet<TipoDocumento> TipoDocumento { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -649,6 +652,61 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_Moneda_Pais");
 
             });
+
+            modelBuilder.Entity<Documento>(entity =>
+            {
+                entity.HasKey(e => e.DocId).HasName("PRIMARY");
+                entity.ToTable("documento");
+                entity.HasIndex(e => e.TdoId, "FK_Documento_Tipo_Documento");
+                entity.HasIndex(e => e.DocIdCliente, "FK_Documento_Cliente");
+                entity.Property(e => e.DocId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("doc_id");
+                entity.Property(e => e.DocExtencion)
+                    .HasMaxLength(50)
+                    .HasColumnName("doc_extencion");
+                entity.Property(e => e.DocNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("doc_nombre");
+                entity.Property(e => e.DocUrl)
+                    .HasMaxLength(50)
+                    .HasColumnName("doc_url");
+                entity.Property(e => e.TdoId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tdo_id");
+
+                entity.Property(e => e.DocIdCliente)
+                   .HasColumnType("int(11)")
+                   .HasColumnName("doc_id_cliente");
+
+                entity.HasOne(d => d.TipoDoc).WithMany()
+                    .HasForeignKey(d => d.TdoId)
+                    .HasConstraintName("FK_Documento_Tipo_Documento");
+
+                entity.HasOne(d => d.DocCli).WithMany()
+                    .HasForeignKey(d => d.DocIdCliente)
+                    .HasConstraintName("FK_Documento_Cliente");
+
+            });
+            
+            modelBuilder.Entity<TipoDocumento>(entity =>
+            {
+                entity.HasKey(e => e.TdoId).HasName("PRIMARY");
+                entity.ToTable("tipo_documento");
+                entity.Property(e => e.TdoId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tdo_id");
+                entity.Property(e => e.TdoDescripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("tdo_descripcion");
+                entity.Property(e => e.TdoNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("tdo_nombre");
+
+            });
+
 
 
         }

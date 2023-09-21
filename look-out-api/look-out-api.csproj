@@ -17,8 +17,4 @@
     <ProjectReference Include="..\look.Infrastructure\look.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\proyecto\" />
-  </ItemGroup>
-
 </Project>
