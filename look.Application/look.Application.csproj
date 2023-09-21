@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="interfaces\proyecto\" />
     <Folder Include="services\admin\NewFolder\" />
+    <Folder Include="services\proyecto\" />
   </ItemGroup>
 
   <ItemGroup>

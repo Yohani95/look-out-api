@@ -11,4 +11,9 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="entities\proyecto\" />
+    <Folder Include="interfaces\proyecto\" />
+  </ItemGroup>
+
 </Project>
