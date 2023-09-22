@@ -76,9 +76,9 @@ namespace look.Infrastructure.data
                     .HasColumnType("tinyint(4)")
                     .HasColumnName("usu_vigente");
 
-                //entity.HasOne(d => d.Persona).WithMany()
-                //    .HasForeignKey(d => d.PerId)
-                //    .HasConstraintName("FK_Usuario_perfil");
+                entity.HasOne(d => d.Persona).WithMany()
+                    .HasForeignKey(d => d.PerId)
+                    .HasConstraintName("FK_Usuario_perfil");
 
                 entity.HasOne(d => d.Perfil).WithMany()
                     .HasForeignKey(d => d.PerId)
