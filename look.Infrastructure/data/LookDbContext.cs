@@ -41,6 +41,7 @@ namespace look.Infrastructure.data
         public DbSet<Documento> Documento { get; set; }
         public DbSet<TipoDocumento> TipoDocumento { get; set; }
         public DbSet<EstadoProyecto> EstadoProyecto { get; set; }
+        public DbSet<TipoServicio> TipoServicios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -725,7 +726,26 @@ namespace look.Infrastructure.data
 
             });
 
+            modelBuilder.Entity<TipoServicio>(entity =>
+            {
+                entity.HasKey(e => e.TseId).HasName("PRIMARY");
 
+                entity.ToTable("tipo_servicio");
+
+                entity.Property(e => e.TseId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tse_id");
+                entity.Property(e => e.TseDescripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("tse_descripcion");
+                entity.Property(e => e.TseNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("tse_nombre");
+                entity.Property(e => e.TseVigente)
+                    .HasColumnType("tinyint(4)")
+                    .HasColumnName("tse_vigente");
+            });
 
         }
 
