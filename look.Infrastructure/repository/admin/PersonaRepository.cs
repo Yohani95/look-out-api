@@ -28,26 +28,26 @@ namespace look.Infrastructure.repository.admin
         public async Task<List<PersonaDTO>> GetAllContactEnteties()
         {
             var query = from p in _dbContext.Persona
-                        join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
-                        on p.Id equals e.PerId into emailGroup
-                        from email in emailGroup.DefaultIfEmpty()
-                        join tel in _dbContext.Telefono.Where(tel => tel.TelPrincipal == 1)
-                        on p.Id equals tel.perId into telGroup
-                        from telefono in telGroup.DefaultIfEmpty()
                         join cp in _dbContext.ClientePersona
                         on p.Id equals cp.PerId into clientePersonaGroup
                         from clientePersona in clientePersonaGroup.DefaultIfEmpty()
-                        join cl in _dbContext.Cliente
-                        on clientePersona.CliId equals cl.CliId into clienteGroup
+                        join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
+                        on p.Id equals e.PerId into emailGroup
+                        from email in emailGroup.DefaultIfEmpty()
+                        join t in _dbContext.Telefono.Where(tel => tel.TelPrincipal == 1)
+                        on p.Id equals t.perId into telGroup
+                        from telefono in telGroup.DefaultIfEmpty()
+                        join c in _dbContext.Cliente
+                        on clientePersona.CliId equals c.CliId into clienteGroup
                         from cliente in clienteGroup.DefaultIfEmpty()
-                        where p == null || p.TpeId == 3
+                        where p.TpeId == 3
                         orderby p.Id
                         select new PersonaDTO
                         {
-                            Email= email.EmaEmail,
-                            Telefono=telefono.telNumero,
-                            Persona=p,
-                            Cuenta=cliente != null ? cliente.CliNombre : null,
+                            Email = email != null ? email.EmaEmail : null,
+                            Telefono = telefono != null ? telefono.telNumero : null,
+                            Persona = p,
+                            Cuenta = cliente != null ? cliente.CliNombre : null
                         };
 
             return await query.ToListAsync();

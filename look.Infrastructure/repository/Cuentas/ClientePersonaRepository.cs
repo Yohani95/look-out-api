@@ -60,6 +60,7 @@ namespace look.Infrastructure.repository.Cuentas
                         join p in _dbContext.Persona on (cpNullable != null ? cpNullable.PerId : (int?)null) equals p.Id into pGroup
                         from pNullable in pGroup.DefaultIfEmpty()
                         where pNullable == null || pNullable.TpeId == 2
+                        orderby c.CliId
                         select new
                         {
                             Cliente = c,
