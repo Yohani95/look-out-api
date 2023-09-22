@@ -202,7 +202,7 @@ namespace look.Application.services.admin
                 {
                     IsSuccess = true,
                     MessageCode = ServiceResultMessage.Success,
-                    Message = "Listaado de Contactos."
+                    Message = "Listado de Contactos."
                 };
                 return new ResponseGeneric<List<PersonaDTO>>
                 {
@@ -222,6 +222,64 @@ namespace look.Application.services.admin
                 };
 
                 return new ResponseGeneric<List<PersonaDTO>>
+                {
+                    serviceResult = errorResult,
+                    Data = null // Puedes dejar la lista vacía o null según tu necesidad
+                };
+            }
+        }
+        /// <summary>
+        /// lista todas las persona de tipo contacto segun el id del cliente
+        /// </summary>
+        /// <param name="id">id de cliente esperado</param>
+        /// <returns>retorna una lista de persona tipo contacto</returns>
+        public async Task<ResponseGeneric<List<Persona>>> GetAllContactByIdClient(int id)
+        {
+            _logger.Information("Listando contactos segun id del cliente");
+            try
+            {
+                var clientPerson=await _clientePersonaService.FindByClient(id);
+                var contact = clientPerson.Select(cp => cp.Persona).ToList();
+
+                if (contact == null || clientPerson==null)
+                {
+                    var invalidInputResult = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.InvalidInput,
+                        Message = "Sin Datos."
+                    };
+
+                    return new ResponseGeneric<List<Persona>>
+                    {
+                        serviceResult = invalidInputResult,
+                        Data = null
+                    };
+                }
+                var result = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = "Listado de Contactos segun el id del cliente."
+                };
+                return new ResponseGeneric<List<Persona>>
+                {
+                    serviceResult = result,
+                    Data = contact.Where(p=>p.TpeId==3).ToList(),
+                };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error("Error interno del servidor: " + ex.ToString());
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                };
+
+                return new ResponseGeneric<List<Persona>>
                 {
                     serviceResult = errorResult,
                     Data = null // Puedes dejar la lista vacía o null según tu necesidad

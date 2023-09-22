@@ -95,6 +95,23 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
+        [HttpGet("GetAllContactByIdClient/{id}")]
+        public async Task<ActionResult<ResponseGeneric<List<Persona>>>> GetAllContactByIdClient(int id)
+        {
+            var result = await _personaService.GetAllContactByIdClient(id);
+
+            switch (result.serviceResult.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
         protected override int GetEntityId(Persona entity)
         {
            return entity.Id;

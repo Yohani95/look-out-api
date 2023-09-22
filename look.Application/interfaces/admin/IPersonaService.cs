@@ -11,5 +11,6 @@ namespace look.Application.interfaces.admin
         Task<ServiceResult> Edit(int id,PersonaDTO personaDTO);
         Task<ServiceResult> Delete(int id);
         Task<ResponseGeneric<List<PersonaDTO>>> GetAllContactEnteties();
+        Task<ResponseGeneric<List<Persona>>> GetAllContactByIdClient(int id);
     }
 }
