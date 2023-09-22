@@ -42,6 +42,8 @@ namespace look.Infrastructure.data
         public DbSet<TipoDocumento> TipoDocumento { get; set; }
         public DbSet<EstadoProyecto> EstadoProyecto { get; set; }
         public DbSet<EstadoProspecto> EstadoProspecto { get; set; }
+        public DbSet<EstadoPropuesta> EstadoPropuesta { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -737,6 +739,20 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.EpsDescripcion)
                     .HasMaxLength(50)
                     .HasColumnName("eps_descripcion");               
+
+            });
+
+            modelBuilder.Entity<EstadoPropuesta>(entity =>
+            {
+                entity.HasKey(e => e.EppId).HasName("PRIMARY");
+                entity.ToTable("estado_propuesta");
+                entity.Property(e => e.EppId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("epp_id");
+                entity.Property(e => e.EppDescripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("epp_descripcion");
 
             });
 
