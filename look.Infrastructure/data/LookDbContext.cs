@@ -801,9 +801,9 @@ namespace look.Infrastructure.data
                   entity.HasOne(d => d.Mon).WithMany()
                       .HasForeignKey(d => d.MonId)
                       .HasConstraintName("FK_Proespecto_Moneda");
-                  //entity.HasOne(d => d.Tipser).WithMany(p => p.Prospectos)
-                  //    .HasForeignKey(d => d.TseId)
-                  //    .HasConstraintName("FK_Proespecto_Tipo_Servicio");
+                  entity.HasOne(d => d.TipSer).WithMany()
+                      .HasForeignKey(d => d.TseId)
+                      .HasConstraintName("FK_Proespecto_Tipo_Servicio");
 
               });
             modelBuilder.Entity<TipoServicio>(entity =>

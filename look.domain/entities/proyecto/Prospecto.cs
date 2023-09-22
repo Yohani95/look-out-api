@@ -29,7 +29,8 @@ namespace look.domain.entities.proyecto
         [JsonIgnore]
         public virtual Moneda? Mon { get; set; }
 
-        //public virtual TipoServicio? Tipser { get; set; }
+        [JsonIgnore]
+        public virtual TipoServicio? TipSer { get; set; }
 
 
 
