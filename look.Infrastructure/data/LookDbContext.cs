@@ -40,6 +40,7 @@ namespace look.Infrastructure.data
         public DbSet<Moneda> Moneda { get; set; }
         public DbSet<Documento> Documento { get; set; }
         public DbSet<TipoDocumento> TipoDocumento { get; set; }
+        public DbSet<EstadoProyecto> EstadoProyecto { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -704,6 +705,23 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.TdoNombre)
                     .HasMaxLength(50)
                     .HasColumnName("tdo_nombre");
+
+            });
+
+            modelBuilder.Entity<EstadoProyecto>(entity =>
+            {
+                entity.HasKey(e => e.EpyId).HasName("PRIMARY");
+                entity.ToTable("estado_proyecto");
+                entity.Property(e => e.EpyId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("epy_id");
+                entity.Property(e => e.EpyDescripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("epy_desripcion");
+                entity.Property(e => e.EpyNombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("epy_nombre");
 
             });
 

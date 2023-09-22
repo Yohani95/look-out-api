@@ -18,7 +18,7 @@ namespace look_out_api.Controllers.proyecto
 
         protected override int GetEntityId(Documento entity)
         {
-            // Implementa la lógica para obtener el ID de la entidad Moneda
+            // Implementa la lógica para obtener el ID de la entidad Documento
             return entity.DocId;
         }
     }
