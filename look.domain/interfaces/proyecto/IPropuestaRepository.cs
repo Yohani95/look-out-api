@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace look.domain.entities.proyecto
+namespace look.domain.interfaces.proyecto
 {
-    public class EstadoPropuesta
+    public interface IPropuestaRepository : IRepository<Propuesta>
     {
-        public int EppId { get; set; }
-        public string? EppDescripcion { get; set; }
     }
 }
