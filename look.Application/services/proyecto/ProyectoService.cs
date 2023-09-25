@@ -1,4 +1,5 @@
 ﻿using look.Application.interfaces.proyecto;
+using look.domain.dto.admin;
 using look.domain.entities.Common;
 using look.domain.entities.proyecto;
 using look.domain.interfaces;
@@ -16,15 +17,44 @@ namespace look.Application.services.proyecto
             _proyectoRepository = proyectoRepository;
         }
 
-        public async Task<int> GetLastId()
+        public async Task<ResponseGeneric<int>> GetLastId()
         {
             try
             {
                 var proy = await _proyectoRepository.GetAllAsync();
-                var id = proy == null ? 0 : proy.LastOrDefault().PryId;                               
-                return id;
+
+                if(proy == null)
+                {
+                    var result = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.NotFound,
+                        Message = "No hay datos."
+                    };
+                    return new ResponseGeneric<int>
+                    {
+                        serviceResult = result,
+                        Data = 0 
+                    };
+                }
+
+                var id = proy == null ? 0 : proy.LastOrDefault().PryId;
+
+                var resultSuccess= new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = Message.PeticionOk
+                };
+
+                return new ResponseGeneric<int>
+                {
+                    serviceResult = resultSuccess,
+                    Data = id
+                };
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var errorResult = new ServiceResult
                 {
@@ -33,9 +63,12 @@ namespace look.Application.services.proyecto
                     Message = $"Error interno del servidor: {ex.Message}"
                 };
 
-                return 0;
+                return new ResponseGeneric<int>
+                {
+                    serviceResult = errorResult,
+                    Data = 0
+                };
             }
-            
         }
     }
 }

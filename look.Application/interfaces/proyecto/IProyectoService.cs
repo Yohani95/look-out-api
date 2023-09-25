@@ -15,7 +15,6 @@ namespace look.Application.interfaces.proyecto
         /// Obtiene el último ID registrado de la tabla proyecto
         /// </summary>
         /// <returns>Retorna un entero</returns>
-        //Task<int> GetLastId();
         Task<ResponseGeneric<int>> GetLastId();
     }
 }

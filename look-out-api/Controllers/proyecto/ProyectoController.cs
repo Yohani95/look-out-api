@@ -27,9 +27,6 @@ namespace look_out_api.Controllers.proyecto
         [HttpGet("GetLastId")]
         public async Task<IActionResult> GetLastId() 
         {           
-
-            var response = await _proyectoService.GetLastId();
-
             var result = await _proyectoService.GetLastId();
             switch (result.serviceResult.MessageCode)
             {
@@ -42,10 +39,6 @@ namespace look_out_api.Controllers.proyecto
                 default:
                     return StatusCode(500, result);
             }
-
-
-
-            return Ok(response);
         }
 
 
