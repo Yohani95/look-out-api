@@ -42,7 +42,7 @@ namespace look_out_api.Controllers.admin
         [HttpPost]
         public async Task<IActionResult> CreateUsuario(Usuario usuario)
         {
-            await _usuarioService.AddAsync(usuario);
+            _usuarioService.encriptarPassword(usuario);
             return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.UsuId }, usuario);
         }
 
@@ -53,7 +53,9 @@ namespace look_out_api.Controllers.admin
             {
                 return BadRequest();
             }
-            await _usuarioService.UpdateAsync(usuario);
+
+            _usuarioService.ActualizaUsuario(usuario);
+           
             return NoContent();
         }
 
