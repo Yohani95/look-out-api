@@ -875,6 +875,73 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_Propuesta_Tipo_Servicio");
             });
 
+            modelBuilder.Entity<Proyecto>(entity =>
+            {
+
+                entity.HasKey(e => e.PryId).HasName("PRIMARY");
+                entity.ToTable("proyecto");
+                entity.HasIndex(e => e.PryIdCliente, "FK_Proyecto_Cliente");
+                entity.HasIndex(e => e.EpyId, "FK_Proyecto_Estado_Proyecto");
+                entity.HasIndex(e => e.MonId, "FK_Proyecto_Moneda");
+                entity.HasIndex(e => e.PrpId, "FK_Proyecto_Propuesta");
+                entity.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
+                entity.Property(e => e.PryId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pry_id");
+                entity.Property(e => e.PryNombre)
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("pry_nombre");
+                entity.Property(e => e.PrpId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("prp_id");
+                entity.Property(e => e.EpyId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("epy_id");
+                entity.Property(e => e.TseId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tse_id");
+                entity.Property(e => e.PryFechaInicioEstimada)
+                    .HasColumnType("datetime")
+                    .HasColumnName("pry_fecha_inicio_estimada");
+                entity.Property(e => e.PryValor)
+                    .HasColumnType("decimal(18,2)")
+                    .HasColumnName("pry_valor");
+                entity.Property(e => e.MonId)
+                   .HasColumnType("int(11)")
+                   .HasColumnName("mon_id");
+                entity.Property(e => e.PryIdCliente)
+                   .HasColumnType("int(11)")
+                   .HasColumnName("pry_id_cliente");
+                entity.Property(e => e.PryFechaCierreEstimada)
+                   .HasColumnType("datetime")
+                   .HasColumnName("pry_fecha_cierre_estimada");
+                entity.Property(e => e.PryFechaCierre)
+                 .HasColumnType("datetime")
+                 .HasColumnName("pry_fecha_cierre");
+                entity.Property(e => e.PryIdContacto)
+                  .HasColumnType("int(11)")
+                  .HasColumnName("pry_id_contacto");
+                entity.Property(e => e.PryIdContactoClave)
+                 .HasColumnType("int(11)")
+                 .HasColumnName("pry_id_contacto_clave");
+                entity.HasOne(d => d.Cli).WithMany()
+                    .HasForeignKey(d => d.PryIdCliente)
+                    .HasConstraintName("FK_Proyecto_Cliente");
+                entity.HasOne(d => d.EsProy).WithMany()
+                    .HasForeignKey(d => d.EpyId)
+                    .HasConstraintName("FK_Proyecto_Estado_Proyecto");
+                entity.HasOne(d => d.Mon).WithMany()
+                    .HasForeignKey(d => d.MonId)
+                    .HasConstraintName("FK_Proyecto_Moneda");
+                entity.HasOne(d => d.Prop).WithMany()
+                    .HasForeignKey(d => d.PrpId)
+                    .HasConstraintName("FK_Proyecto_Propuesta");
+                entity.HasOne(d => d.TipSer).WithMany()
+                  .HasForeignKey(d => d.TseId)
+                  .HasConstraintName("FK_Proyecto_Tipo_Servicio");
+            });
+
         }
 
     }
