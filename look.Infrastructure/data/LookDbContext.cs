@@ -45,6 +45,7 @@ namespace look.Infrastructure.data
         public DbSet<EstadoPropuesta> EstadoPropuesta { get; set; }
         public DbSet<Prospecto> Prospecto { get; set; }
         public DbSet<TipoServicio> TipoServicios { get; set; }
+        public DbSet<Proyecto> Proyecto { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
