@@ -24,7 +24,10 @@ namespace look.Infrastructure.repository.admin
 
         public async Task<Usuario> Login(Usuario user)
         {
-            return await _dbContext.Usuario.FirstOrDefaultAsync(u => u.UsuNombre==user.UsuNombre  && u.UsuContraseña == user.UsuContraseña);
+            return await _dbContext.Usuario
+                .Include(u => u.Persona)
+                .Include(u=>u.Perfil)
+                .FirstOrDefaultAsync(u => u.UsuNombre==user.UsuNombre  && u.UsuContraseña == user.UsuContraseña);
         }
     }
 }

@@ -6,6 +6,10 @@ using Serilog;
 using look.domain.entities.Common;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json")
+    .Build();
 builder.Services.AddDbContext<LookDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("api_lookoutContext") ?? throw new InvalidOperationException("Connection string 'api_lookoutContext' not found.");
@@ -16,11 +20,15 @@ Logger.InitializeLogger();
 
 var logger = Logger.GetLogger();
 Log.Logger = logger;
-Log.Information("Iniciando Servicio de Backend . net 6 look-out");
+Log.Information("Iniciando Servicio de Backend .net 6 look-out");
 builder.Services.AddControllers();
 Log.Information("Cargando inyección de dependencias");
 builder.Services.AddApplicationServices();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Registrar las configuraciones como servicio
+builder.Services.Configure<SharePointConfig>(configuration.GetSection("SharePointConfig"));
+
 Log.Information("Esperando Solicitudes.....");
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

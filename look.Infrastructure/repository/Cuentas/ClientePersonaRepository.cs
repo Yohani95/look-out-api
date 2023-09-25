@@ -33,7 +33,7 @@ namespace look.Infrastructure.repository.Cuentas
         {
             try
             {
-                return await _dbContext.ClientePersona.Where(p => p.CliId == id).ToListAsync();
+                return await _dbContext.ClientePersona.Where(p => p.CliId == id).Include(p=>p.Persona).ToListAsync();
             }
             catch (Exception ex)
             {

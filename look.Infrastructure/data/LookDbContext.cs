@@ -1,4 +1,4 @@
-﻿﻿using look.domain.entities.admin;
+using look.domain.entities.admin;
 using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
 using look.domain.entities.world;
@@ -46,6 +46,7 @@ namespace look.Infrastructure.data
         public DbSet<Prospecto> Prospecto { get; set; }
         public DbSet<TipoServicio> TipoServicios { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }
+        public DbSet<Propuesta> Propuesta { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,9 +78,9 @@ namespace look.Infrastructure.data
                     .HasColumnType("tinyint(4)")
                     .HasColumnName("usu_vigente");
 
-                //entity.HasOne(d => d.Persona).WithMany()
-                //    .HasForeignKey(d => d.PerId)
-                //    .HasConstraintName("FK_Usuario_perfil");
+                entity.HasOne(d => d.Persona).WithMany()
+                    .HasForeignKey(d => d.PerId)
+                    .HasConstraintName("FK_Usuario_perfil");
 
                 entity.HasOne(d => d.Perfil).WithMany()
                     .HasForeignKey(d => d.PerId)
@@ -807,6 +808,7 @@ namespace look.Infrastructure.data
                       .HasConstraintName("FK_Proespecto_Tipo_Servicio");
 
               });
+
             modelBuilder.Entity<TipoServicio>(entity =>
             {
                 entity.HasKey(e => e.TseId).HasName("PRIMARY");
@@ -826,6 +828,51 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.TseVigente)
                     .HasColumnType("tinyint(4)")
                     .HasColumnName("tse_vigente");
+            });
+
+            modelBuilder.Entity<Propuesta>(entity =>
+            {
+
+                entity.HasKey(e => e.PrpId).HasName("PRIMARY");
+                entity.ToTable("propuesta");
+                entity.HasIndex(e => e.EppId, "FK_Propuesta_Estado_Propuesta");
+                entity.HasIndex(e => e.MonId, "FK_Propuesta_Moneda");
+                entity.HasIndex(e => e.PrsId, "FK_Propuesta_Prospecto");
+                entity.HasIndex(e => e.TseId, "FK_Propuesta_Tipo_Servicio");
+                entity.Property(e => e.PrpId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("prp_id");
+                entity.Property(e => e.PrsId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("prs_id");
+                entity.Property(e => e.PrpDescripcion)
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("prp_descripcion");
+                entity.Property(e => e.PrpPresupuesto)
+                    .HasColumnType("decimal(18,2)")
+                    .HasColumnName("prp_presupuesto");
+                entity.Property(e => e.MonId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("mon_id");
+                entity.Property(e => e.EppId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("epp_id");
+                entity.Property(e => e.TseId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tse_id");                
+                entity.HasOne(d => d.EsPro).WithMany()
+                    .HasForeignKey(d => d.EppId)
+                    .HasConstraintName("FK_Propuesta_Estado_Propuesta");
+                entity.HasOne(d => d.Mon).WithMany()
+                    .HasForeignKey(d => d.MonId)
+                    .HasConstraintName("FK_Propuesta_Moneda");
+                entity.HasOne(d => d.Prosp).WithMany()
+                    .HasForeignKey(d => d.PrsId)
+                    .HasConstraintName("FK_Propuesta_Prospecto");
+                entity.HasOne(d => d.TipSer).WithMany()
+                    .HasForeignKey(d => d.TseId)
+                    .HasConstraintName("FK_Propuesta_Tipo_Servicio");
             });
 
         }
