@@ -1,5 +1,7 @@
 ﻿using look.Application.interfaces.proyecto;
 using look.Application.services.admin;
+using look.domain.entities.Common;
+using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,5 +23,18 @@ namespace look_out_api.Controllers.proyecto
             // Implementa la lógica para obtener el ID de la entidad Proyecto
             return entity.PryId;
         }
+
+        [HttpGet("GetLastId")]
+        public async Task<IActionResult> GetLastId() 
+        {           
+
+            var response = await _proyectoService.GetLastId();
+                       
+
+            return Ok(response);
+        }
+
+
+
     }
 }

@@ -9,5 +9,10 @@ namespace look.Application.interfaces.proyecto
 {
     public interface IProyectoService : IService<Proyecto>
     {
+        /// <summary>
+        /// Obtiene el último ID registrado de la tabla proyecto
+        /// </summary>
+        /// <returns>Retorna un entero</returns>
+        Task<int> GetLastId(); 
     }
 }
