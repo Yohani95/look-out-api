@@ -1,4 +1,6 @@
-﻿using look.domain.entities.proyecto;
+﻿using look.domain.entities.Common;
+using look.domain.entities.cuentas;
+using look.domain.entities.proyecto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace look.Application.interfaces.proyecto
         /// Obtiene el último ID registrado de la tabla proyecto
         /// </summary>
         /// <returns>Retorna un entero</returns>
-        Task<int> GetLastId(); 
+        //Task<int> GetLastId();
+        Task<ResponseGeneric<int>> GetLastId();
     }
 }

@@ -29,7 +29,21 @@ namespace look_out_api.Controllers.proyecto
         {           
 
             var response = await _proyectoService.GetLastId();
-                       
+
+            var result = await _proyectoService.GetLastId();
+            switch (result.serviceResult.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+
+
 
             return Ok(response);
         }
