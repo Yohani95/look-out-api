@@ -48,12 +48,13 @@ namespace look.Application.services.proyecto
             try
             {
                 _logger.Information("Crear proyecto");
+                await _unitOfWork.BeginTransactionAsync();
                 if (proyecto == null)
                 {
                     return new ServiceResult
                     {
                         IsSuccess = false,
-                        Message = "",
+                        Message = Message.EntidadNull,
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
@@ -61,51 +62,24 @@ namespace look.Application.services.proyecto
                 var urlArchivo1 = Files.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
                 var urlArchivo2 = Files.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
-                    return new ServiceResult { IsSuccess = false, Message = "", MessageCode = ServiceResultMessage.InvalidInput };
+                    return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
+                //completar correctamente segun lo que se requiere con todos los campos
                 await _documentoService.AddAsync(new Documento { DocExtencion = file1.ContentType, DocNombre = file1.FileName, DocUrl = urlArchivo1.ToString() });
                 await _documentoService.AddAsync(new Documento { DocExtencion = file2.ContentType, DocNombre = file2.FileName, DocUrl = urlArchivo2.ToString() });
 
-                _unitOfWork.BeginTransactionAsync();
+
+             
 
                 var propuesta = new Propuesta
                 {
 
                 };
 
-                var estadoProyecto = new EstadoProyecto
-                {
-
-                };
-
-                var tipoServicio = new TipoServicio
-                {
-
-                };
-
-                var moneda = new Moneda
-                {
-
-                };
-
-                var cliente = new Cliente
-                {
-
-                };
-
-                var documento = new Documento
-                {
-
-                };
 
                 await _propuestaService.AddAsync(propuesta);
-                await _estadoProyectoService.AddAsync(estadoProyecto);
-                await _tipoServicioService.AddAsync(tipoServicio);
-                await _monedaService.AddAsync(moneda);
-                await _clienteService.AddAsync(cliente);
-                await _documentoService.AddAsync(documento);
                 await _proyectoRepository.AddAsync(proyecto);
 
-                _unitOfWork.CommitAsync();
+                await _unitOfWork.CommitAsync();
                 return new ServiceResult 
                 { 
                     MessageCode = ServiceResultMessage.Success,
@@ -115,11 +89,11 @@ namespace look.Application.services.proyecto
 
             }
             catch (Exception ex) {
-                _unitOfWork.RollbackAsync();
+                await _unitOfWork.RollbackAsync();
                 return new ServiceResult
                 {
                     IsSuccess = false,
-                    Message = "",
+                    Message =  $"Error interno del servidor: {ex.Message}",
                     MessageCode = ServiceResultMessage.InvalidInput
                 };
             }

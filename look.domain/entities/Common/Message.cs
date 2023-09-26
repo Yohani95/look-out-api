@@ -9,5 +9,7 @@ namespace look.domain.entities.Common
     public class Message
     {
         public static string PeticionOk { get; } = "Petición Exitosa"; 
+        public static string SinDocumentos { get; } = "No hay Documento de respaldo"; 
+        public static string EntidadNull { get; } = "Entidad Nula"; 
     }
 }

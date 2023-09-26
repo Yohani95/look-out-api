@@ -42,7 +42,7 @@ namespace look_out_api.Controllers.proyecto
         }
 
         [HttpPost("createAsync")]
-        public async Task<IActionResult> CreateAsync(IFormFile file1 ,IFormFile file2,Proyecto proyecto)
+        public async Task<IActionResult> CreateAsync(Proyecto proyecto, IFormFile file1, IFormFile file2)
         {
             var result = await _proyectoService.createAsync(file1,file2,proyecto);
             switch (result.MessageCode)

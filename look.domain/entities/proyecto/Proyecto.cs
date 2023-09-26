@@ -25,19 +25,14 @@ namespace look.domain.entities.proyecto
         public int? PryIdContacto { get; set; }
         public int? PryIdContactoClave { get; set; }
 
-        [JsonIgnore]
         public virtual Cliente? Cli { get; set; }
 
-        [JsonIgnore]
         public virtual EstadoProyecto? EsProy { get; set; }
 
-        [JsonIgnore]
         public virtual Moneda? Mon { get; set; }
 
-        [JsonIgnore]
         public virtual Propuesta? Prop { get; set; } 
-
-        [JsonIgnore]
+        
         public virtual TipoServicio? TipSer { get; set; }
     }
 }
