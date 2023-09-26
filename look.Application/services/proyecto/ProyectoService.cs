@@ -18,10 +18,12 @@ namespace look.Application.services.proyecto
         private readonly ILogger _logger = Logger.GetLogger();
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProspectoService _prospectoService;
-        public ProyectoService(IProyectoRepository proyectoRepository, IProspectoService prospectoService) : base(proyectoRepository)
+        private readonly IDocumentoService _documentoService;
+        public ProyectoService(IProyectoRepository proyectoRepository, IProspectoService prospectoService, IDocumentoService documentoService) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
             _prospectoService = prospectoService;
+            _documentoService = documentoService;
         }
 
         public async Task<ServiceResult> createAsync( IFormFile file1, IFormFile file2,Proyecto proyecto)
@@ -43,14 +45,15 @@ namespace look.Application.services.proyecto
                 var urlArchivo2 = Files.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
                 if(urlArchivo.Equals("")|| urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message="",MessageCode=ServiceResultMessage.InvalidInput };
-
+                await _documentoService.AddAsync(new Documento { DocExtencion = file1.ContentType });
+                await _documentoService.AddAsync(new Documento { DocExtencion = file2.ContentType });
                 _unitOfWork.BeginTransactionAsync();
                 var prospecto = new Prospecto {
                 
                 };
-                _prospectoService.AddAsync(prospecto);
+                await _prospectoService.AddAsync(prospecto);
 
-                _proyectoRepository.AddAsync(proyecto);
+                await _proyectoRepository.AddAsync(proyecto);
 
                 _unitOfWork.CommitAsync();
                 return new ServiceResult { MessageCode = ServiceResultMessage.Success,IsSuccess=true,Message=Message.PeticionOk };
