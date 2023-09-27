@@ -29,8 +29,8 @@ namespace look.Application.services.proyecto
         private readonly IMonedaService _monedaService;
         private readonly IClienteService _clienteService;
         private readonly IDocumentoService _documentoService;
-               
-       
+
+
         public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaService propuestaService, IEstadoProyectoService estadoProyectoService, ITipoServicioService tipoServicioService, IMonedaService monedaService, IClienteService clienteService, IDocumentoService documentoService) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
@@ -40,10 +40,10 @@ namespace look.Application.services.proyecto
             _monedaService = monedaService;
             _clienteService = clienteService;
             _documentoService = documentoService;
-           
+
         }
 
-        public async Task<ServiceResult> createAsync( IFormFile file1, IFormFile file2,Proyecto proyecto)
+        public async Task<ServiceResult> createAsync(IFormFile file1, IFormFile file2, Proyecto proyecto)
         {
             try
             {
@@ -64,15 +64,17 @@ namespace look.Application.services.proyecto
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
                 //completar correctamente segun lo que se requiere con todos los campos
-                await _documentoService.AddAsync(new Documento { DocExtencion = file1.ContentType, DocNombre = file1.FileName, DocUrl = urlArchivo1.ToString() });
-                await _documentoService.AddAsync(new Documento { DocExtencion = file2.ContentType, DocNombre = file2.FileName, DocUrl = urlArchivo2.ToString() });
-
-
-             
+                await _documentoService.AddAsync(new Documento { DocExtencion = file1.ContentType, DocNombre = file1.FileName, DocUrl = urlArchivo1.ToString(),DocIdCliente=proyecto.PryIdCliente,TdoId=1 });
+                await _documentoService.AddAsync(new Documento { DocExtencion = file2.ContentType, DocNombre = file2.FileName, DocUrl = urlArchivo2.ToString(), DocIdCliente = proyecto.PryIdCliente, TdoId = 1 });
 
                 var propuesta = new Propuesta
                 {
-
+                    MonId=proyecto.MonId,
+                    PrpPresupuesto=0,
+                    EppId=1,
+                    PrpDescripcion="N/A",
+                    TseId=1,
+                    PrsId=1,
                 };
 
 
@@ -80,20 +82,21 @@ namespace look.Application.services.proyecto
                 await _proyectoRepository.AddAsync(proyecto);
 
                 await _unitOfWork.CommitAsync();
-                return new ServiceResult 
-                { 
+                return new ServiceResult
+                {
                     MessageCode = ServiceResultMessage.Success,
-                    IsSuccess=true,
-                    Message=Message.PeticionOk 
-                 };
+                    IsSuccess = true,
+                    Message = Message.PeticionOk
+                };
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 await _unitOfWork.RollbackAsync();
                 return new ServiceResult
                 {
                     IsSuccess = false,
-                    Message =  $"Error interno del servidor: {ex.Message}",
+                    Message = $"Error interno del servidor: {ex.Message}",
                     MessageCode = ServiceResultMessage.InvalidInput
                 };
             }
@@ -105,7 +108,7 @@ namespace look.Application.services.proyecto
             {
                 var proy = await _proyectoRepository.GetAllAsync();
 
-                if(proy == null)
+                if (proy == null)
                 {
                     var result = new ServiceResult
                     {
@@ -116,13 +119,13 @@ namespace look.Application.services.proyecto
                     return new ResponseGeneric<int>
                     {
                         serviceResult = result,
-                        Data = 0 
+                        Data = 0
                     };
                 }
 
                 var id = proy == null ? 0 : proy.LastOrDefault().PryId;
 
-                var resultSuccess= new ServiceResult
+                var resultSuccess = new ServiceResult
                 {
                     IsSuccess = true,
                     MessageCode = ServiceResultMessage.Success,

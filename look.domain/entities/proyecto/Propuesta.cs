@@ -13,6 +13,9 @@ namespace look.domain.entities.proyecto
     public class Propuesta
     {
         public int PrpId { get; set; }
+        /// <summary>
+        /// id prospecto
+        /// </summary>
         public int? PrsId { get; set; }
         public string? PrpDescripcion { get; set; }
         public double? PrpPresupuesto { get; set; }
