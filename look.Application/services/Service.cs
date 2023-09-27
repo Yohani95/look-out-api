@@ -27,9 +27,9 @@ namespace look.Application.services
             return await _repository.GetByIdAsync(id);
         }
 
-        public virtual async Task AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
-            await _repository.AddAsync(entity);
+           return await _repository.AddAsync(entity);
         }
 
         public virtual async Task UpdateAsync(T entity)
