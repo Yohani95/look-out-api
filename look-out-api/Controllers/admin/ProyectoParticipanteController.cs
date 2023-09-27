@@ -14,6 +14,19 @@ namespace look_out_api.Controllers.admin
         {
             _participanteService = service;
         }
+        
+        [HttpGet("WithEntities")]
+        public async Task<ActionResult<IEnumerable<ProyectoParticipante>>> GetAllWithEntities()
+        {
+            var proyectosParticipantes = await _participanteService.ListComplete();
+
+            if (proyectosParticipantes == null)
+            {
+                return NotFound();
+            }
+
+            return proyectosParticipantes;
+        }
 
         protected override int GetEntityId(ProyectoParticipante entity)
         {
