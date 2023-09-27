@@ -49,6 +49,8 @@ namespace look.Infrastructure.data
         public DbSet<ProyectoParticipante> ProyectoParticipante { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }
         
+        public DbSet<ProyectoDocumento> ProyectoDocumento { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -989,6 +991,37 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.CarDescripcion)
                     .HasMaxLength(50)
                     .HasColumnName("car_descripcion");
+            });
+            
+            modelBuilder.Entity<ProyectoDocumento>(entity =>
+            {
+                entity.HasKey(e => e.PydId).HasName("PRIMARY");
+                entity.ToTable("proyecto_documento");
+                entity.HasIndex(e => e.DocId, "FK_Proyecto_Documento_Documento");
+                entity.HasIndex(e => e.PryId, "FK_Proyecto_Documento_Proyecto");
+                entity.HasIndex(e => e.TdoId, "FK_Proyecto_Documento_Tipo_Documento");
+                entity.Property(e => e.PydId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pyd_id");
+                entity.Property(e => e.PryId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pry_id");
+                entity.Property(e => e.DocId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("doc_id");
+                entity.Property(e => e.TdoId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tdo_id");
+                entity.HasOne(d => d.Proyecto).WithMany()
+                    .HasForeignKey(d => d.PryId)
+                    .HasConstraintName("FK_Propuesta_Estado_Propuesta");
+                entity.HasOne(d => d.Documento).WithMany()
+                    .HasForeignKey(d => d.DocId)
+                    .HasConstraintName("FK_Propuesta_Moneda");
+                entity.HasOne(d => d.TipoDocumento).WithMany()
+                    .HasForeignKey(d => d.TdoId)
+                    .HasConstraintName("FK_Propuesta_Prospecto");
             });
 
         }
