@@ -24,22 +24,16 @@ namespace look.Application.services.proyecto
         private readonly ILogger _logger = Logger.GetLogger();
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPropuestaService _propuestaService;
-        private readonly IEstadoProyectoService _estadoProyectoService;
-        private readonly ITipoServicioService _tipoServicioService;
-        private readonly IMonedaService _monedaService;
-        private readonly IClienteService _clienteService;
         private readonly IDocumentoService _documentoService;
+        private readonly IProyectoDocumentoService _proyectoDocumentoService;
 
 
-        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaService propuestaService, IEstadoProyectoService estadoProyectoService, ITipoServicioService tipoServicioService, IMonedaService monedaService, IClienteService clienteService, IDocumentoService documentoService) : base(proyectoRepository)
+        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaService propuestaService, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
-            _propuestaService = propuestaService;
-            _estadoProyectoService = estadoProyectoService;
-            _tipoServicioService = tipoServicioService;
-            _monedaService = monedaService;
-            _clienteService = clienteService;
+            _propuestaService = propuestaService;         
             _documentoService = documentoService;
+            _proyectoDocumentoService = proyectoDocumentoService;
 
         }
 
@@ -64,8 +58,27 @@ namespace look.Application.services.proyecto
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
                 //completar correctamente segun lo que se requiere con todos los campos
-                await _documentoService.AddAsync(new Documento { DocExtencion = file1.ContentType, DocNombre = file1.FileName, DocUrl = urlArchivo1.ToString(),DocIdCliente=proyecto.PryIdCliente,TdoId=1 });
-                await _documentoService.AddAsync(new Documento { DocExtencion = file2.ContentType, DocNombre = file2.FileName, DocUrl = urlArchivo2.ToString(), DocIdCliente = proyecto.PryIdCliente, TdoId = 1 });
+
+                var documento1 = new Documento
+                {
+                    DocExtencion = file1.ContentType,
+                    DocNombre = file1.FileName,
+                    DocUrl = urlArchivo1.ToString(),
+                    DocIdCliente = proyecto.PryIdCliente,
+                    TdoId = 1
+                };
+
+                var documento2 = new Documento
+                {
+                    DocExtencion = file2.ContentType,
+                    DocNombre = file2.FileName,
+                    DocUrl = urlArchivo2.ToString(),
+                    DocIdCliente = proyecto.PryIdCliente,
+                    TdoId = 1
+                };
+
+                await _documentoService.AddAsync(documento1);               
+                await _documentoService.AddAsync(documento2);
 
                 var propuesta = new Propuesta
                 {
@@ -80,6 +93,21 @@ namespace look.Application.services.proyecto
 
                 await _propuestaService.AddAsync(propuesta);
                 await _proyectoRepository.AddAsync(proyecto);
+
+                var proyectoDocumento1 = new ProyectoDocumento
+                {
+                    PryId = proyecto.PryId,
+                    DocId = documento1.DocId                    
+                };
+
+                var proyectoDocumento2 = new ProyectoDocumento
+                {
+                    PryId = proyecto.PryId,
+                    DocId = documento2.DocId
+                };
+
+                await _proyectoDocumentoService.AddAsync(proyectoDocumento1);
+                await _proyectoDocumentoService.AddAsync(proyectoDocumento2);
 
                 await _unitOfWork.CommitAsync();
                 return new ServiceResult
