@@ -16,7 +16,7 @@ namespace look.Application.services.admin
             _usuarioRepository = repository;
         }
 
-        public void encriptarPassword(Usuario usuario)
+        public async Task encriptarPassword(Usuario usuario)
         {
             
             string textoEncriptado = Encriptar(usuario.UsuContraseña, "9#JwPz$T7@u&yAqK");
@@ -24,11 +24,12 @@ namespace look.Application.services.admin
             AddAsync(usuario);
         }
 
-        public void ActualizaUsuario(Usuario usuario)
+        public async Task ActualizaUsuario(Usuario usuario)
         {
             string textoEncriptado = Encriptar(usuario.UsuContraseña, "9#JwPz$T7@u&yAqK");
             usuario.UsuContraseña = textoEncriptado;
             UpdateAsync(usuario);
+            
         }
 
         public async Task<List<Usuario>> ListComplete()

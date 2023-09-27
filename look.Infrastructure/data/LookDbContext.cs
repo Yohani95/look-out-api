@@ -47,6 +47,10 @@ namespace look.Infrastructure.data
         public DbSet<TipoServicio> TipoServicios { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }
         public DbSet<Propuesta> Propuesta { get; set; }
+        public DbSet<ProyectoParticipante> ProyectoParticipante { get; set; }
+        
+        public DbSet<ProyectoDocumento> ProyectoDocumento { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -873,6 +877,85 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.TipSer).WithMany()
                     .HasForeignKey(d => d.TseId)
                     .HasConstraintName("FK_Propuesta_Tipo_Servicio");
+            });
+
+            modelBuilder.Entity<ProyectoParticipante>(entity =>
+            {
+                entity.HasKey(e => e.PpaId).HasName("PRIMARY");
+                entity.ToTable("proyecto_participantes");
+                entity.HasIndex(e => e.CarId, "FK_Proyecto_Participantes_Car");
+                entity.HasIndex(e => e.PerId, "FK_Proyecto_Participantes_Persona");
+                entity.HasIndex(e => e.PryId, "FK_Proyecto_Participantes_Proyecto");
+                entity.Property(e => e.PpaId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("ppa_id");
+                entity.Property(e => e.CarId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("car_id");
+                entity.Property(e => e.PerId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("per_id");
+                entity.Property(e => e.PryId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pry_id");
+                entity.HasOne(d => d.Per).WithMany()
+                    .HasForeignKey(d => d.PerId)
+                    .HasConstraintName("FK_Propuesta_Estado_Propuesta");
+                entity.HasOne(d => d.Car).WithMany()
+                    .HasForeignKey(d => d.CarId)
+                    .HasConstraintName("FK_Propuesta_Moneda");
+                entity.HasOne(d => d.Pro).WithMany()
+                    .HasForeignKey(d => d.PryId)
+                    .HasConstraintName("FK_Propuesta_Prospecto");
+            });
+            
+            modelBuilder.Entity<Car>(entity =>
+            {
+                entity.HasKey(e => e.CarId).HasName("PRIMARY");
+                entity.ToTable("car");
+                entity.Property(e => e.CarId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("car_id");
+                entity.Property(e => e.CarNombre)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("car_nombre");
+                entity.Property(e => e.CarDescripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("car_descripcion");
+            });
+            
+            modelBuilder.Entity<ProyectoDocumento>(entity =>
+            {
+                entity.HasKey(e => e.PydId).HasName("PRIMARY");
+                entity.ToTable("proyecto_documento");
+                entity.HasIndex(e => e.DocId, "FK_Proyecto_Documento_Documento");
+                entity.HasIndex(e => e.PryId, "FK_Proyecto_Documento_Proyecto");
+                entity.HasIndex(e => e.TdoId, "FK_Proyecto_Documento_Tipo_Documento");
+                entity.Property(e => e.PydId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pyd_id");
+                entity.Property(e => e.PryId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pry_id");
+                entity.Property(e => e.DocId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("doc_id");
+                entity.Property(e => e.TdoId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tdo_id");
+                entity.HasOne(d => d.Proyecto).WithMany()
+                    .HasForeignKey(d => d.PryId)
+                    .HasConstraintName("FK_Propuesta_Estado_Propuesta");
+                entity.HasOne(d => d.Documento).WithMany()
+                    .HasForeignKey(d => d.DocId)
+                    .HasConstraintName("FK_Propuesta_Moneda");
+                entity.HasOne(d => d.TipoDocumento).WithMany()
+                    .HasForeignKey(d => d.TdoId)
+                    .HasConstraintName("FK_Propuesta_Prospecto");
             });
 
             modelBuilder.Entity<Proyecto>(entity =>

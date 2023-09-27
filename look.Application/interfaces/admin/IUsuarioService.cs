@@ -11,9 +11,9 @@ namespace look.Application.interfaces.admin
     {
         Task<Usuario> Login(Usuario usuario);
         
-        void encriptarPassword(Usuario usuario);
+        Task encriptarPassword(Usuario usuario);
         
-        void ActualizaUsuario(Usuario usuario);
+        Task ActualizaUsuario(Usuario usuario);
         Task<List<Usuario>> ListComplete();
     }
 }
