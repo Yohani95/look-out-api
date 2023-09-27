@@ -41,7 +41,22 @@ namespace look_out_api.Controllers.proyecto
             }
         }
 
-
+        [HttpPost("createAsync")]
+        public async Task<IActionResult> CreateAsync(Proyecto proyecto, IFormFile file1, IFormFile file2)
+        {
+            var result = await _proyectoService.createAsync(file1,file2,proyecto);
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
 
     }
 }

@@ -20,7 +20,7 @@ namespace look.Application.services.Common
             _sharePointConfig = sharePointConfig.Value;
         }
         // Método para subir un archivo
-        public async Task<string> UploadFileAsync(IFormFile file, int clientId)
+        public static  async Task<string> UploadFileAsync(IFormFile file, int clientId)
         {
 
 
@@ -32,7 +32,7 @@ namespace look.Application.services.Common
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
             // Construye la ruta de la carpeta del cliente y el archivo
-            var clientFolderPath = Path.Combine(_serverUploadPath, "File", clientId.ToString());
+            var clientFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "File", clientId.ToString());
             var filePath = Path.Combine(clientFolderPath, fileName);
 
             // Asegúrate de que la carpeta del cliente exista
