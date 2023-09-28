@@ -28,12 +28,13 @@ namespace look.Application.services.proyecto
         private readonly IProyectoDocumentoService _proyectoDocumentoService;
 
 
-        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaService propuestaService, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService) : base(proyectoRepository)
+        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaService propuestaService, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
             _propuestaService = propuestaService;         
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
+            _unitOfWork= unitOfWork;
 
         }
 
