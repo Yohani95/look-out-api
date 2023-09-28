@@ -42,7 +42,7 @@ namespace look_out_api.Controllers.proyecto
         }
 
         [HttpPost("createAsync")]
-        public async Task<IActionResult> CreateAsync([FromForm] Proyecto proyecto, [FromForm] IFormFile file1, [FromForm] IFormFile file2)
+        public async Task<IActionResult> CreateAsync(Proyecto proyecto, [FromForm] IFormFile file1, [FromForm] IFormFile file2)
         {
              //var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success}; 
             var result = await _proyectoService.createAsync(file1,file2,proyecto);

@@ -92,17 +92,22 @@ namespace look.Application.services.proyecto
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId});
 
                 await _unitOfWork.CommitAsync();
+                _logger.Information("Proyecto creado exitosamente");
                 return new ServiceResult
                 {
                     MessageCode = ServiceResultMessage.Success,
                     IsSuccess = true,
-                    Message = Message.PeticionOk
+                    Message = Message.PeticionOk,
                 };
+                
 
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
+
+                _logger.Information("Error al crear el proyecto: " + ex.Message);
+
                 return new ServiceResult
                 {
                     IsSuccess = false,
