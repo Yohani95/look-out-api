@@ -50,6 +50,7 @@ namespace look.Infrastructure.data
         public DbSet<ProyectoParticipante> ProyectoParticipante { get; set; }
         
         public DbSet<ProyectoDocumento> ProyectoDocumento { get; set; }
+        public DbSet<TarifarioConvenio> TarifarioConvenio { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -886,6 +887,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.CarId, "FK_Proyecto_Participantes_Car");
                 entity.HasIndex(e => e.PerId, "FK_Proyecto_Participantes_Persona");
                 entity.HasIndex(e => e.PryId, "FK_Proyecto_Participantes_Proyecto");
+                entity.HasIndex(e => e.PrfId, "FK_Proyecto_participantes_Perfil");
                 entity.Property(e => e.PpaId)
                     .ValueGeneratedNever()
                     .HasColumnType("int(11)")
@@ -899,6 +901,12 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PryId)
                     .HasColumnType("int(11)")
                     .HasColumnName("pry_id");
+                entity.Property(e => e.PerTartifa)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("per_tarifa");
+                entity.Property(e => e.PrfId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("prf_id");
                 entity.HasOne(d => d.Per).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Propuesta_Estado_Propuesta");
@@ -908,6 +916,9 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Pro).WithMany()
                     .HasForeignKey(d => d.PryId)
                     .HasConstraintName("FK_Propuesta_Prospecto");
+                entity.HasOne(d => d.Perfil).WithMany()
+                    .HasForeignKey(d => d.PrfId)
+                    .HasConstraintName("FK_Proyecto_participantes_Perfil");
             });
             
             modelBuilder.Entity<Car>(entity =>
@@ -1023,6 +1034,45 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.TipSer).WithMany()
                   .HasForeignKey(d => d.TseId)
                   .HasConstraintName("FK_Proyecto_Tipo_Servicio");
+            });
+            
+            modelBuilder.Entity<TarifarioConvenio>(entity =>
+            {
+
+                entity.HasKey(e => e.TcId).HasName("PRIMARY");
+                entity.ToTable("tarifario_convenido");
+                entity.Property(e => e.TcId)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tc_id");
+                entity.Property(e => e.TcPerfilAsignado)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tc_perfil_asignado");
+                entity.Property(e => e.TcTarifa)
+                    .HasColumnType("int(50)")
+                    .HasColumnName("tc_tarifa");
+                entity.Property(e => e.TcMoneda)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tc_moneda");
+                entity.Property(e => e.TcBase)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tc_base");
+                entity.Property(e => e.TcStatus)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tc_status");
+                entity.Property(e => e.TcInicioVigencia)
+                    .HasColumnType("datetime")
+                    .HasColumnName("tc_inicio_vigencia");       
+                entity.Property(e => e.TcTerminoVigencia)
+                    .HasColumnType("datetime")
+                    .HasColumnName("tc_termino_vigencia");       
+                entity.Property(e => e.ComentariosGrales)
+                    .HasColumnType("varchar(1000")
+                    .HasColumnName("comentarios_grales");       
+                entity.Property(e => e.PRpId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("prp_id");       
+                
             });
 
         }
