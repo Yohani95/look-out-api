@@ -12,11 +12,17 @@ namespace look.domain.entities.admin
         
         public int? CarId { get; set; }
         
+        public int PerTartifa {get; set; }
+        
+        public int? PrfId {get; set; }
+        
         public virtual Car? Car { get; set; }
         
         public virtual Persona? Per { get; set; }
         
         public virtual Proyecto? Pro { get; set; }
+        
+        public virtual Perfil Perfil { get; set; }
     }
 }
 
