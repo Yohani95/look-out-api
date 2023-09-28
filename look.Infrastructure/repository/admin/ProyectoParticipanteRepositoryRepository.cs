@@ -14,7 +14,7 @@ namespace look.Infrastructure.repository.admin
 
         public async Task<List<ProyectoParticipante>> GetComplete()
         {
-            return await _dbContext.ProyectoParticipante.Include(e=>e.Per).Include(e=>e.Per).Include(e=>e.Pro).Include(e=>e.Car).ToListAsync();
+            return await _dbContext.ProyectoParticipante.Include(e=>e.Per).Include(e=>e.Per).Include(e=>e.Pro).Include(e=>e.Car).Include(e=>e.Perfil).ToListAsync();
         }
     }
 }
