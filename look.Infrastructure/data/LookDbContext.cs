@@ -834,6 +834,25 @@ namespace look.Infrastructure.data
                     .HasColumnType("tinyint(4)")
                     .HasColumnName("tse_vigente");
             });
+            
+            modelBuilder.Entity<Perfil>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+                entity.ToTable("perfil");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tse_id");
+                entity.Property(e => e.Prf_Nombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("prf_nombre");
+                entity.Property(e => e.Prf_Descripcion)
+                    .HasMaxLength(50)
+                    .HasColumnName("prf_descripcion");
+                
+            });
 
             modelBuilder.Entity<Propuesta>(entity =>
             {

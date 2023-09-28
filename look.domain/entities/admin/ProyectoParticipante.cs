@@ -6,15 +6,15 @@ namespace look.domain.entities.admin
     {
         public int PpaId { get; set; }
 
-        public int? PryId { get; set; }
+        public int PryId { get; set; }
 
-        public int? PerId { get; set; }
+        public int PerId { get; set; }
         
-        public int? CarId { get; set; }
+        public int CarId { get; set; }
         
-        public int PerTartifa {get; set; }
+        public int PerTartifa { get; set; }
         
-        public int? PrfId {get; set; }
+        public int PrfId {get; set; }
         
         public virtual Car? Car { get; set; }
         
@@ -22,7 +22,7 @@ namespace look.domain.entities.admin
         
         public virtual Proyecto? Pro { get; set; }
         
-        public virtual Perfil Perfil { get; set; }
+        public virtual Perfil? Perfil { get; set; }
     }
 }
 
