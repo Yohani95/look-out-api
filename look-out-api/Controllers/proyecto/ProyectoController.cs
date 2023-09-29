@@ -1,5 +1,6 @@
 ﻿using look.Application.interfaces.proyecto;
 using look.Application.services.admin;
+using look.domain.dto.proyecto;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
@@ -42,10 +43,10 @@ namespace look_out_api.Controllers.proyecto
         }
 
         [HttpPost("createAsync")]
-        public async Task<IActionResult> CreateAsync(Proyecto proyecto, [FromForm] IFormFile file1, [FromForm] IFormFile file2)
+        public async Task<IActionResult> CreateAsync([FromForm] ProyectoDTO proyectoDTO)
         {
              //var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success}; 
-            var result = await _proyectoService.createAsync(file1,file2,proyecto);
+            var result = await _proyectoService.createAsync(proyectoDTO.file1,proyectoDTO.file2,proyectoDTO.proyecto);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
