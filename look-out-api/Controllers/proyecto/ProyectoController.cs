@@ -5,6 +5,7 @@ using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace look_out_api.Controllers.proyecto
 {
@@ -43,10 +44,13 @@ namespace look_out_api.Controllers.proyecto
         }
 
         [HttpPost("createAsync")]
-        public async Task<IActionResult> CreateAsync([FromForm] ProyectoDTO proyectoDTO)
+        public async Task<IActionResult> CreateAsync([FromForm]Proyecto proyecto, [FromForm] IFormFile file1, [FromForm] IFormFile file2)
         {
-             //var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success}; 
-            var result = await _proyectoService.createAsync(proyectoDTO.file1,proyectoDTO.file2,proyectoDTO.proyecto);
+            var json = HttpContext.Request.Form["proyecto"];
+            var proyecto1 = JsonConvert.DeserializeObject<Proyecto>(json);
+
+            var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success}; 
+            //var result = await _proyectoService.createAsync(proyectoDTO.file1,proyectoDTO.file2,proyectoDTO.proyecto);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
