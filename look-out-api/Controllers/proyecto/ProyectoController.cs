@@ -1,5 +1,6 @@
 ﻿using look.Application.interfaces.proyecto;
 using look.Application.services.admin;
+using look.domain.dto.admin;
 using look.domain.dto.proyecto;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
@@ -43,15 +44,17 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-
+        
         [HttpPost("createAsync")]
-        public async Task<IActionResult> CreateAsync([FromForm]Proyecto proyecto, [FromForm] IFormFile file1, [FromForm] IFormFile file2)
+        public async Task<IActionResult> CreateAsync([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
         {
-            var json = HttpContext.Request.Form["proyecto"];
-            var proyectoJson = JsonConvert.DeserializeObject<Proyecto>(json);
-
-            //var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success};
-            var result = await _proyectoService.createAsync(file1,file2,proyectoJson);
+            
+            var proyecto = JsonConvert.DeserializeObject<Proyecto>(proyectoJson);
+            IFormFile file1;
+            IFormFile file2;
+            file1 = files[0];
+            file2 = files[1];
+            var result = await _proyectoService.createAsync(file1,file2,proyecto);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -64,6 +67,11 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
+
+        
+        
+
+
         [HttpGet("GeFileByProject/{nombreArchivo}")]
         public IActionResult DescargarArchivo(string path)
         {
