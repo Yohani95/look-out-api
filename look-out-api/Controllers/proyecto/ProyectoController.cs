@@ -67,8 +67,24 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
+
         
         
 
+
+        [HttpGet("GeFileByProject/{nombreArchivo}")]
+        public IActionResult DescargarArchivo(string path)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                var archivoStream = System.IO.File.OpenRead(path);
+                return File(archivoStream, "application/octet-stream", archivoStream.Name);
+            }
+            else
+            {
+                Log.Warning(Message.SinDocumentos);
+                return NotFound();
+            }
+        }
     }
 }

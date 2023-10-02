@@ -53,29 +53,12 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-
-                var urlArchivo1 = Files.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
-                var urlArchivo2 = Files.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
+                var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
+                var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
                 //completar correctamente segun lo que se requiere con todos los campos
-
-                var documento1=await _documentoService.AddAsync(new Documento
-                {
-                    DocExtencion = file1.ContentType,
-                    DocNombre = file1.FileName,
-                    DocUrl = urlArchivo1.ToString(),
-                    DocIdCliente = proyecto.PryIdCliente,
-                    TdoId = 1
-                });               
-                var documento2=await _documentoService.AddAsync(new Documento
-                {
-                    DocExtencion = file2.ContentType,
-                    DocNombre = file2.FileName,
-                    DocUrl = urlArchivo2.ToString(),
-                    DocIdCliente = proyecto.PryIdCliente,
-                    TdoId = 1
-                });
+              
                 var propuesta = new Propuesta
                 {
                     MonId=proyecto.MonId,
@@ -88,7 +71,25 @@ namespace look.Application.services.proyecto
 
                 await _propuestaService.AddAsync(propuesta);
                 await _proyectoRepository.AddAsync(proyecto);
+
+                var documento1 = await _documentoService.AddAsync(new Documento
+                {
+                    DocExtencion = file1.ContentType,
+                    DocNombre = file1.FileName,
+                    DocUrl = urlArchivo1.ToString(),
+                    DocIdCliente = proyecto.PryIdCliente,
+                    TdoId = 1
+                });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId});
+
+                var documento2 = await _documentoService.AddAsync(new Documento
+                {
+                    DocExtencion = file2.ContentType,
+                    DocNombre = file2.FileName,
+                    DocUrl = urlArchivo2.ToString(),
+                    DocIdCliente = proyecto.PryIdCliente,
+                    TdoId = 1
+                });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId});
 
                 await _unitOfWork.CommitAsync();
@@ -112,9 +113,94 @@ namespace look.Application.services.proyecto
                 {
                     IsSuccess = false,
                     Message = $"Error interno del servidor: {ex.Message}",
-                    MessageCode = ServiceResultMessage.InvalidInput
+                    MessageCode = ServiceResultMessage.InternalServerError
                 };
             }
+        }
+
+        public async Task<ServiceResult> deleteAsync(int id)
+        {
+            try
+            {
+                _logger.Information("Eliminar proyecto con documentos y propuesta");
+
+                if (id <= 0)
+                {
+                    return new ServiceResult
+                    {
+                        IsSuccess = false,
+                        Message = Message.EntidadNull,
+                        MessageCode = ServiceResultMessage.InvalidInput
+                    };
+                }
+
+                // Verifica si el proyecto existe en la base de datos antes de eliminarlo.
+                var existingProyecto = await _proyectoRepository.GetByIdAsync(id);
+                if (existingProyecto == null)
+                {
+                    return new ServiceResult
+                    {
+                        IsSuccess = false,
+                        Message = Message.EntidadNull,
+                        MessageCode = ServiceResultMessage.InvalidInput
+                    };
+                }
+
+                // Elimina la propuesta asociada al proyecto.
+                var propuesta=await _propuestaService.GetByIdAsync((int)existingProyecto.PrpId);
+                await _propuestaService.DeleteAsync(propuesta);
+
+                // Elimina los documentos asociados al proyecto.
+                var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
+                proyectoDocumentos.Where(d=>d.PryId == id).ToList();
+
+                foreach (var proDoc in proyectoDocumentos)
+                {
+                    var documento = await _documentoService.GetByIdAsync(proDoc.DocId);
+                    bool deleted = FileServices.DeleteFile(documento.DocUrl);
+
+                    if (!deleted)
+                    {
+                        await _documentoService.DeleteAsync(documento);
+                    }
+                }
+
+                // Elimina el proyecto después de eliminar la propuesta y los documentos.
+                await _proyectoRepository.DeleteAsync(existingProyecto);
+
+                _logger.Information("Proyecto con propuesta y documentos eliminado exitosamente");
+                return new ServiceResult
+                {
+                    IsSuccess = true,
+                    Message = Message.PeticionOk,
+                    MessageCode = ServiceResultMessage.Success
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error al eliminar el proyecto con propuesta y documentos: " + ex.Message);
+
+                return new ServiceResult
+                {
+                    IsSuccess = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    MessageCode = ServiceResultMessage.InternalServerError
+                };
+            }
+        }
+
+        public async Task<FileStream> GetFile(string path)
+        {
+            try
+            {
+                _logger.Error("Descargando archivos para el proyecto");
+                return FileServices.GetFile(path);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error al actualizar el proyecto con documentos: " + ex.Message);
+            }
+            return null;
         }
 
         public async Task<ResponseGeneric<int>> GetLastId()
@@ -167,6 +253,97 @@ namespace look.Application.services.proyecto
                 {
                     serviceResult = errorResult,
                     Data = 0
+                };
+            }
+        }
+
+        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto, int id)
+        {
+            try
+            {
+                _logger.Information("Actualizar proyecto con documentos");
+                proyecto.PrpId=id;
+                if (proyecto == null || proyecto.PryId == 0)
+                {
+                    return new ServiceResult
+                    {
+                        IsSuccess = false,
+                        Message = Message.EntidadNull,
+                        MessageCode = ServiceResultMessage.InvalidInput
+                    };
+                }
+
+                // Verifica si el proyecto existe en la base de datos antes de actualizarlo.
+                var existingProyecto = await _proyectoRepository.GetByIdAsync(proyecto.PryId);
+                if (existingProyecto == null)
+                {
+                    return new ServiceResult
+                    {
+                        IsSuccess = false,
+                        Message = Message.EntidadNull,
+                        MessageCode = ServiceResultMessage.InvalidInput
+                    };
+                }
+
+                // Actualiza los campos del proyecto con los valores proporcionados.
+                existingProyecto.MonId = proyecto.MonId;
+                existingProyecto.EpyId = proyecto.EpyId;
+                existingProyecto.TseId = proyecto.TseId;
+                existingProyecto.EsProy= proyecto.EsProy;
+                existingProyecto.PrpId= proyecto.PrpId;
+                existingProyecto.PryFechaCierre= proyecto.PryFechaCierre;
+                existingProyecto.PryFechaInicioEstimada= proyecto.PryFechaCierreEstimada;
+                existingProyecto.PryValor= proyecto.PryValor;
+
+                var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
+                foreach (var proyectoDocumento in proyectoDocumentos.Where(p => p.PryId == existingProyecto.PryId))
+                {
+                    var documento = await _documentoService.GetByIdAsync(proyectoDocumento.DocId);
+                    FileServices.DeleteFile(documento.DocUrl);
+                    await _documentoService.DeleteAsync(documento);
+                }
+
+                // Actualiza los documentos si se proporcionan archivos actualizados.
+                if (file1 != null)
+                {
+                    var urlArchivo1 = FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
+                    await _documentoService.AddAsync(new Documento
+                    {
+                        DocExtencion = file1.ContentType,
+                        DocNombre = file1.FileName,
+                        DocUrl = urlArchivo1.ToString()
+                    });
+                }
+
+                if (file2 != null)
+                {
+                    var urlArchivo2 = FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
+                    await _documentoService.AddAsync(new Documento
+                    {
+                        DocExtencion = file2.ContentType,
+                        DocNombre = file2.FileName,
+                        DocUrl = urlArchivo2.ToString()
+                    });
+                }
+                // Llama al repositorio para guardar los cambios en la base de datos.
+                await _proyectoRepository.UpdateAsync(existingProyecto);
+
+                _logger.Information("Proyecto con documentos actualizado exitosamente");
+                return new ServiceResult
+                {
+                    MessageCode = ServiceResultMessage.Success,
+                    IsSuccess = true,
+                    Message = Message.PeticionOk,
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error al actualizar el proyecto con documentos: " + ex.Message);
+                return new ServiceResult
+                {
+                    IsSuccess = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    MessageCode = ServiceResultMessage.InternalServerError
                 };
             }
         }

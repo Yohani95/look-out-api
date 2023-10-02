@@ -682,7 +682,7 @@ namespace look.Infrastructure.data
                     .HasMaxLength(50)
                     .HasColumnName("doc_nombre");
                 entity.Property(e => e.DocUrl)
-                    .HasMaxLength(50)
+                    .HasMaxLength(190)
                     .HasColumnName("doc_url");
                 entity.Property(e => e.TdoId)
                     .HasColumnType("int(11)")
@@ -843,8 +843,8 @@ namespace look.Infrastructure.data
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
-                    .HasColumnType("int(11)")
-                    .HasColumnName("tse_id");
+                    .HasMaxLength(50)
+                    .HasColumnName("id");
                 entity.Property(e => e.Prf_Nombre)
                     .HasMaxLength(50)
                     .HasColumnName("prf_nombre");
