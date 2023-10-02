@@ -843,7 +843,7 @@ namespace look.Infrastructure.data
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
-                    .HasColumnType("int(11)")
+                    .HasMaxLength(50)
                     .HasColumnName("tse_id");
                 entity.Property(e => e.Prf_Nombre)
                     .HasMaxLength(50)
