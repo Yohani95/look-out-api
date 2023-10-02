@@ -21,7 +21,25 @@ namespace look.Application.interfaces.proyecto
         /// Crea un proyecto con sus entidades y archivos
         /// </summary>
         /// <param name="proyecto">entidad proyecto</param>
-        /// <returns></returns>
+        /// <returns>retorna un mensaje generico</returns>
         Task<ServiceResult> createAsync(IFormFile file1,IFormFile file2,Proyecto proyecto);
+        /// <summary>
+        /// Actualiza el proyecto y actualiza sus archivos
+        /// </summary>
+        /// <param name="id">identificador(ID) del proyecto</param>
+        /// <returns>retorna un mensaje generico</returns>
+        Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto,int id);
+        /// <summary>
+        /// Borra un proyecto con sus entidades y los archivos relacionados
+        /// </summary>
+        /// <param name="id">identificador(ID) del proyecto</param>
+        /// <returns>retorna un mensaje generico</returns>
+        Task<ServiceResult> deleteAsync(int id);
+        /// <summary>
+        /// Descarga el archivo del proyecto según su ruta 
+        /// </summary>
+        /// <param name="path">ruta del archivo</param>
+        /// <returns>retorna un archivo</returns>
+        Task<FileStream> GetFile(string path);
     }
 }

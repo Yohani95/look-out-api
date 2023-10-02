@@ -8,14 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace look.Application.services.Common
 {
-    public class Files
+    public class FileServices
     {
         private readonly ISharePointConfig _sharePointConfig;
 
         private readonly string _serverUploadPath = AppDomain.CurrentDomain.BaseDirectory;
 
         private readonly ILogger _logger = (ILogger)domain.entities.Common.Logger.GetLogger();
-        public Files(IOptions<SharePointConfig> sharePointConfig)
+        public FileServices(IOptions<SharePointConfig> sharePointConfig)
         {
             _sharePointConfig = sharePointConfig.Value;
         }
@@ -51,7 +51,7 @@ namespace look.Application.services.Common
         /// Método para eliminar un archivo
         /// </summary>
         /// <param name="filePath"></param>
-        public bool DeleteFile(string filePath)
+        public static bool DeleteFile(string filePath)
         {
             try
             {
@@ -76,12 +76,34 @@ namespace look.Application.services.Common
         /// <param name="file"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public string GetFileFormat(IFormFile file)
+        public static string GetFileFormat(IFormFile file)
         {
             if (file == null)
                 throw new ArgumentException("El archivo no es válido.");
 
             return Path.GetExtension(file.FileName).ToLowerInvariant();
+        }
+        
+        public static FileStream GetFile(string filePath)
+        {
+            try
+            {
+                if (filePath == null)
+                {
+                    throw new ArgumentException();
+                }
+                if (System.IO.File.Exists(filePath))
+                {
+                    // Devuelve el archivo como una descarga.
+                    var archivoStream = System.IO.File.OpenRead(filePath);
+                    return archivoStream;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return null;
         }
         /// <summary>
         /// Método para subir un archivo a SharePoint

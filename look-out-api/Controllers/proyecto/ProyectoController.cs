@@ -6,6 +6,7 @@ using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace look_out_api.Controllers.proyecto
 {
@@ -47,10 +48,10 @@ namespace look_out_api.Controllers.proyecto
         public async Task<IActionResult> CreateAsync([FromForm]Proyecto proyecto, [FromForm] IFormFile file1, [FromForm] IFormFile file2)
         {
             var json = HttpContext.Request.Form["proyecto"];
-            var proyecto1 = JsonConvert.DeserializeObject<Proyecto>(json);
+            var proyectoJson = JsonConvert.DeserializeObject<Proyecto>(json);
 
-            var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success}; 
-            //var result = await _proyectoService.createAsync(proyectoDTO.file1,proyectoDTO.file2,proyectoDTO.proyecto);
+            var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success};
+            //var result = await _proyectoService.createAsync(proyectoDTO.file1,proyectoDTO.file2,proyectoJson);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -63,6 +64,19 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-
+        [HttpGet("GeFileByProject/{nombreArchivo}")]
+        public IActionResult DescargarArchivo(string path)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                var archivoStream = System.IO.File.OpenRead(path);
+                return File(archivoStream, "application/octet-stream", archivoStream.Name);
+            }
+            else
+            {
+                Log.Warning(Message.SinDocumentos);
+                return NotFound();
+            }
+        }
     }
 }
