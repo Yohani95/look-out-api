@@ -2,6 +2,7 @@
 using look.Application.services.admin;
 using look.domain.entities.world;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace look_out_api.Controllers.world
 {
@@ -15,6 +16,15 @@ namespace look_out_api.Controllers.world
         {
             _monedaService = monedaService;
         }
+        
+        [HttpGet("getTipoMoneda")]
+        public async Task<IActionResult> GetAllEmail(int id,string amount)
+        {
+            Log.Information("Solicitud GetAll email");
+            Moneda email = await _monedaService.consultaMonedaConvertida(id,amount);
+            return Ok(email);
+        }
+        
 
         protected override int GetEntityId(Moneda entity)
         {

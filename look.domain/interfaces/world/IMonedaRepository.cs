@@ -9,5 +9,6 @@ namespace look.domain.interfaces.world
 {
     public interface IMonedaRepository : IRepository<Moneda>
     {
+        
     }
 }
