@@ -641,7 +641,7 @@ namespace look.Infrastructure.data
 
                 entity.Property(e => e.MonNombre)
 
-                    .HasColumnType("int(11)")
+                    .HasColumnType("varchar(50)")
 
                     .HasColumnName("mon_nombre");
 

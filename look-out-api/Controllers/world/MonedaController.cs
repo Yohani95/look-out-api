@@ -18,11 +18,11 @@ namespace look_out_api.Controllers.world
         }
         
         [HttpGet("getTipoMoneda")]
-        public async Task<IActionResult> GetAllEmail(int id,string amount)
+        public async Task<IActionResult> getTipoMoneda(int idTo,int idFrom,string amount)
         {
-            Log.Information("Solicitud GetAll email");
-            Moneda email = await _monedaService.consultaMonedaConvertida(id,amount);
-            return Ok(email);
+            Log.Information("Solicitud getTipoMoneda");
+            String result = await _monedaService.consultaMonedaConvertida(idFrom,idTo,amount);
+            return Ok(result);
         }
         
 
