@@ -53,28 +53,12 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-                var urlArchivo1 = FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
-                var urlArchivo2 = FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
+                var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
+                var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
                 //completar correctamente segun lo que se requiere con todos los campos
-
-                var documento1=await _documentoService.AddAsync(new Documento
-                {
-                    DocExtencion = file1.ContentType,
-                    DocNombre = file1.FileName,
-                    DocUrl = urlArchivo1.ToString(),
-                    DocIdCliente = proyecto.PryIdCliente,
-                    TdoId = 1
-                });               
-                var documento2=await _documentoService.AddAsync(new Documento
-                {
-                    DocExtencion = file2.ContentType,
-                    DocNombre = file2.FileName,
-                    DocUrl = urlArchivo2.ToString(),
-                    DocIdCliente = proyecto.PryIdCliente,
-                    TdoId = 1
-                });
+              
                 var propuesta = new Propuesta
                 {
                     MonId=proyecto.MonId,
@@ -87,7 +71,25 @@ namespace look.Application.services.proyecto
 
                 await _propuestaService.AddAsync(propuesta);
                 await _proyectoRepository.AddAsync(proyecto);
+
+                var documento1 = await _documentoService.AddAsync(new Documento
+                {
+                    DocExtencion = file1.ContentType,
+                    DocNombre = file1.FileName,
+                    DocUrl = urlArchivo1.ToString(),
+                    DocIdCliente = proyecto.PryIdCliente,
+                    TdoId = 1
+                });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId});
+
+                var documento2 = await _documentoService.AddAsync(new Documento
+                {
+                    DocExtencion = file2.ContentType,
+                    DocNombre = file2.FileName,
+                    DocUrl = urlArchivo2.ToString(),
+                    DocIdCliente = proyecto.PryIdCliente,
+                    TdoId = 1
+                });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId});
 
                 await _unitOfWork.CommitAsync();

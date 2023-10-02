@@ -682,7 +682,7 @@ namespace look.Infrastructure.data
                     .HasMaxLength(50)
                     .HasColumnName("doc_nombre");
                 entity.Property(e => e.DocUrl)
-                    .HasMaxLength(50)
+                    .HasMaxLength(190)
                     .HasColumnName("doc_url");
                 entity.Property(e => e.TdoId)
                     .HasColumnType("int(11)")

@@ -50,8 +50,8 @@ namespace look_out_api.Controllers.proyecto
             var json = HttpContext.Request.Form["proyecto"];
             var proyectoJson = JsonConvert.DeserializeObject<Proyecto>(json);
 
-            var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success};
-            //var result = await _proyectoService.createAsync(proyectoDTO.file1,proyectoDTO.file2,proyectoJson);
+            //var result = new ServiceResult { IsSuccess=true,Message="recibiendo Ok",MessageCode=ServiceResultMessage.Success};
+            var result = await _proyectoService.createAsync(file1,file2,proyectoJson);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
