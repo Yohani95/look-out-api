@@ -1,7 +1,9 @@
 ﻿using look.Application.interfaces.world;
+using look.domain.dto.admin;
 using look.domain.entities.world;
 using look.domain.interfaces;
 using look.domain.interfaces.world;
+using Newtonsoft.Json;
 using Serilog;
 
 
@@ -17,22 +19,28 @@ namespace look.Application.services.world
             _monedaRepository = monedaRepository;
         }
 
-        public async Task<String> consultaMonedaConvertida(int idTo,int idFrom,string amount)
+        public async Task<string> consultaMonedaConvertida(int idTo,int idFrom,string amount)
         {
             var clientIdTo = await _monedaRepository.GetByIdAsync((int) idTo);
             var clientidFrom = await _monedaRepository.GetByIdAsync((int) idFrom);
             string responseBody = "";
+            double MonedaConvertida = 0.0;
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
                     string url = "https://api.exchangeratesapi.io/v1/convert?access_key=7a2d122af2e9771c0dc8165fa0399598&from="+clientidFrom.MonNombre+"&to="+clientIdTo.MonNombre+"&amount="+amount;
-                    Log.Information("url que va a servicio"+url);
                     HttpResponseMessage response = await client.GetAsync(url);
                     if (response.IsSuccessStatusCode)
                     {
                         responseBody= await response.Content.ReadAsStringAsync();
-                        Console.WriteLine(responseBody);
+                        ConversionResult conversionResult = JsonConvert.DeserializeObject<ConversionResult>(responseBody);
+                        MonedaConvertida = conversionResult.result;
+                        var resultJson = new
+                        {
+                            MonedaConvertida = conversionResult.result
+                        };
+                        responseBody = JsonConvert.SerializeObject(resultJson);
                         
                     }
                     else
