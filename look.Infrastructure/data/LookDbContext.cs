@@ -672,7 +672,6 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.TdoId, "FK_Documento_Tipo_Documento");
                 entity.HasIndex(e => e.DocIdCliente, "FK_Documento_Cliente");
                 entity.Property(e => e.DocId)
-                    .ValueGeneratedNever()
                     .HasColumnType("int(11)")
                     .HasColumnName("doc_id");
                 entity.Property(e => e.DocExtencion)
@@ -864,7 +863,6 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PrsId, "FK_Propuesta_Prospecto");
                 entity.HasIndex(e => e.TseId, "FK_Propuesta_Tipo_Servicio");
                 entity.Property(e => e.PrpId)
-                    .ValueGeneratedNever()
                     .HasColumnType("int(11)")
                     .HasColumnName("prp_id");
                 entity.Property(e => e.PrsId)
@@ -965,7 +963,6 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PryId, "FK_Proyecto_Documento_Proyecto");
                 entity.HasIndex(e => e.TdoId, "FK_Proyecto_Documento_Tipo_Documento");
                 entity.Property(e => e.PydId)
-                    .ValueGeneratedNever()
                     .HasColumnType("int(11)")
                     .HasColumnName("pyd_id");
                 entity.Property(e => e.PryId)

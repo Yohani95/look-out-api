@@ -72,7 +72,7 @@ namespace look_out_api.Controllers.proyecto
         
 
 
-        [HttpGet("GeFileByProject/{nombreArchivo}")]
+        [HttpGet("GeFileByProject")]
         public IActionResult DescargarArchivo(string path)
         {
             if (System.IO.File.Exists(path))

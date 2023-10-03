@@ -3,6 +3,7 @@ using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -12,6 +13,7 @@ namespace look.domain.entities.proyecto
 {
     public class Propuesta
     {
+        [Key]
         public int PrpId { get; set; }
         /// <summary>
         /// id prospecto

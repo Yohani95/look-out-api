@@ -23,15 +23,15 @@ namespace look.Application.services.proyecto
         private readonly IProyectoRepository _proyectoRepository;
         private readonly ILogger _logger = Logger.GetLogger();
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IPropuestaService _propuestaService;
+        private readonly IPropuestaRepository _propuestaRepository;
         private readonly IDocumentoService _documentoService;
         private readonly IProyectoDocumentoService _proyectoDocumentoService;
 
 
-        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaService propuestaService, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork) : base(proyectoRepository)
+        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaRepository propuestaRepository, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
-            _propuestaService = propuestaService;         
+            _propuestaRepository = propuestaRepository;         
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
             _unitOfWork= unitOfWork;
@@ -69,7 +69,8 @@ namespace look.Application.services.proyecto
                     PrsId=1,
                 };
 
-                await _propuestaService.AddAsync(propuesta);
+                var propuestaCreated=await _propuestaRepository.AddAsync(propuesta);
+                proyecto.PryId = propuestaCreated.PrpId;
                 await _proyectoRepository.AddAsync(proyecto);
 
                 var documento1 = await _documentoService.AddAsync(new Documento
@@ -80,8 +81,6 @@ namespace look.Application.services.proyecto
                     DocIdCliente = proyecto.PryIdCliente,
                     TdoId = 1
                 });
-                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId});
-
                 var documento2 = await _documentoService.AddAsync(new Documento
                 {
                     DocExtencion = file2.ContentType,
@@ -90,7 +89,8 @@ namespace look.Application.services.proyecto
                     DocIdCliente = proyecto.PryIdCliente,
                     TdoId = 1
                 });
-                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId});
+                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId, TdoId = 1 });
+                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId,TdoId=1});
 
                 await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto creado exitosamente");
@@ -147,8 +147,8 @@ namespace look.Application.services.proyecto
                 }
 
                 // Elimina la propuesta asociada al proyecto.
-                var propuesta=await _propuestaService.GetByIdAsync((int)existingProyecto.PrpId);
-                await _propuestaService.DeleteAsync(propuesta);
+                var propuesta=await _propuestaRepository.GetByIdAsync((int)existingProyecto.PrpId);
+                await _propuestaRepository.DeleteAsync(propuesta);
 
                 // Elimina los documentos asociados al proyecto.
                 var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
