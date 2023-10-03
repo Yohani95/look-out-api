@@ -189,12 +189,18 @@ namespace look.Application.services.proyecto
             }
         }
 
-        public async Task<FileStream> GetFile(string path)
+        public async Task<List<FileStream>> GetFile(int idProject)
         {
             try
             {
-                _logger.Error("Descargando archivos para el proyecto");
-                return FileServices.GetFile(path);
+                _logger.Information("Descargando archivos para el proyecto");
+                var proyectoDocumento = await _proyectoDocumentoService.GetByIdProject(idProject);
+                List<FileStream> files = new List<FileStream>();
+                foreach (var item in proyectoDocumento)
+                {
+                    files.Add(FileServices.GetFile(item.Documento.DocUrl));
+                }
+                return files;
             }
             catch (Exception ex)
             {
@@ -347,5 +353,7 @@ namespace look.Application.services.proyecto
                 };
             }
         }
+
+        
     }
 }

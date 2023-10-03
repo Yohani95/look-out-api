@@ -83,6 +83,11 @@ namespace look.Application.services.Common
 
             return Path.GetExtension(file.FileName).ToLowerInvariant();
         }
+       /// <summary>
+       /// obtiene el archivo segun su path
+       /// </summary>
+       /// <param name="filePath">path del archivo</param>
+       /// <returns>retorna un archivo</returns>
         
         public static FileStream GetFile(string filePath)
         {
@@ -90,7 +95,7 @@ namespace look.Application.services.Common
             {
                 if (filePath == null)
                 {
-                    throw new ArgumentException();
+                    return null;
                 }
                 if (System.IO.File.Exists(filePath))
                 {
@@ -99,9 +104,9 @@ namespace look.Application.services.Common
                     return archivoStream;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                
             }
             return null;
         }

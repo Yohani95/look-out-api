@@ -17,7 +17,7 @@ namespace look.Application.services.proyecto
             _proyectoDocumentoRepository = repository;
         }
 
-        public async Task<ProyectoDocumento> GetByIdProject(int id)
+        public async Task<List<ProyectoDocumento>> GetByIdProject(int id)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace look.Application.services.proyecto
                 {
                     return null;
                 }
-                return proyectos.Where(p=>p.PryId == id).FirstOrDefault();
+                return proyectos.Where(p=>p.PryId == id).ToList();
             }
             catch (Exception ex)
             {

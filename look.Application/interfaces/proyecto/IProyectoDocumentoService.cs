@@ -10,7 +10,7 @@ namespace look.Application.interfaces.proyecto
         /// </summary>
         /// <param name="id">id del proyecto</param>
         /// <returns>retorna un proyectoDocumento</returns>
-        Task<ProyectoDocumento> GetByIdProject (int id);
+        Task<List<ProyectoDocumento>> GetByIdProject (int id);
     }
 }
 

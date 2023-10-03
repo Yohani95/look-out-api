@@ -40,6 +40,6 @@ namespace look.Application.interfaces.proyecto
         /// </summary>
         /// <param name="path">ruta del archivo</param>
         /// <returns>retorna un archivo</returns>
-        Task<FileStream> GetFile(string path);
+        Task<List<FileStream>> GetFile(int id);
     }
 }
