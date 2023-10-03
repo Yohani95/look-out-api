@@ -53,12 +53,6 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-                var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
-                var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
-                if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
-                    return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
-                //completar correctamente segun lo que se requiere con todos los campos
-              
                 var propuesta = new Propuesta
                 {
                     MonId=proyecto.MonId,
@@ -71,7 +65,13 @@ namespace look.Application.services.proyecto
 
                 var propuestaCreated=await _propuestaRepository.AddAsync(propuesta);
                 proyecto.PryId = propuestaCreated.PrpId;
-                await _proyectoRepository.AddAsync(proyecto);
+                var proyectoCreated=await _proyectoRepository.AddAsync(proyecto);
+
+                var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente,proyectoCreated.PryId);
+                var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente,proyectoCreated.PryId);
+                if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
+                    return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
+                //completar correctamente segun lo que se requiere con todos los campos
 
                 var documento1 = await _documentoService.AddAsync(new Documento
                 {
@@ -306,7 +306,7 @@ namespace look.Application.services.proyecto
                 // Actualiza los documentos si se proporcionan archivos actualizados.
                 if (file1 != null)
                 {
-                    var urlArchivo1 = FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente);
+                    var urlArchivo1 = FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente,1);
                     await _documentoService.AddAsync(new Documento
                     {
                         DocExtencion = file1.ContentType,
@@ -317,7 +317,7 @@ namespace look.Application.services.proyecto
 
                 if (file2 != null)
                 {
-                    var urlArchivo2 = FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente);
+                    var urlArchivo2 = FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente,1);
                     await _documentoService.AddAsync(new Documento
                     {
                         DocExtencion = file2.ContentType,

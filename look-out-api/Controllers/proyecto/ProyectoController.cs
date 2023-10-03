@@ -68,10 +68,6 @@ namespace look_out_api.Controllers.proyecto
             }
         }
 
-        
-        
-
-
         [HttpGet("GeFileByProject")]
         public IActionResult DescargarArchivo(string path)
         {

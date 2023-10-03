@@ -10,7 +10,6 @@ namespace look.domain.entities.proyecto
         
         public int TdoId { get; set; }
         
-        
         public virtual Documento? Documento { get; set; }
         
         public virtual Proyecto? Proyecto { get; set; }
