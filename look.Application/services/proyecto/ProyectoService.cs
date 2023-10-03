@@ -193,6 +193,9 @@ namespace look.Application.services.proyecto
         {
             try
             {
+                /*funcion a revisar ya que aun  nose determina bien 
+                 * el funcionamiento o si cumple con lo que se requiere en la logica de 
+                negocio*/
                 _logger.Information("Descargando archivos para el proyecto");
                 var proyectoDocumento = await _proyectoDocumentoService.GetByIdProject(idProject);
                 List<FileStream> files = new List<FileStream>();
@@ -204,7 +207,7 @@ namespace look.Application.services.proyecto
             }
             catch (Exception ex)
             {
-                _logger.Error("Error al actualizar el proyecto con documentos: " + ex.Message);
+                _logger.Error("Error interno del servidor: " + ex.Message);
             }
             return null;
         }

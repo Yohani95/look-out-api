@@ -27,6 +27,18 @@ namespace look_out_api.Controllers.proyecto
 
             return proyectosDocumentos;
         }
+        [HttpGet("GetByIdProject/{id}")]
+        public async Task<ActionResult<IEnumerable<ProyectoDocumento>>> GetByIdProject(int id)
+        {
+            var proyectosDocumentos = await _proyectoService.GetByIdProject(id);
+
+            if (proyectosDocumentos == null)
+            {
+                return NotFound();
+            }
+
+            return proyectosDocumentos;
+        }
 
         protected override int GetEntityId(ProyectoDocumento entity)
         {

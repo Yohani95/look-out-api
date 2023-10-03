@@ -74,7 +74,7 @@ namespace look_out_api.Controllers.proyecto
             if (System.IO.File.Exists(path))
             {
                 var archivoStream = System.IO.File.OpenRead(path);
-                return File(archivoStream, "application/octet-stream", archivoStream.Name);
+                return File(archivoStream, "application/octet-stream");
             }
             else
             {
