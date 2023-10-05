@@ -69,7 +69,7 @@ namespace look.Application.services.proyecto
                 proyecto.PrpId= propuestaCreated.PrpId;
                 var proyectoCreated=await _proyectoRepository.AddAsync(proyecto);
 
-                 urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
+                urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
                 urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
@@ -77,7 +77,7 @@ namespace look.Application.services.proyecto
 
                 var documento1 = await _documentoService.AddAsync(new Documento
                 {
-                    DocExtencion = file1.ContentType,
+                    DocExtencion = System.IO.Path.GetExtension(file1.FileName),
                     DocNombre = file1.FileName,
                     DocUrl = urlArchivo1.ToString(),
                     DocIdCliente = proyectoCreated.PryIdCliente,
@@ -85,7 +85,7 @@ namespace look.Application.services.proyecto
                 });
                 var documento2 = await _documentoService.AddAsync(new Documento
                 {
-                    DocExtencion = file2.ContentType,
+                    DocExtencion = System.IO.Path.GetExtension(file2.FileName),
                     DocNombre = file2.FileName,
                     DocUrl = urlArchivo2.ToString(),
                     DocIdCliente = proyectoCreated.PryIdCliente,
