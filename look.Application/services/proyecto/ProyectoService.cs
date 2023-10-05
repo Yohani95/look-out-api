@@ -40,6 +40,8 @@ namespace look.Application.services.proyecto
 
         public async Task<ServiceResult> createAsync(IFormFile file1, IFormFile file2, Proyecto proyecto)
         {
+            string urlArchivo1 = "";
+            string urlArchivo2 = "";
             try
             {
                 _logger.Information("Crear proyecto");
@@ -64,11 +66,11 @@ namespace look.Application.services.proyecto
                 };
 
                 var propuestaCreated=await _propuestaRepository.AddAsync(propuesta);
-                proyecto.PryId = propuestaCreated.PrpId;
+                proyecto.PrpId= propuestaCreated.PrpId;
                 var proyectoCreated=await _proyectoRepository.AddAsync(proyecto);
 
-                var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente,proyectoCreated.PryId);
-                var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente,proyectoCreated.PryId);
+                 urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
+                urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
                 if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
                     return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
                 //completar correctamente segun lo que se requiere con todos los campos
@@ -78,7 +80,7 @@ namespace look.Application.services.proyecto
                     DocExtencion = file1.ContentType,
                     DocNombre = file1.FileName,
                     DocUrl = urlArchivo1.ToString(),
-                    DocIdCliente = proyecto.PryIdCliente,
+                    DocIdCliente = proyectoCreated.PryIdCliente,
                     TdoId = 1
                 });
                 var documento2 = await _documentoService.AddAsync(new Documento
@@ -86,11 +88,11 @@ namespace look.Application.services.proyecto
                     DocExtencion = file2.ContentType,
                     DocNombre = file2.FileName,
                     DocUrl = urlArchivo2.ToString(),
-                    DocIdCliente = proyecto.PryIdCliente,
+                    DocIdCliente = proyectoCreated.PryIdCliente,
                     TdoId = 1
                 });
-                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId, TdoId = 1 });
-                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId,TdoId=1});
+                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento1.DocId, TdoId = 1 });
+                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento2.DocId,TdoId=1});
 
                 await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto creado exitosamente");
@@ -106,7 +108,8 @@ namespace look.Application.services.proyecto
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-
+                FileServices.DeleteFile(urlArchivo1);
+                FileServices.DeleteFile(urlArchivo2);
                 _logger.Information("Error al crear el proyecto: " + ex.Message);
 
                 return new ServiceResult

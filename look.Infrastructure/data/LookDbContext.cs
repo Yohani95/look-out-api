@@ -100,7 +100,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.LenId, "FK_pais_id_Lenguaje");
 
                 entity.Property(e => e.PaiId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("pai_id");
                 entity.Property(e => e.LenId)
@@ -121,7 +121,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("lenguaje");
 
                 entity.Property(e => e.LenId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("len_id");
                 entity.Property(e => e.LenNombre)
@@ -138,7 +138,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("tipo_persona");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
                 entity.Property(e => e.TpeDescripcion)
@@ -160,7 +160,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.TemId, "FK_Email_Tipo_Email");
 
                 entity.Property(e => e.EmaId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("ema_id");
                 entity.Property(e => e.CliId)
@@ -200,7 +200,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.temId).HasName("PRIMARY");
                 entity.ToTable("tipo_email");
                 entity.Property(e => e.temId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int")
                     .HasColumnName("tem_id");
                 entity.Property(e => e.temNombre)
@@ -218,7 +218,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.perId, "FK_Telefono_Persona");
                 entity.HasIndex(e => e.tteId, "FK_Telefono_Tipo_Telefono");
                 entity.Property(e => e.telId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("tel_id");
                 entity.Property(e => e.cliId)
@@ -254,7 +254,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.tteId).HasName("PRIMARY");
                 entity.ToTable("tipo_telefono");
                 entity.Property(e => e.tteId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int")
                     .HasColumnName("tte_id");
                 entity.Property(e => e.tteNombre)
@@ -367,7 +367,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("giro");
 
                 entity.Property(e => e.GirId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("gir_id");
                 entity.Property(e => e.GirDescripcion)
@@ -387,7 +387,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("estado_cliente");
 
                 entity.Property(e => e.EclId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("ecl_id");
                 entity.Property(e => e.EclNombre)
@@ -403,7 +403,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.RegId, "FK_Provincia_Region");
 
                 entity.Property(e => e.PrvId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("prv_id");
                 entity.Property(e => e.PrvNombre)
@@ -426,7 +426,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PrvId, "FK_Comuna_Provincia");
 
                 entity.Property(e => e.ComId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("com_id");
                 entity.Property(e => e.ComNombre)
@@ -449,7 +449,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PaiId, "FK_Region_pais_id");
 
                 entity.Property(e => e.RegId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("reg_id");
                 entity.Property(e => e.PaiId)
@@ -473,7 +473,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("sector_comercial");
 
                 entity.Property(e => e.SecId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("sec_id");
                 entity.Property(e => e.SecDescripcion)
@@ -534,7 +534,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("rol");
 
                 entity.Property(e => e.RolId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("rol_id");
                 entity.Property(e => e.RolDescripcion)
@@ -559,7 +559,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.ComId, "FK_Direccion_Comuna");
 
                 entity.Property(e => e.DirId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("dir_id");
                 entity.Property(e => e.PerId)
@@ -609,7 +609,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.TdiId).HasName("PRIMARY");
                 entity.ToTable("tipo_direccion");
                 entity.Property(e => e.TdiId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int")
                     .HasColumnName("tdi_id");
                 entity.Property(e => e.TdiNombre)
@@ -633,7 +633,7 @@ namespace look.Infrastructure.data
 
                 entity.Property(e => e.MonId)
 
-                    .ValueGeneratedNever()
+                    
 
                     .HasColumnType("int(11)")
 
@@ -706,7 +706,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.TdoId).HasName("PRIMARY");
                 entity.ToTable("tipo_documento");
                 entity.Property(e => e.TdoId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("tdo_id");
                 entity.Property(e => e.TdoDescripcion)
@@ -723,7 +723,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.EpyId).HasName("PRIMARY");
                 entity.ToTable("estado_proyecto");
                 entity.Property(e => e.EpyId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("epy_id");
                 entity.Property(e => e.EpyDescripcion)
@@ -740,7 +740,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.EpsId).HasName("PRIMARY");
                 entity.ToTable("estado_prospecto");
                 entity.Property(e => e.EpsId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("eps_id");
                 entity.Property(e => e.EpsDescripcion)
@@ -754,7 +754,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.EppId).HasName("PRIMARY");
                 entity.ToTable("estado_propuesta");
                 entity.Property(e => e.EppId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("epp_id");
                 entity.Property(e => e.EppDescripcion)
@@ -774,7 +774,7 @@ namespace look.Infrastructure.data
                   entity.HasIndex(e => e.MonId, "FK_Proespecto_Moneda");
                   entity.HasIndex(e => e.TseId, "FK_Proespecto_Tipo_Servicio");
                   entity.Property(e => e.PrsId)
-                      .ValueGeneratedNever()
+                      
                       .HasColumnType("int(11)")
                       .HasColumnName("prs_id");
                   entity.Property(e => e.CliId)
@@ -820,7 +820,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("tipo_servicio");
 
                 entity.Property(e => e.TseId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("tse_id");
                 entity.Property(e => e.TseDescripcion)
@@ -841,7 +841,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("perfil");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    
                     .HasMaxLength(50)
                     .HasColumnName("id");
                 entity.Property(e => e.Prf_Nombre)
@@ -906,7 +906,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PryId, "FK_Proyecto_Participantes_Proyecto");
                 entity.HasIndex(e => e.PrfId, "FK_Proyecto_participantes_Perfil");
                 entity.Property(e => e.PpaId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("ppa_id");
                 entity.Property(e => e.CarId)
@@ -943,11 +943,11 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.CarId).HasName("PRIMARY");
                 entity.ToTable("car");
                 entity.Property(e => e.CarId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("car_id");
                 entity.Property(e => e.CarNombre)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("car_nombre");
                 entity.Property(e => e.CarDescripcion)
@@ -996,7 +996,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PrpId, "FK_Proyecto_Propuesta");
                 entity.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
                 entity.Property(e => e.PryId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("pry_id");
                 entity.Property(e => e.PryNombre)
@@ -1058,7 +1058,7 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.TcId).HasName("PRIMARY");
                 entity.ToTable("tarifario_convenido");
                 entity.Property(e => e.TcId)
-                    .ValueGeneratedNever()
+                    
                     .HasColumnType("int(11)")
                     .HasColumnName("tc_id");
                 entity.Property(e => e.TcPerfilAsignado)

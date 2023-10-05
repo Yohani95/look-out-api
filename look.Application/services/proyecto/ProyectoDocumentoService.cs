@@ -21,8 +21,8 @@ namespace look.Application.services.proyecto
         {
             try
             {
-                var proyectos=await _proyectoDocumentoRepository.GetAllAsync();
-                if (proyectos != null)
+                var proyectos=await _proyectoDocumentoRepository.GetComplete();
+                if (proyectos == null)
                 {
                     return null;
                 }
