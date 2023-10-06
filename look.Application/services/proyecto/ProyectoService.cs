@@ -154,7 +154,7 @@ namespace look.Application.services.proyecto
                 await _propuestaRepository.DeleteAsync(propuesta);
 
                 // Elimina los documentos asociados al proyecto.
-                var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
+                var proyectoDocumentos = await _proyectoDocumentoService.ListComplete();
                 proyectoDocumentos.Where(d=>d.PryId == id).ToList();
 
                 foreach (var proDoc in proyectoDocumentos)
