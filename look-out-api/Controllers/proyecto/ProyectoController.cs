@@ -82,5 +82,26 @@ namespace look_out_api.Controllers.proyecto
                 return NotFound();
             }
         }
+        
+        [HttpDelete("DeleteWithEntities/{id}")]
+        public async Task<IActionResult> DeleteWithEntities(int id)
+        {
+            Log.Information("Solicitud Delete ClienteId: " + id);
+            var result = await _proyectoService.deleteAsync(id);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        
+        
     }
 }
