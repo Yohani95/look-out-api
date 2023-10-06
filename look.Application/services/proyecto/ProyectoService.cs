@@ -155,9 +155,9 @@ namespace look.Application.services.proyecto
 
                 // Elimina los documentos asociados al proyecto.
                 var proyectoDocumentos = await _proyectoDocumentoService.ListComplete();
-                proyectoDocumentos.Where(d=>d.PryId == id).ToList();
+                var proyectoDocumentoFiltrado =proyectoDocumentos.Where(d=>d.PryId == id).ToList();
 
-                foreach (var proDoc in proyectoDocumentos)
+                foreach (var proDoc in proyectoDocumentoFiltrado)
                 {
                     var documento = await _documentoService.GetByIdAsync(proDoc.DocId);
                     bool deleted = FileServices.DeleteFile(documento.DocUrl);
@@ -170,7 +170,7 @@ namespace look.Application.services.proyecto
 
                 // Elimina el proyecto después de eliminar la propuesta y los documentos.
                 await _proyectoRepository.DeleteAsync(existingProyecto);
-
+                await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto con propuesta y documentos eliminado exitosamente");
                 return new ServiceResult
                 {
@@ -182,7 +182,7 @@ namespace look.Application.services.proyecto
             catch (Exception ex)
             {
                 _logger.Error("Error al eliminar el proyecto con propuesta y documentos: " + ex.Message);
-
+                await _unitOfWork.RollbackAsync();
                 return new ServiceResult
                 {
                     IsSuccess = false,
@@ -269,12 +269,11 @@ namespace look.Application.services.proyecto
             }
         }
 
-        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto, int id)
+        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto)
         {
             try
             {
                 _logger.Information("Actualizar proyecto con documentos");
-                proyecto.PrpId=id;
                 if (proyecto == null || proyecto.PryId == 0)
                 {
                     return new ServiceResult
