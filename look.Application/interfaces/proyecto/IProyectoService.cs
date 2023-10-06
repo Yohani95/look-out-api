@@ -28,7 +28,7 @@ namespace look.Application.interfaces.proyecto
         /// </summary>
         /// <param name="id">identificador(ID) del proyecto</param>
         /// <returns>retorna un mensaje generico</returns>
-        Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto,int id);
+        Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto);
         /// <summary>
         /// Borra un proyecto con sus entidades y los archivos relacionados
         /// </summary>

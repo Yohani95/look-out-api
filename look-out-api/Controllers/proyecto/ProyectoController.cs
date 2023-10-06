@@ -86,8 +86,32 @@ namespace look_out_api.Controllers.proyecto
         [HttpDelete("DeleteWithEntities/{id}")]
         public async Task<IActionResult> DeleteWithEntities(int id)
         {
-            Log.Information("Solicitud Delete ClienteId: " + id);
+            Log.Information("Solicitud Delete ProyectoId: " + id);
             var result = await _proyectoService.deleteAsync(id);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        
+        [HttpPut("UpdateWithEntities/{id}")]
+        public async Task<IActionResult> UpdateWithEntities([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
+        {
+            var proyecto = JsonConvert.DeserializeObject<Proyecto>(proyectoJson);
+            IFormFile file1;
+            IFormFile file2;
+            file1 = files[0];
+            file2 = files[1];
+            Log.Information("Solicitud Delete ProyectoId: " + proyecto.PryId);
+            var result = await _proyectoService.updateAsync(file1 ,file2 ,proyecto);
 
             switch (result.MessageCode)
             {
