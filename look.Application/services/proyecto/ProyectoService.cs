@@ -125,6 +125,7 @@ namespace look.Application.services.proyecto
         {
             try
             {
+                await _unitOfWork.BeginTransactionAsync();
                 _logger.Information("Eliminar proyecto con documentos y propuesta");
 
                 if (id <= 0)
@@ -170,14 +171,16 @@ namespace look.Application.services.proyecto
 
                 // Elimina el proyecto después de eliminar la propuesta y los documentos.
                 await _proyectoRepository.DeleteAsync(existingProyecto);
-                await _unitOfWork.CommitAsync();
+                
                 _logger.Information("Proyecto con propuesta y documentos eliminado exitosamente");
+                await _unitOfWork.CommitAsync();
                 return new ServiceResult
                 {
                     IsSuccess = true,
                     Message = Message.PeticionOk,
                     MessageCode = ServiceResultMessage.Success
                 };
+                
             }
             catch (Exception ex)
             {

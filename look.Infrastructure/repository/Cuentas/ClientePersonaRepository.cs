@@ -20,12 +20,15 @@ namespace look.Infrastructure.repository.Cuentas
 
         public async Task DeleteByClient(int id)
         {
-            var clientToDelete = await _dbContext.ClientePersona.FirstOrDefaultAsync(p => p.CliId == id);
-
+            
+            var clientToDelete =  _dbContext.ClientePersona.Where(p=>p.CliId== id).ToList();
             if (clientToDelete != null)
             {
-                _dbContext.ClientePersona.Remove(clientToDelete);
-                await _dbContext.SaveChangesAsync();
+                foreach (var proDoc in clientToDelete)
+                {
+                    _dbContext.ClientePersona.Remove(proDoc);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
         }
 
