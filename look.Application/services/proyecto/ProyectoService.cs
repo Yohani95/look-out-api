@@ -298,7 +298,7 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-
+                await _unitOfWork.BeginTransactionAsync();
                 // Actualiza los campos del proyecto con los valores proporcionados.
                 existingProyecto.MonId = proyecto.MonId;
                 existingProyecto.EpyId = proyecto.EpyId;
@@ -320,25 +320,36 @@ namespace look.Application.services.proyecto
                 // Actualiza los documentos si se proporcionan archivos actualizados.
                 if (file1 != null)
                 {
-                    var urlArchivo1 = FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente,1);
-                    await _documentoService.AddAsync(new Documento
+                    var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente,proyecto.PryId);
+                    var documento1 = await _documentoService.AddAsync(new Documento
                     {
                         DocExtencion = file1.ContentType,
                         DocNombre = file1.FileName,
-                        DocUrl = urlArchivo1.ToString()
+                        DocUrl = urlArchivo1.ToString(),
+                        DocIdCliente = proyecto.PryIdCliente,
+                        TdoId = 1
                     });
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId, TdoId = 1 });
+
                 }
 
                 if (file2 != null)
                 {
-                    var urlArchivo2 = FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente,1);
-                    await _documentoService.AddAsync(new Documento
+                    var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente,proyecto.PryId);
+                    var documento2 = await _documentoService.AddAsync(new Documento
                     {
                         DocExtencion = file2.ContentType,
                         DocNombre = file2.FileName,
-                        DocUrl = urlArchivo2.ToString()
+                        DocUrl = urlArchivo2.ToString(),
+                        DocIdCliente = proyecto.PryIdCliente,
+                        TdoId = 1
                     });
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId,TdoId=1});
+
                 }
+                
+                await _unitOfWork.CommitAsync();
+
                 // Llama al repositorio para guardar los cambios en la base de datos.
                 await _proyectoRepository.UpdateAsync(existingProyecto);
 
