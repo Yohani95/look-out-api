@@ -91,7 +91,7 @@ namespace look.Application.services.cuentas
                 existingCliente.CliNif= cliente.CliNif;
                 existingCliente.PaiId = cliente.PaiId;
                 existingCliente.GirId= cliente.GirId;
-                existingCliente.SectorComercial = cliente.SectorComercial;
+                existingCliente.SecId = cliente.SecId;
                 existingCliente.CliNombre = cliente.CliNombre;
                 existingCliente.CliSitioWeb = cliente.CliSitioWeb;
                 existingCliente.EclId = cliente.EclId;
