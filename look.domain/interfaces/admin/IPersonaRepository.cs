@@ -12,6 +12,8 @@ namespace look.domain.interfaces.admin
     {
         Task<List<Persona>> GetAllByType(int typePersonId);
         Task<List<PersonaDTO>> GetAllContactEnteties();
+        
+        Task<List<PersonaDTOAll>> GetAllContact();
 
     }
 }

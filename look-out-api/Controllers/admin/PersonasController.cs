@@ -95,6 +95,25 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
+        
+        [HttpGet("GetAllContact")]
+        public async Task<ActionResult<ResponseGeneric<List<PersonaDTO>>>> GetAllContact()
+        {
+            var result = await _personaService.GetAllContact();
+
+            switch (result.serviceResult.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        
         [HttpGet("GetAllContactByIdClient/{id}")]
         public async Task<ActionResult<ResponseGeneric<List<Persona>>>> GetAllContactByIdClient(int id)
         {
