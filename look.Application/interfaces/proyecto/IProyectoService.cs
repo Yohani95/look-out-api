@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using look.domain.dto.admin;
 
 namespace look.Application.interfaces.proyecto
 {
@@ -22,7 +23,7 @@ namespace look.Application.interfaces.proyecto
         /// </summary>
         /// <param name="proyecto">entidad proyecto</param>
         /// <returns>retorna un mensaje generico</returns>
-        Task<ServiceResult> createAsync(IFormFile file1,IFormFile file2,Proyecto proyecto);
+        Task<ServiceResult> createAsync(IFormFile file1,IFormFile file2,ProyectoDTO proyecto);
         /// <summary>
         /// Actualiza el proyecto y actualiza sus archivos
         /// </summary>

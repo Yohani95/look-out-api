@@ -26,6 +26,7 @@ namespace look.Application.services.proyecto
         private readonly IPropuestaRepository _propuestaRepository;
         private readonly IDocumentoService _documentoService;
         private readonly IProyectoDocumentoService _proyectoDocumentoService;
+        private readonly ITarifarioConvenioService _tarifarioConvenioService;
 
 
         public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaRepository propuestaRepository, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork) : base(proyectoRepository)
@@ -38,12 +39,28 @@ namespace look.Application.services.proyecto
 
         }
 
-        public async Task<ServiceResult> createAsync(IFormFile file1, IFormFile file2, Proyecto proyecto)
+        public async Task<ServiceResult> createAsync(IFormFile file1, IFormFile file2, ProyectoDTO proyectos)
         {
             string urlArchivo1 = "";
             string urlArchivo2 = "";
+            Proyecto proyecto = new Proyecto();
             try
             {
+                proyecto.PryId = proyectos.PryId;
+                proyecto.PryNombre =proyectos.PryNombre;
+                proyecto.PrpId = proyectos.PrpId;
+                proyecto.EpyId = proyectos.EpyId;
+                proyecto.TseId = proyectos.TseId;
+                proyecto.PryFechaInicioEstimada=proyectos.PryFechaInicioEstimada;
+                proyecto.PryValor=proyectos.PryValor;
+                proyecto.MonId=proyectos.MonId;
+                proyecto.PryIdCliente=proyectos.PryIdCliente;
+                proyecto.PryFechaCierreEstimada=proyectos.PryFechaCierreEstimada;
+                proyecto.PryFechaCierre=proyectos.PryFechaCierre;
+                proyecto.PryIdContacto=proyectos.PryIdContacto;
+                proyecto.PryIdContactoClave=proyectos.PryIdContactoClave;
+                
+                
                 _logger.Information("Crear proyecto");
                 await _unitOfWork.BeginTransactionAsync();
                 if (proyecto == null)
@@ -93,7 +110,11 @@ namespace look.Application.services.proyecto
                 });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento1.DocId, TdoId = 1 });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento2.DocId,TdoId=1});
-
+                foreach (var tarifariolist in proyectos.TarifarioConvenios)
+                {
+                    await _tarifarioConvenioService.AddAsync(tarifariolist);
+                }
+                
                 await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto creado exitosamente");
                 return new ServiceResult
