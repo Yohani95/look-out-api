@@ -52,5 +52,27 @@ namespace look.Infrastructure.repository.admin
 
             return await query.ToListAsync();
         }
+        
+        public async Task<List<PersonaDTOAll>> GetAllContact()
+        {
+            var query = from p in _dbContext.Persona
+                
+                join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
+                    on p.Id equals e.PerId into emailGroup
+                from email in emailGroup.DefaultIfEmpty()
+                join t in _dbContext.Telefono.Where(tel => tel.TelPrincipal == 1)
+                    on p.Id equals t.perId into telGroup
+                from telefono in telGroup.DefaultIfEmpty()
+                where p.TpeId == 3
+                orderby p.Id
+                select new PersonaDTOAll
+                {
+                    Email = email,
+                    Telefono = telefono,
+                    Persona = p
+                };
+
+            return await query.ToListAsync();
+        }
     }
 }

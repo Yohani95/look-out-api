@@ -228,6 +228,60 @@ namespace look.Application.services.admin
                 };
             }
         }
+        
+        public async Task<ResponseGeneric<List<PersonaDTOAll>>> GetAllContact()
+        {
+            _logger.Information("Listando contactos con sus entidades");
+            try
+            {
+                var contact = await _personaRepository.GetAllContact();
+
+                if (contact == null)
+                {
+                    var invalidInputResult = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.InvalidInput,
+                        Message = "Sin Datos."
+                    };
+
+                    return new ResponseGeneric<List<PersonaDTOAll>>
+                    {
+                        serviceResult = invalidInputResult,
+                        Data = null 
+                    };
+                }
+                var result = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = "Listado de Contactos."
+                };
+                return new ResponseGeneric<List<PersonaDTOAll>>
+                {
+                    serviceResult = result,
+                    Data = contact 
+                };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error("Error interno del servidor: " + ex.ToString());
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                };
+
+                return new ResponseGeneric<List<PersonaDTOAll>>
+                {
+                    serviceResult = errorResult,
+                    Data = null // Puedes dejar la lista vacía o null según tu necesidad
+                };
+            }
+        }
+        
         /// <summary>
         /// lista todas las persona de tipo contacto segun el id del cliente
         /// </summary>
