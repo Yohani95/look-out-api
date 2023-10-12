@@ -1,4 +1,5 @@
 ﻿using look.domain.entities.admin;
+using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,8 @@ namespace look.domain.dto.admin
         public string? Telefono { get; set; }
         public string? Cargo{ get; set;}
         public string? Cuenta { get; set; }
+        public List<Email>? Emails { get; set; }
+        public List<Telefono>? Telefonos { get; set; }
+        public List<Direccion>? direccions { get; set; }
     }
 }
