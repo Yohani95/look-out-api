@@ -13,6 +13,11 @@ namespace look.Application.interfaces.proyecto
     public interface IProyectoService : IService<Proyecto>
     {
         /// <summary>
+        /// obtiene la lista con sus entidades
+        /// </summary>
+        /// <returns>retorna una lista de proyecto</returns>
+        Task<List<Proyecto>> GetComplete();
+        /// <summary>
         /// Obtiene el último ID registrado de la tabla proyecto
         /// </summary>
         /// <returns>Retorna un entero</returns>

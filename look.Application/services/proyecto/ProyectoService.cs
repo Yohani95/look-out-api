@@ -195,6 +195,19 @@ namespace look.Application.services.proyecto
             }
         }
 
+        public async Task<List<Proyecto>> GetComplete()
+        {
+            try
+            {
+                return await _proyectoRepository.GetComplete();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error interno del servidor: " + ex.Message);
+                return null;
+            }
+        }
+
         public async Task<List<FileStream>> GetFile(int idProject)
         {
             try

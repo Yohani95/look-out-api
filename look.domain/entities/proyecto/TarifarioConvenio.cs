@@ -11,5 +11,8 @@ public class TarifarioConvenio
     public DateTime? TcInicioVigencia { get; set; }
     public DateTime? TcTerminoVigencia { get; set; }
     public string ComentariosGrales { get; set; }
-    public int PRpId { get; set; }
+    /// <summary>
+    /// id de proyecto
+    /// </summary>
+    public int ProyectoId { get; set; }
 }

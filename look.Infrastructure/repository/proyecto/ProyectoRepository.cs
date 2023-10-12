@@ -1,6 +1,7 @@
 ﻿using look.domain.entities.proyecto;
 using look.domain.interfaces.proyecto;
 using look.Infrastructure.data;
+using Microsoft.EntityFrameworkCore;
 using MyApp.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,14 @@ namespace look.Infrastructure.repository.proyecto
     {
         public ProyectoRepository(LookDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<List<Proyecto>> GetComplete()
+        {
+            return await _dbContext.Proyecto
+                .Include(p=>p.Cli)
+                .Include(p=>p.TipSer)
+                .ToListAsync();
         }
     }
 }
