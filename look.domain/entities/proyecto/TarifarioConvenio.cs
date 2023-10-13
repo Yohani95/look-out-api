@@ -2,7 +2,7 @@ namespace look.domain.entities.proyecto;
 
 public class TarifarioConvenio
 {
-    public int? TcId { get; set; }
+    public int TcId { get; set; }
     public int? TcPerfilAsignado { get; set; }
     public int? TcTarifa { get; set; }
     public int? TcMoneda { get; set; }
