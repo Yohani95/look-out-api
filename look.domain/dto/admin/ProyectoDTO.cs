@@ -17,5 +17,6 @@ public class ProyectoDTO
     public DateTime? PryFechaCierre { get; set; }
     public int? PryIdContacto { get; set; }
     public int? PryIdContactoClave { get; set; }
-    public List<TarifarioConvenio> TarifarioConvenios { get; set; }
+    
+    public TarifarioDTO[]? TarifarioConvenio { get; set; }
 }
