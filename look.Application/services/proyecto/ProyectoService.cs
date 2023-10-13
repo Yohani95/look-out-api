@@ -29,12 +29,13 @@ namespace look.Application.services.proyecto
         private readonly ITarifarioConvenioService _tarifarioConvenioService;
 
 
-        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaRepository propuestaRepository, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork) : base(proyectoRepository)
+        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaRepository propuestaRepository, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork, ITarifarioConvenioService tarifarioConvenioService) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
             _propuestaRepository = propuestaRepository;         
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
+            _tarifarioConvenioService = tarifarioConvenioService;
             _unitOfWork= unitOfWork;
 
         }
@@ -113,7 +114,7 @@ namespace look.Application.services.proyecto
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento2.DocId,TdoId=1});
                 foreach (var tarifariolist in proyectos.TarifarioConvenio)
                 {
-                    TarifarioConvenio tarifarioConvenido = new TarifarioConvenio();
+                    var tarifarioConvenido = new TarifarioConvenio();
                     tarifarioConvenido.TcPerfilAsignado = tarifariolist.TcPerfilAsignado;
                     tarifarioConvenido.TcBase = tarifariolist.TcBase;
                     tarifarioConvenido.TcMoneda = tarifariolist.TcMoneda;
