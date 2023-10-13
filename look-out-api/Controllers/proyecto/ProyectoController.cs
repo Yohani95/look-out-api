@@ -122,7 +122,18 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-        
-        
+
+        [HttpGet("WithEntities")]
+        public async Task<ActionResult<IEnumerable<Proyecto>>> GetAllWithEntities()
+        {
+            var proyectosDocumentos = await _proyectoService.GetComplete();
+
+            if (proyectosDocumentos == null)
+            {
+                return NotFound();
+            }
+
+            return proyectosDocumentos;
+        }
     }
 }
