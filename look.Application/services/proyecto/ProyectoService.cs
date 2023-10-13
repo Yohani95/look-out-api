@@ -44,6 +44,7 @@ namespace look.Application.services.proyecto
             string urlArchivo1 = "";
             string urlArchivo2 = "";
             Proyecto proyecto = new Proyecto();
+            
             try
             {
                 proyecto.PryId = proyectos.PryId;
@@ -110,10 +111,19 @@ namespace look.Application.services.proyecto
                 });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento1.DocId, TdoId = 1 });
                 await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento2.DocId,TdoId=1});
-                foreach (var tarifariolist in proyectos.TarifarioConvenios)
+                foreach (var tarifariolist in proyectos.TarifarioConvenio)
                 {
-                    await _tarifarioConvenioService.AddAsync(tarifariolist);
+                    TarifarioConvenio tarifarioConvenido = new TarifarioConvenio();
+                    tarifarioConvenido.TcPerfilAsignado = tarifariolist.TcPerfilAsignado;
+                    tarifarioConvenido.TcBase = tarifariolist.TcBase;
+                    tarifarioConvenido.TcMoneda = tarifariolist.TcMoneda;
+                    tarifarioConvenido.TcStatus = tarifariolist.TcStatus;
+                    tarifarioConvenido.TcTarifa = tarifariolist.TcTarifa;
+                    tarifarioConvenido.PRpId = proyectoCreated.PryId;
+                    
+                    await _tarifarioConvenioService.AddAsync(tarifarioConvenido);
                 }
+                
                 
                 await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto creado exitosamente");
