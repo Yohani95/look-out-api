@@ -1085,7 +1085,7 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.ComentariosGrales)
                     .HasColumnType("varchar(1000")
                     .HasColumnName("comentarios_grales");       
-                entity.Property(e => e.ProyectoId)
+                entity.Property(e => e.PRpId)
                     .HasColumnType("int(11)")
                     .HasColumnName("prp_id");       
                 

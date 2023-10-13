@@ -1,13 +1,10 @@
 ﻿using look.Application.interfaces.proyecto;
-using look.Application.services.admin;
-using look.domain.dto.admin;
-using look.domain.dto.proyecto;
 using look.domain.entities.Common;
-using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
+using ProyectoDTO = look.domain.dto.admin.ProyectoDTO;
 
 namespace look_out_api.Controllers.proyecto
 {
@@ -49,7 +46,7 @@ namespace look_out_api.Controllers.proyecto
         public async Task<IActionResult> CreateAsync([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
         {
             
-            var proyecto = JsonConvert.DeserializeObject<Proyecto>(proyectoJson);
+            var proyecto = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
             IFormFile file1;
             IFormFile file2;
             file1 = files[0];
