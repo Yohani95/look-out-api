@@ -343,6 +343,7 @@ namespace look.Application.services.proyecto
                 proyecto.PryFechaCierre=proyectos.PryFechaCierre;
                 proyecto.PryIdContacto=proyectos.PryIdContacto;
                 proyecto.PryIdContactoClave=proyectos.PryIdContactoClave;
+                
                 _logger.Information("Actualizar proyecto con documentos");
                 if (proyecto == null || proyecto.PryId == 0)
                 {
@@ -384,11 +385,26 @@ namespace look.Application.services.proyecto
                     await _documentoService.DeleteAsync(documento);
                 }
                 // Actualiza los tarifarios si se proporcionan nuevos tarifarios.
-                var TarifarioConvenido = await _tarifarioConvenioService.GetAllAsync();
-                foreach (var proyectoDocumento in TarifarioConvenido.Where(p => p.PRpId == existingProyecto.PryId))
+                if (proyectos.TarifarioConvenio != null)
                 {
-                    var tarifario = await _tarifarioConvenioService.GetByIdAsync(proyectoDocumento.TcId);
-                    await _tarifarioConvenioService.DeleteAsync(tarifario);
+                    var TarifarioConvenido = await _tarifarioConvenioService.GetAllAsync();
+                    foreach (var proyectoDocumento in TarifarioConvenido.Where(p => p.PRpId == existingProyecto.PryId))
+                    {
+                        var tarifario = await _tarifarioConvenioService.GetByIdAsync(proyectoDocumento.TcId);
+                        await _tarifarioConvenioService.DeleteAsync(tarifario);
+                    }
+                    foreach (var tarifariolist in proyectos.TarifarioConvenio)
+                    {
+                        var tarifarioConvenido = new TarifarioConvenio();
+                        tarifarioConvenido.TcPerfilAsignado = tarifariolist.TcPerfilAsignado;
+                        tarifarioConvenido.TcBase = tarifariolist.TcBase;
+                        tarifarioConvenido.TcMoneda = tarifariolist.TcMoneda;
+                        tarifarioConvenido.TcStatus = tarifariolist.TcStatus;
+                        tarifarioConvenido.TcTarifa = tarifariolist.TcTarifa;
+                        tarifarioConvenido.PRpId = proyecto.PryId;
+                    
+                        await _tarifarioConvenioService.AddAsync(tarifarioConvenido);
+                    }
                 }
 
                 // Actualiza los documentos si se proporcionan archivos actualizados.
