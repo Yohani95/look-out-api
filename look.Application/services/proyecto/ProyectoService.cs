@@ -324,10 +324,25 @@ namespace look.Application.services.proyecto
             }
         }
 
-        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, Proyecto proyecto)
+        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, ProyectoDTO proyectos)
         {
             try
             {
+                Proyecto proyecto = new Proyecto();
+                
+                proyecto.PryId = proyectos.PryId;
+                proyecto.PryNombre =proyectos.PryNombre;
+                proyecto.PrpId = proyectos.PrpId;
+                proyecto.EpyId = proyectos.EpyId;
+                proyecto.TseId = proyectos.TseId;
+                proyecto.PryFechaInicioEstimada=proyectos.PryFechaInicioEstimada;
+                proyecto.PryValor=proyectos.PryValor;
+                proyecto.MonId=proyectos.MonId;
+                proyecto.PryIdCliente=proyectos.PryIdCliente;
+                proyecto.PryFechaCierreEstimada=proyectos.PryFechaCierreEstimada;
+                proyecto.PryFechaCierre=proyectos.PryFechaCierre;
+                proyecto.PryIdContacto=proyectos.PryIdContacto;
+                proyecto.PryIdContactoClave=proyectos.PryIdContactoClave;
                 _logger.Information("Actualizar proyecto con documentos");
                 if (proyecto == null || proyecto.PryId == 0)
                 {
@@ -367,6 +382,13 @@ namespace look.Application.services.proyecto
                     var documento = await _documentoService.GetByIdAsync(proyectoDocumento.DocId);
                     FileServices.DeleteFile(documento.DocUrl);
                     await _documentoService.DeleteAsync(documento);
+                }
+                // Actualiza los tarifarios si se proporcionan nuevos tarifarios.
+                var TarifarioConvenido = await _tarifarioConvenioService.GetAllAsync();
+                foreach (var proyectoDocumento in TarifarioConvenido.Where(p => p.PRpId == existingProyecto.PryId))
+                {
+                    var tarifario = await _tarifarioConvenioService.GetByIdAsync(proyectoDocumento.TcId);
+                    await _tarifarioConvenioService.DeleteAsync(tarifario);
                 }
 
                 // Actualiza los documentos si se proporcionan archivos actualizados.

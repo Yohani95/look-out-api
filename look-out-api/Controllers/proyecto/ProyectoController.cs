@@ -102,7 +102,7 @@ namespace look_out_api.Controllers.proyecto
         [HttpPut("UpdateWithEntities/{id}")]
         public async Task<IActionResult> UpdateWithEntities([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
         {
-            var proyecto = JsonConvert.DeserializeObject<Proyecto>(proyectoJson);
+            var proyecto = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
             IFormFile file1;
             IFormFile file2;
             file1 = files[0];
