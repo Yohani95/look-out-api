@@ -229,7 +229,7 @@ namespace look.Application.services.admin
             }
         }
         
-        public async Task<ResponseGeneric<List<PersonaDTOAll>>> GetAllContact()
+        public async Task<ResponseGeneric<List<PersonaDTO>>> GetAllContact()
         {
             _logger.Information("Listando contactos con sus entidades");
             try
@@ -245,7 +245,7 @@ namespace look.Application.services.admin
                         Message = "Sin Datos."
                     };
 
-                    return new ResponseGeneric<List<PersonaDTOAll>>
+                    return new ResponseGeneric<List<PersonaDTO>>
                     {
                         serviceResult = invalidInputResult,
                         Data = null 
@@ -257,7 +257,7 @@ namespace look.Application.services.admin
                     MessageCode = ServiceResultMessage.Success,
                     Message = "Listado de Contactos."
                 };
-                return new ResponseGeneric<List<PersonaDTOAll>>
+                return new ResponseGeneric<List<PersonaDTO>>
                 {
                     serviceResult = result,
                     Data = contact 
@@ -274,7 +274,7 @@ namespace look.Application.services.admin
                     Message = $"Error interno del servidor: {ex.Message}"
                 };
 
-                return new ResponseGeneric<List<PersonaDTOAll>>
+                return new ResponseGeneric<List<PersonaDTO>>
                 {
                     serviceResult = errorResult,
                     Data = null // Puedes dejar la lista vacía o null según tu necesidad

@@ -53,7 +53,7 @@ namespace look.Infrastructure.repository.admin
             return await query.ToListAsync();
         }
         
-        public async Task<List<PersonaDTOAll>> GetAllContact()
+        public async Task<List<PersonaDTO>> GetAllContact()
         {
             var query = from p in _dbContext.Persona
                 
@@ -65,10 +65,10 @@ namespace look.Infrastructure.repository.admin
                 from telefono in telGroup.DefaultIfEmpty()
                 where p.TpeId == 3
                 orderby p.Id
-                select new PersonaDTOAll
+                select new PersonaDTO
                 {
-                    Email = email,
-                    Telefono = telefono,
+                    Email = email.EmaEmail,
+                    Telefono = telefono.telNumero,
                     Persona = p
                 };
 
