@@ -36,6 +36,7 @@ namespace look.Application.services.proyecto
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
             _tarifarioConvenioService = tarifarioConvenioService;
+            
             _unitOfWork= unitOfWork;
 
         }
@@ -200,7 +201,13 @@ namespace look.Application.services.proyecto
                         await _documentoService.DeleteAsync(documento);
                     }
                 }
-
+                // Elimina los participantes asociados al proyecto.
+                var tarifarioConvenido = await _tarifarioConvenioService.ListComplete();
+                var tarifarioConvenidoFiltrado =tarifarioConvenido.Where(d=>d.PRpId == id).ToList();
+                foreach (var tarifariolist in tarifarioConvenidoFiltrado)
+                {
+                    await _tarifarioConvenioService.DeleteAsync(tarifariolist);
+                }
                 // Elimina el proyecto después de eliminar la propuesta y los documentos.
                 await _proyectoRepository.DeleteAsync(existingProyecto);
                 
