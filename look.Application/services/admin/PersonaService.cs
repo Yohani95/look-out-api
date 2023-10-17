@@ -4,6 +4,7 @@ using look.domain.dto.admin;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
+using look.domain.entities.world;
 using look.domain.interfaces.admin;
 using look.domain.interfaces.unitOfWork;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,17 @@ namespace look.Application.services.admin
         private readonly ILogger _logger = Logger.GetLogger();
         private readonly IUnitOfWork _unitOfWork;
         private readonly IClientePersonaService _clientePersonaService;
-        public PersonaService(IPersonaRepository repository, IUnitOfWork unitOfWork,IClientePersonaService clientePersonaService) : base(repository)
+        private readonly IEmailService _emailService;
+        private readonly ITelefonoService _telefonoService;
+        private readonly IDireccionService _direccionService;
+        public PersonaService(IPersonaRepository repository, IUnitOfWork unitOfWork,IClientePersonaService clientePersonaService,IEmailService emailService, ITelefonoService telefonoService, IDireccionService direccionService) : base(repository)
         {
             _personaRepository = repository;
             _unitOfWork = unitOfWork;
             _clientePersonaService = clientePersonaService;
+            _emailService = emailService;
+            _telefonoService = telefonoService;
+            _direccionService = direccionService;
         }
 
         public async Task<ServiceResult> Create(PersonaDTO personaDTO)
@@ -42,6 +49,57 @@ namespace look.Application.services.admin
                     CliVigente = (sbyte?) 1,
                     PerId = persona.Id // Usar el ID de la persona actual
                 };
+                if (personaDTO.Emails.Count > 0)
+                {
+                    //agrega las email enviadas
+                    foreach (var emailList in personaDTO.Emails)
+                    {
+                        var email = new Email();
+                        email.CliId = personaDTO.IdCliente;
+                        email.PerId = persona.Id;
+                        email.EmaVigente = emailList.EmaVigente;
+                        email.EmaPrincipal = emailList.EmaPrincipal;
+                        email.TemId = emailList.TemId;
+                        email.EmaEmail = emailList.EmaEmail;
+                    
+                        await _emailService.AddAsync(email);
+                    }
+                }
+                if (personaDTO.Telefonos.Count > 0)
+                {
+                    //agrega las telefonos enviadas
+                    foreach (var telefonosList in personaDTO.Telefonos)
+                    {
+                        var telefono = new Telefono();
+                        telefono.cliId = personaDTO.IdCliente;
+                        telefono.perId = persona.Id;
+                        telefono.telNumero = telefonosList.telNumero;
+                        telefono.tteId = telefonosList.tteId;
+                        telefono.telVigente = telefonosList.telVigente;
+                        telefono.TelPrincipal = telefonosList.TelPrincipal;
+                    
+                        await _telefonoService.AddAsync(telefono);
+                    }
+                }
+                if (personaDTO.direccions.Count > 0)
+                {
+                    //agrega las direcciones enviadas
+                    foreach (var direccionList in personaDTO.direccions)
+                    {
+                        var direccion = new Direccion();
+                        direccion.PerId = persona.Id;
+                        direccion.CliId = personaDTO.IdCliente;
+                        direccion.DirCalle = direccionList.DirCalle;
+                        direccion.DirNumero = direccionList.DirNumero;
+                        direccion.ComId = direccionList.ComId;
+                        direccion.DirBlock = direccionList.DirBlock;
+                        direccion.TdiId = direccionList.TdiId;
+                        direccion.DirPrincipal = direccionList.DirPrincipal;
+                    
+                        await _direccionService.AddAsync(direccion);
+                    }
+                }
+                
                 await _clientePersonaService.AddAsync(personaCliente);
                 await _unitOfWork.CommitAsync();
                 _logger.Information("El Contacto Creado con exito");
@@ -76,7 +134,43 @@ namespace look.Application.services.admin
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.NotFound, Message = "La persona no fue encontrada." };
                 }
                 var clientesPersona = await _clientePersonaService.GetAllAsync(); // Obtiene todos los registros
-
+                
+                //elimina las email enviadas
+                var emailListSearch = await _emailService.ListComplete();
+                var emailListSearchFiltrado =emailListSearch.Where(d=>d.PerId == id).ToList();
+                if (emailListSearchFiltrado.Count > 0)
+                {
+                    
+                    foreach (var emailList in emailListSearchFiltrado)
+                    {
+                        await _emailService.DeleteAsync(emailList);
+                    }
+                }
+                
+                //elimina las telefonos enviadas
+                var telefonoListSearch = await _telefonoService.ListComplete();
+                var telefonoListSearchFiltrado =telefonoListSearch.Where(d=>d.perId == id).ToList();
+                if (telefonoListSearchFiltrado.Count > 0)
+                {
+                    
+                    foreach (var telefonosList in telefonoListSearchFiltrado)
+                    {
+                        await _telefonoService.DeleteAsync(telefonosList);
+                    }
+                }
+                
+                //elimina las direcciones enviadas
+                var direccionListSearch = await _direccionService.ListComplete();
+                var direccionListSearchFiltrado =direccionListSearch.Where(d=>d.PerId == id).ToList();
+                if (direccionListSearchFiltrado.Count > 0)
+                {
+                    
+                    foreach (var direccionList in direccionListSearchFiltrado)
+                    {
+                        await _direccionService.DeleteAsync(direccionList);
+                    }
+                }
+                
                 var clientePersonaFiltrado = clientesPersona
                     .Where(clientePersona =>
                           clientePersona.PerId == existingPersona.Id).FirstOrDefault();
@@ -120,7 +214,7 @@ namespace look.Application.services.admin
                 {
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "El objeto persona proporcionado es nulo." };
                 }
-
+                
                 var existingPersona = await _personaRepository.GetByIdAsync(id);
 
                 if (existingPersona == null)
@@ -138,6 +232,92 @@ namespace look.Application.services.admin
                     clientePersonaFiltrado.CliId = personaDTO.IdCliente; 
                     await _clientePersonaService.UpdateAsync(clientePersonaFiltrado);
                 }
+                
+                if (personaDTO.Emails.Count > 0)
+                {
+                    //elimina los antiguos email enviadas
+                    var emailListSearch = await _emailService.ListComplete();
+                    var emailListSearchFiltrado =emailListSearch.Where(d=>d.PerId == id).ToList();
+                    if (emailListSearchFiltrado.Count > 0)
+                    {
+                    
+                        foreach (var emailList in emailListSearchFiltrado)
+                        {
+                            await _emailService.DeleteAsync(emailList);
+                        }
+                    }
+                    //agrega las email nuevos enviadas
+                    foreach (var emailList in personaDTO.Emails)
+                    {
+                        var email = new Email();
+                        email.CliId = personaDTO.IdCliente;
+                        email.PerId = id;
+                        email.EmaVigente = emailList.EmaVigente;
+                        email.EmaPrincipal = emailList.EmaPrincipal;
+                        email.TemId = emailList.TemId;
+                        email.EmaEmail = emailList.EmaEmail;
+                    
+                        await _emailService.AddAsync(email);
+                    }
+                }
+                if (personaDTO.Telefonos.Count > 0)
+                {
+                    //elimina los telefonos antiguos
+                    var telefonoListSearch = await _telefonoService.ListComplete();
+                    var telefonoListSearchFiltrado =telefonoListSearch.Where(d=>d.perId == id).ToList();
+                    if (telefonoListSearchFiltrado.Count > 0)
+                    {
+                    
+                        foreach (var telefonosList in telefonoListSearchFiltrado)
+                        {
+                            await _telefonoService.DeleteAsync(telefonosList);
+                        }
+                    }
+                    
+                    //agrega los nuevos telefonos enviadas
+                    foreach (var telefonosList in personaDTO.Telefonos)
+                    {
+                        var telefono = new Telefono();
+                        telefono.cliId = personaDTO.IdCliente;
+                        telefono.perId = id;
+                        telefono.telNumero = telefonosList.telNumero;
+                        telefono.tteId = telefonosList.tteId;
+                        telefono.telVigente = telefonosList.telVigente;
+                        telefono.TelPrincipal = telefonosList.TelPrincipal;
+                    
+                        await _telefonoService.AddAsync(telefono);
+                    }
+                }
+                if (personaDTO.direccions.Count > 0)
+                {
+                    //elimina las direcciones antiguas
+                    var direccionListSearch = await _direccionService.ListComplete();
+                    var direccionListSearchFiltrado =direccionListSearch.Where(d=>d.PerId == id).ToList();
+                    if (direccionListSearchFiltrado.Count > 0)
+                    {
+                    
+                        foreach (var direccionList in direccionListSearchFiltrado)
+                        {
+                            await _direccionService.DeleteAsync(direccionList);
+                        }
+                    }
+                    //agrega las direcciones nuevas enviadas
+                    foreach (var direccionList in personaDTO.direccions)
+                    {
+                        var direccion = new Direccion();
+                        direccion.PerId = id;
+                        direccion.CliId = personaDTO.IdCliente;
+                        direccion.DirCalle = direccionList.DirCalle;
+                        direccion.DirNumero = direccionList.DirNumero;
+                        direccion.ComId = direccionList.ComId;
+                        direccion.DirBlock = direccionList.DirBlock;
+                        direccion.TdiId = direccionList.TdiId;
+                        direccion.DirPrincipal = direccionList.DirPrincipal;
+                    
+                        await _direccionService.AddAsync(direccion);
+                    }
+                }
+                
 
                 existingPersona.PerNombres = personaDTO.Persona.PerNombres;
                 existingPersona.PerApellidoPaterno = personaDTO.Persona.PerApellidoPaterno;
