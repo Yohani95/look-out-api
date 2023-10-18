@@ -6,9 +6,9 @@ using MyApp.Infrastructure.Data;
 
 namespace look.Infrastructure.repository.admin
 {
-    public class ProyectoParticipanteRepositoryRepository :Repository<ProyectoParticipante>, IProyectoParticipanteRepository
+    public class ProyectoParticipanteRepository :Repository<ProyectoParticipante>, IProyectoParticipanteRepository
     {
-        public ProyectoParticipanteRepositoryRepository(LookDbContext dbContext) : base(dbContext)
+        public ProyectoParticipanteRepository(LookDbContext dbContext) : base(dbContext)
         {
         }
 

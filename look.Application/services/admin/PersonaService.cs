@@ -81,10 +81,10 @@ namespace look.Application.services.admin
                         await _telefonoService.AddAsync(telefono);
                     }
                 }
-                if (personaDTO.direccions.Count > 0)
+                if (personaDTO.direcciones.Count > 0)
                 {
                     //agrega las direcciones enviadas
-                    foreach (var direccionList in personaDTO.direccions)
+                    foreach (var direccionList in personaDTO.direcciones)
                     {
                         var direccion = new Direccion();
                         direccion.PerId = persona.Id;
@@ -288,7 +288,7 @@ namespace look.Application.services.admin
                         await _telefonoService.AddAsync(telefono);
                     }
                 }
-                if (personaDTO.direccions.Count > 0)
+                if (personaDTO.direcciones.Count > 0)
                 {
                     //elimina las direcciones antiguas
                     var direccionListSearch = await _direccionService.ListComplete();
@@ -302,7 +302,7 @@ namespace look.Application.services.admin
                         }
                     }
                     //agrega las direcciones nuevas enviadas
-                    foreach (var direccionList in personaDTO.direccions)
+                    foreach (var direccionList in personaDTO.direcciones)
                     {
                         var direccion = new Direccion();
                         direccion.PerId = id;

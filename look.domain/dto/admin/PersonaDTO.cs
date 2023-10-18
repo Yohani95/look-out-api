@@ -19,6 +19,6 @@ namespace look.domain.dto.admin
         public string? Cuenta { get; set; }
         public List<Email>? Emails { get; set; }
         public List<Telefono>? Telefonos { get; set; }
-        public List<Direccion>? direccions { get; set; }
+        public List<Direccion>? direcciones { get; set; }
     }
 }
