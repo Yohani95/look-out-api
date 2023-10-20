@@ -41,32 +41,14 @@ namespace look.Application.services.proyecto
 
         }
 
-        public async Task<ServiceResult> createAsync(IFormFile file1, IFormFile file2, ProyectoDTO proyectos)
+        public async Task<ServiceResult> createAsync(List<IFormFile> files, ProyectoDTO proyectoDTO)
         {
-            string urlArchivo1 = "";
-            string urlArchivo2 = "";
-            Proyecto proyecto = new Proyecto();
-            
+            List<Documento> documentos=new List<Documento>();
             try
-            {
-                proyecto.PryId = proyectos.PryId;
-                proyecto.PryNombre =proyectos.PryNombre;
-                proyecto.PrpId = proyectos.PrpId;
-                proyecto.EpyId = proyectos.EpyId;
-                proyecto.TseId = proyectos.TseId;
-                proyecto.PryFechaInicioEstimada=proyectos.PryFechaInicioEstimada;
-                proyecto.PryValor=proyectos.PryValor;
-                proyecto.MonId=proyectos.MonId;
-                proyecto.PryIdCliente=proyectos.PryIdCliente;
-                proyecto.PryFechaCierreEstimada=proyectos.PryFechaCierreEstimada;
-                proyecto.PryFechaCierre=proyectos.PryFechaCierre;
-                proyecto.PryIdContacto=proyectos.PryIdContacto;
-                proyecto.PryIdContactoClave=proyectos.PryIdContactoClave;
-                
-                
+            {           
                 _logger.Information("Crear proyecto");
                 await _unitOfWork.BeginTransactionAsync();
-                if (proyecto == null)
+                if (proyectoDTO == null)
                 {
                     return new ServiceResult
                     {
@@ -75,58 +57,37 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-                var propuesta = new Propuesta
+                var propuestaCreated=await _propuestaRepository.AddAsync(new Propuesta{MonId = proyectoDTO.Proyecto.MonId,PrpPresupuesto = 0,EppId = 1,PrpDescripcion = "N/A",TseId = 1,PrsId = 1,});
+                proyectoDTO.Proyecto.PrpId= propuestaCreated.PrpId;
+                var proyectoCreated=await _proyectoRepository.AddAsync(proyectoDTO.Proyecto);
+#region "Guardar Archivos"
+                foreach (var file in files)
                 {
-                    MonId=proyecto.MonId,
-                    PrpPresupuesto=0,
-                    EppId=1,
-                    PrpDescripcion="N/A",
-                    TseId=1,
-                    PrsId=1,
-                };
-
-                var propuestaCreated=await _propuestaRepository.AddAsync(propuesta);
-                proyecto.PrpId= propuestaCreated.PrpId;
-                var proyectoCreated=await _proyectoRepository.AddAsync(proyecto);
-
-                urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
-                urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyectoCreated.PryIdCliente,proyectoCreated.PryId);
-                if (urlArchivo1.Equals("") || urlArchivo2.Equals(""))
-                    return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
-                //completar correctamente segun lo que se requiere con todos los campos
-
-                var documento1 = await _documentoService.AddAsync(new Documento
-                {
-                    DocExtencion = System.IO.Path.GetExtension(file1.FileName),
-                    DocNombre = file1.FileName,
-                    DocUrl = urlArchivo1.ToString(),
-                    DocIdCliente = proyectoCreated.PryIdCliente,
-                    TdoId = 1
-                });
-                var documento2 = await _documentoService.AddAsync(new Documento
-                {
-                    DocExtencion = System.IO.Path.GetExtension(file2.FileName),
-                    DocNombre = file2.FileName,
-                    DocUrl = urlArchivo2.ToString(),
-                    DocIdCliente = proyectoCreated.PryIdCliente,
-                    TdoId = 1
-                });
-                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento1.DocId, TdoId = 1 });
-                await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoCreated.PryId,DocId = documento2.DocId,TdoId=1});
-                foreach (var tarifariolist in proyectos.TarifarioConvenio)
-                {
-                    var tarifarioConvenido = new TarifarioConvenio();
-                    tarifarioConvenido.TcPerfilAsignado = tarifariolist.TcPerfilAsignado;
-                    tarifarioConvenido.TcBase = tarifariolist.TcBase;
-                    tarifarioConvenido.TcMoneda = tarifariolist.TcMoneda;
-                    tarifarioConvenido.TcStatus = tarifariolist.TcStatus;
-                    tarifarioConvenido.TcTarifa = tarifariolist.TcTarifa;
-                    tarifarioConvenido.PRpId = proyectoCreated.PryId;
-                    
-                    await _tarifarioConvenioService.AddAsync(tarifarioConvenido);
+                    var url= await FileServices.UploadFileAsync(file, (int)proyectoCreated.PryIdCliente, proyectoCreated.PryId);
+                    if (url.Equals("") )
+                        return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
+                    var documento = await _documentoService.AddAsync(new Documento
+                    {
+                        DocExtencion = System.IO.Path.GetExtension(file.FileName),
+                        DocNombre = file.FileName,
+                        DocUrl = url.ToString(),
+                        DocIdCliente = proyectoCreated.PryIdCliente,
+                        TdoId = 1
+                    });
+                    documentos.Add(documento);
                 }
-                
-                
+                foreach (var doc in documentos)
+                {
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento { PryId = proyectoCreated.PryId, DocId = doc.DocId, TdoId = 1 });
+                }
+#endregion
+
+                foreach (var tarifario in proyectoDTO.TarifarioConvenio)
+                {
+                    tarifario.PRpId = proyectoCreated.PryId;
+                    await _tarifarioConvenioService.AddAsync(tarifario);
+                }
+
                 await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto creado exitosamente");
                 return new ServiceResult
@@ -135,16 +96,14 @@ namespace look.Application.services.proyecto
                     IsSuccess = true,
                     Message = Message.PeticionOk,
                 };
-                
-
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-                FileServices.DeleteFile(urlArchivo1);
-                FileServices.DeleteFile(urlArchivo2);
-                _logger.Information("Error al crear el proyecto: " + ex.Message);
 
+                documentos.ForEach(documento => { FileServices.DeleteFile(documento.DocUrl); });
+
+                _logger.Information("Error al crear el proyecto: " + ex.Message);
                 return new ServiceResult
                 {
                     IsSuccess = false,
@@ -324,28 +283,13 @@ namespace look.Application.services.proyecto
             }
         }
 
-        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, ProyectoDTO proyectos)
+        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, ProyectoDTO proyectoDTO)
         {
             try
             {
-                Proyecto proyecto = new Proyecto();
-                
-                proyecto.PryId = proyectos.PryId;
-                proyecto.PryNombre =proyectos.PryNombre;
-                proyecto.PrpId = proyectos.PrpId;
-                proyecto.EpyId = proyectos.EpyId;
-                proyecto.TseId = proyectos.TseId;
-                proyecto.PryFechaInicioEstimada=proyectos.PryFechaInicioEstimada;
-                proyecto.PryValor=proyectos.PryValor;
-                proyecto.MonId=proyectos.MonId;
-                proyecto.PryIdCliente=proyectos.PryIdCliente;
-                proyecto.PryFechaCierreEstimada=proyectos.PryFechaCierreEstimada;
-                proyecto.PryFechaCierre=proyectos.PryFechaCierre;
-                proyecto.PryIdContacto=proyectos.PryIdContacto;
-                proyecto.PryIdContactoClave=proyectos.PryIdContactoClave;
-                
+          
                 _logger.Information("Actualizar proyecto con documentos");
-                if (proyecto == null || proyecto.PryId == 0)
+                if (proyectoDTO == null || proyectoDTO.Proyecto.PryId == 0)
                 {
                     return new ServiceResult
                     {
@@ -356,7 +300,7 @@ namespace look.Application.services.proyecto
                 }
 
                 // Verifica si el proyecto existe en la base de datos antes de actualizarlo.
-                var existingProyecto = await _proyectoRepository.GetByIdAsync(proyecto.PryId);
+                var existingProyecto = await _proyectoRepository.GetByIdAsync(proyectoDTO.Proyecto.PryId);
                 if (existingProyecto == null)
                 {
                     return new ServiceResult
@@ -368,14 +312,14 @@ namespace look.Application.services.proyecto
                 }
                 await _unitOfWork.BeginTransactionAsync();
                 // Actualiza los campos del proyecto con los valores proporcionados.
-                existingProyecto.MonId = proyecto.MonId;
-                existingProyecto.EpyId = proyecto.EpyId;
-                existingProyecto.TseId = proyecto.TseId;
-                existingProyecto.EsProy= proyecto.EsProy;
-                existingProyecto.PrpId= proyecto.PrpId;
-                existingProyecto.PryFechaCierre= proyecto.PryFechaCierre;
-                existingProyecto.PryFechaInicioEstimada= proyecto.PryFechaCierreEstimada;
-                existingProyecto.PryValor= proyecto.PryValor;
+                existingProyecto.MonId = proyectoDTO.Proyecto.MonId;
+                existingProyecto.EpyId = proyectoDTO.Proyecto.EpyId;
+                existingProyecto.TseId = proyectoDTO.Proyecto.TseId;
+                existingProyecto.EsProy= proyectoDTO.Proyecto.EsProy;
+                existingProyecto.PrpId= proyectoDTO.Proyecto.PrpId;
+                existingProyecto.PryFechaCierre= proyectoDTO.Proyecto.PryFechaCierre;
+                existingProyecto.PryFechaInicioEstimada= proyectoDTO.Proyecto.PryFechaCierreEstimada;
+                existingProyecto.PryValor= proyectoDTO.Proyecto.PryValor;
 
                 var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
                 foreach (var proyectoDocumento in proyectoDocumentos.Where(p => p.PryId == existingProyecto.PryId))
@@ -385,7 +329,7 @@ namespace look.Application.services.proyecto
                     await _documentoService.DeleteAsync(documento);
                 }
                 // Actualiza los tarifarios si se proporcionan nuevos tarifarios.
-                if (proyectos.TarifarioConvenio != null)
+                if (proyectoDTO.TarifarioConvenio != null)
                 {
                     var TarifarioConvenido = await _tarifarioConvenioService.GetAllAsync();
                     foreach (var proyectoDocumento in TarifarioConvenido.Where(p => p.PRpId == existingProyecto.PryId))
@@ -393,7 +337,7 @@ namespace look.Application.services.proyecto
                         var tarifario = await _tarifarioConvenioService.GetByIdAsync(proyectoDocumento.TcId);
                         await _tarifarioConvenioService.DeleteAsync(tarifario);
                     }
-                    foreach (var tarifariolist in proyectos.TarifarioConvenio)
+                    foreach (var tarifariolist in proyectoDTO.TarifarioConvenio)
                     {
                         var tarifarioConvenido = new TarifarioConvenio();
                         tarifarioConvenido.TcPerfilAsignado = tarifariolist.TcPerfilAsignado;
@@ -401,7 +345,7 @@ namespace look.Application.services.proyecto
                         tarifarioConvenido.TcMoneda = tarifariolist.TcMoneda;
                         tarifarioConvenido.TcStatus = tarifariolist.TcStatus;
                         tarifarioConvenido.TcTarifa = tarifariolist.TcTarifa;
-                        tarifarioConvenido.PRpId = proyecto.PryId;
+                        tarifarioConvenido.PRpId = proyectoDTO.Proyecto.PryId;
                     
                         await _tarifarioConvenioService.AddAsync(tarifarioConvenido);
                     }
@@ -410,31 +354,31 @@ namespace look.Application.services.proyecto
                 // Actualiza los documentos si se proporcionan archivos actualizados.
                 if (file1 != null)
                 {
-                    var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyecto.PryIdCliente,proyecto.PryId);
+                    var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyectoDTO.Proyecto.PryIdCliente, proyectoDTO.Proyecto.PryId);
                     var documento1 = await _documentoService.AddAsync(new Documento
                     {
                         DocExtencion = file1.ContentType,
                         DocNombre = file1.FileName,
                         DocUrl = urlArchivo1.ToString(),
-                        DocIdCliente = proyecto.PryIdCliente,
+                        DocIdCliente = proyectoDTO.Proyecto.PryIdCliente,
                         TdoId = 1
                     });
-                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento1.DocId, TdoId = 1 });
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento1.DocId, TdoId = 1 });
 
                 }
 
                 if (file2 != null)
                 {
-                    var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyecto.PryIdCliente,proyecto.PryId);
+                    var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyectoDTO.Proyecto.PryIdCliente, proyectoDTO.Proyecto.PryId);
                     var documento2 = await _documentoService.AddAsync(new Documento
                     {
                         DocExtencion = file2.ContentType,
                         DocNombre = file2.FileName,
                         DocUrl = urlArchivo2.ToString(),
-                        DocIdCliente = proyecto.PryIdCliente,
+                        DocIdCliente = proyectoDTO.Proyecto.PryIdCliente,
                         TdoId = 1
                     });
-                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyecto.PryId,DocId = documento2.DocId,TdoId=1});
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento2.DocId,TdoId=1});
 
                 }
                 

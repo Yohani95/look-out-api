@@ -16,7 +16,7 @@ namespace look.domain.entities.cuentas
 
         public string? CliNombre { get; set; }
 
-        public string CliDescripcion { get; set; } = null!;
+        public string? CliDescripcion { get; set; }
 
         public int? EclId { get; set; }
 
