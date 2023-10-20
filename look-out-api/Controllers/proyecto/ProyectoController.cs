@@ -4,7 +4,7 @@ using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
-using ProyectoDTO = look.domain.dto.admin.ProyectoDTO;
+using look.domain.dto.admin;
 
 namespace look_out_api.Controllers.proyecto
 {
@@ -45,23 +45,26 @@ namespace look_out_api.Controllers.proyecto
         [HttpPost("createAsync")]
         public async Task<IActionResult> CreateAsync([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
         {
-            
-            var proyecto = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
-            IFormFile file1;
-            IFormFile file2;
-            file1 = files[0];
-            file2 = files[1];
-            var result = await _proyectoService.createAsync(file1,file2,proyecto);
-            switch (result.MessageCode)
+            try
             {
-                case ServiceResultMessage.Success:
-                    return Ok(result);
-                case ServiceResultMessage.InvalidInput:
-                    return BadRequest(result);
-                case ServiceResultMessage.NotFound:
-                    return NotFound(result);
-                default:
-                    return StatusCode(500, result);
+                var proyecto = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
+                var result = await _proyectoService.createAsync(files, proyecto);
+                switch (result.MessageCode)
+                {
+                    case ServiceResultMessage.Success:
+                        return Ok(result);
+                    case ServiceResultMessage.InvalidInput:
+                        return BadRequest(result);
+                    case ServiceResultMessage.NotFound:
+                        return NotFound(result);
+                    default:
+                        return StatusCode(500, result);
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Error("ERROR creando servicio"+ ex.Message);
+                return StatusCode(500);
             }
         }
 
@@ -102,13 +105,13 @@ namespace look_out_api.Controllers.proyecto
         [HttpPut("UpdateWithEntities/{id}")]
         public async Task<IActionResult> UpdateWithEntities([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
         {
-            var proyecto = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
+            var proyectoDTO = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
             IFormFile file1;
             IFormFile file2;
             file1 = files[0];
             file2 = files[1];
-            Log.Information("Solicitud Delete ProyectoId: " + proyecto.PryId);
-            var result = await _proyectoService.updateAsync(file1 ,file2 ,proyecto);
+            Log.Information("Solicitud Delete ProyectoId: " + proyectoDTO.Proyecto.PryId);
+            var result = await _proyectoService.updateAsync(file1 ,file2 , proyectoDTO);
 
             switch (result.MessageCode)
             {

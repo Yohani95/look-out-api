@@ -28,7 +28,7 @@ namespace look.Application.interfaces.proyecto
         /// </summary>
         /// <param name="proyecto">entidad proyecto</param>
         /// <returns>retorna un mensaje generico</returns>
-        Task<ServiceResult> createAsync(IFormFile file1,IFormFile file2,ProyectoDTO proyecto);
+        Task<ServiceResult> createAsync(List<IFormFile> files, ProyectoDTO proyectoDTO);
         /// <summary>
         /// Actualiza el proyecto y actualiza sus archivos
         /// </summary>
