@@ -1087,8 +1087,7 @@ namespace look.Infrastructure.data
                     .HasColumnName("comentarios_grales");       
                 entity.Property(e => e.PRpId)
                     .HasColumnType("int(11)")
-                    .HasColumnName("prp_id");       
-                
+                    .HasColumnName("prp_id");
             });
 
         }

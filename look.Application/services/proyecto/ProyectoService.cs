@@ -36,9 +36,7 @@ namespace look.Application.services.proyecto
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
             _tarifarioConvenioService = tarifarioConvenioService;
-            
             _unitOfWork= unitOfWork;
-
         }
 
         public async Task<ServiceResult> createAsync(List<IFormFile> files, ProyectoDTO proyectoDTO)
@@ -80,7 +78,8 @@ namespace look.Application.services.proyecto
                 {
                     await _proyectoDocumentoService.AddAsync(new ProyectoDocumento { PryId = proyectoCreated.PryId, DocId = doc.DocId, TdoId = 1 });
                 }
-#endregion
+                #endregion
+
 
                 foreach (var tarifario in proyectoDTO.TarifarioConvenio)
                 {
@@ -189,6 +188,57 @@ namespace look.Application.services.proyecto
                     IsSuccess = false,
                     Message = $"Error interno del servidor: {ex.Message}",
                     MessageCode = ServiceResultMessage.InternalServerError
+                };
+            }
+        }
+
+        public async Task<ResponseGeneric<Proyecto>> GetByIdAllEntities(int id)
+        {
+
+            try
+            {
+                _logger.Information("obteniendo proyecto ID: "+ id);
+                if (id <= 0)
+                {
+                    var result = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.NotFound,
+                        Message = "No hay datos."
+                    };
+                    return new ResponseGeneric<Proyecto>
+                    {
+                        serviceResult = result,
+                        Data = null
+                    };
+                }
+                var proyecto = await _proyectoRepository.GetComplete();
+                var resultSuccess = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = Message.PeticionOk
+                };
+                return new ResponseGeneric<Proyecto>
+                {
+                    serviceResult = resultSuccess,
+                    Data = proyecto.FirstOrDefault(p=>p.PryId==id)
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Information(Message.ErrorServidor + ex.Message);
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message =  Message.ErrorServidor+ex.Message
+                };
+
+                return new ResponseGeneric<Proyecto>
+                {
+                    serviceResult = errorResult,
+                    Data = null
                 };
             }
         }

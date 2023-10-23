@@ -47,5 +47,11 @@ namespace look.Application.interfaces.proyecto
         /// <param name="path">ruta del archivo</param>
         /// <returns>retorna un archivo</returns>
         Task<List<FileStream>> GetFile(int id);
+        /// <summary>
+        /// obtiene el objeto con sus entidades,segun su id 
+        /// </summary>
+        /// <param name="id">id de proyecto</param>
+        /// <returns>retorna una respuesta generica con la data</returns>
+        Task<ResponseGeneric<Proyecto>> GetByIdAllEntities(int id);
     }
 }

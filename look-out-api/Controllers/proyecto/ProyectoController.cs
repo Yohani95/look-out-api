@@ -40,6 +40,22 @@ namespace look_out_api.Controllers.proyecto
                 default:
                     return StatusCode(500, result);
             }
+        }     
+        [HttpGet("GetByIdWithEntities/{id}")]
+        public async Task<IActionResult> GetLastId(int id) 
+        {           
+            var result = await _proyectoService.GetByIdAllEntities(id);
+            switch (result.serviceResult.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
         }
         
         [HttpPost("createAsync")]
