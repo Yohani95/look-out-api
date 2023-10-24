@@ -1,4 +1,5 @@
 using look.domain.entities.admin;
+using look.domain.entities.world;
 
 namespace look.domain.entities.proyecto;
 
@@ -23,4 +24,5 @@ public class TarifarioConvenio
 
     public virtual Proyecto? Proyecto { get; set; }
     public virtual Perfil? Perfil { get; set; } 
+    public virtual Moneda? Moneda{ get; set; } 
 }

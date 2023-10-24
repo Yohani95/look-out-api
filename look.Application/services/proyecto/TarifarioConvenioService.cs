@@ -21,12 +21,97 @@ namespace look.Application.services.proyecto
         {
             try
             {
-                var tarifario = await _tarifarioConvenioService.GetAllAsync();
-                return null;
+                var tarifario = await _tarifarioConvenioService.GetComplete();
+                if (id <= 0)
+                {
+                    var result = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.NotFound,
+                        Message = Message.IdNull
+                    };
+                    return new ResponseGeneric<TarifarioConvenio>
+                    {
+                        serviceResult = result,
+                        Data = null
+                    };
+                }
+                var resultSuccess = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = Message.PeticionOk
+                };
+                return new ResponseGeneric<TarifarioConvenio>
+                {
+                    serviceResult = resultSuccess,
+                    Data = tarifario.FirstOrDefault(t => t.TcId == id)
+                };
             }
             catch (Exception ex)
             {
-                throw;
+                _logger.Information(Message.ErrorServidor + ex.Message);
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = Message.ErrorServidor + ex.Message
+                };
+
+                return new ResponseGeneric<TarifarioConvenio>
+                {
+                    serviceResult = errorResult,
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<ResponseGeneric<List<TarifarioConvenio>>> GetByIdProyectoEntities(int idProyecto)
+        {
+            try
+            {
+                var tarifario = await _tarifarioConvenioService.GetComplete();
+                if (idProyecto <= 0)
+                {
+                    var result = new ServiceResult
+                    {
+                        IsSuccess = false,
+                        MessageCode = ServiceResultMessage.NotFound,
+                        Message = Message.IdNull
+                    };
+                    return new  ResponseGeneric<List<TarifarioConvenio>>
+                    {
+                        serviceResult = result,
+                        Data = null
+                    };
+                }
+                var resultSuccess = new ServiceResult
+                {
+                    IsSuccess = true,
+                    MessageCode = ServiceResultMessage.Success,
+                    Message = Message.PeticionOk
+                };
+                return new ResponseGeneric<List<TarifarioConvenio>>
+                {
+                    serviceResult = resultSuccess,
+                    Data = tarifario.Where(t => t.PRpId == idProyecto).ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Information(Message.ErrorServidor + ex.Message);
+                var errorResult = new ServiceResult
+                {
+                    IsSuccess = false,
+                    MessageCode = ServiceResultMessage.InternalServerError,
+                    Message = Message.ErrorServidor + ex.Message
+                };
+
+                return new ResponseGeneric<List<TarifarioConvenio>>
+                {
+                    serviceResult = errorResult,
+                    Data = null
+                };
             }
         }
 

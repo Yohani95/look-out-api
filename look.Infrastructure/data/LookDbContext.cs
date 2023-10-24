@@ -1088,7 +1088,18 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PRpId)
                     .HasColumnType("int(11)")
                     .HasColumnName("prp_id");
+
+                entity.HasOne(d => d.Perfil).WithMany()
+                    .HasForeignKey(d => d.TcPerfilAsignado)
+                    .HasConstraintName("FK_tarifario_convenido_perfil");
+                entity.HasOne(d => d.Proyecto).WithMany()
+                    .HasForeignKey(d => d.PRpId)
+                    .HasConstraintName("FK_tarifario_convenido_proyecto");
+                entity.HasOne(d => d.Moneda).WithMany()
+                    .HasForeignKey(d => d.TcMoneda)
+                    .HasConstraintName("FK_tarifario_convenido_moneda");
             });
+
 
         }
 

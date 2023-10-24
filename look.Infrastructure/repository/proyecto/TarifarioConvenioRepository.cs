@@ -14,7 +14,11 @@ namespace look.Infrastructure.repository.proyecto
 
         public async Task<List<TarifarioConvenio>> GetComplete()
         {
-            return await _dbContext.TarifarioConvenio.ToListAsync();
+            return await _dbContext.TarifarioConvenio
+                .Include(t=>t.Perfil)
+                .Include(t=>t.Proyecto)
+                .Include(t=>t.Moneda)
+                .ToListAsync();
         }
     }
 }
