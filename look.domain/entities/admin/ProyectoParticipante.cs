@@ -1,18 +1,20 @@
 using look.domain.entities.proyecto;
+using System.ComponentModel.DataAnnotations;
 
 namespace look.domain.entities.admin
 {
     public class ProyectoParticipante
     {
+        [Key]
         public int PpaId { get; set; }
 
-        public int PryId { get; set; }
+        public int? PryId { get; set; }
 
-        public int PerId { get; set; }
+        public int? PerId { get; set; }
         
-        public int CarId { get; set; }
+        public int? CarId { get; set; }
         
-        public int PerTartifa { get; set; }
+        public int? PerTartifa { get; set; }
         
         public int PrfId {get; set; }
         
