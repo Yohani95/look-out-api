@@ -7,6 +7,8 @@ namespace look.Application.interfaces.admin
     {
         Task<List<Telefono>> ListComplete();
         
+        Task<List<Telefono>> ListCompleteById(int id);
+        
         Task<ServiceResult> Create(Telefono email);
         Task<ServiceResult> Edit(Telefono email, int id);
         

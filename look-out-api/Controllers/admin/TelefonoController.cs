@@ -63,6 +63,14 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
+        
+        [HttpGet("getAllTelefonoById")]
+        public async Task<IActionResult> getAllTelefonoById(int id)
+        {
+            Log.Information("Solicitud GetAll email");
+            var email = await _telefonoService.ListCompleteById(id);
+            return Ok(email);
+        }
 
 
         protected override int GetEntityId(Telefono entity)

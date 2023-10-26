@@ -28,6 +28,14 @@ namespace look_out_api.Controllers.admin
             var email = await _emailService.ListComplete();
             return Ok(email);
         }
+        
+        [HttpGet("getAllEmailById")]
+        public async Task<IActionResult> getAllEmailById(int id)
+        {
+            Log.Information("Solicitud GetAll email");
+            var email = await _emailService.ListCompleteById(id);
+            return Ok(email);
+        }
         [HttpPost("create")]
         public async Task<IActionResult> CreateEmail(Email email)
         {

@@ -116,6 +116,11 @@ namespace look.Application.services.admin
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
         }
+        
+        public async Task<List<Telefono>> ListCompleteById(int id)
+        {
+            return await _telefonoRepository.ListCompleteById(id);
+        }
     }
 }
 
