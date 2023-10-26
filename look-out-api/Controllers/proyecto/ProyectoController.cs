@@ -122,12 +122,8 @@ namespace look_out_api.Controllers.proyecto
         public async Task<IActionResult> UpdateWithEntities([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
         {
             var proyectoDTO = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
-            IFormFile file1;
-            IFormFile file2;
-            file1 = files[0];
-            file2 = files[1];
             Log.Information("Solicitud Delete ProyectoId: " + proyectoDTO.Proyecto.PryId);
-            var result = await _proyectoService.updateAsync(file1 ,file2 , proyectoDTO);
+            var result = await _proyectoService.updateAsync(files, proyectoDTO);
 
             switch (result.MessageCode)
             {

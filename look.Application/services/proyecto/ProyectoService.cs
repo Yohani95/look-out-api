@@ -333,7 +333,7 @@ namespace look.Application.services.proyecto
             }
         }
 
-        public async Task<ServiceResult> updateAsync(IFormFile file1, IFormFile file2, ProyectoDTO proyectoDTO)
+        public async Task<ServiceResult> updateAsync(List<IFormFile> files, ProyectoDTO proyectoDTO)
         {
             try
             {
@@ -402,35 +402,21 @@ namespace look.Application.services.proyecto
                 }
 
                 // Actualiza los documentos si se proporcionan archivos actualizados.
-                if (file1 != null)
+                foreach (var documentos in files)
                 {
-                    var urlArchivo1 = await FileServices.UploadFileAsync(file1, (int)proyectoDTO.Proyecto.PryIdCliente, proyectoDTO.Proyecto.PryId);
-                    var documento1 = await _documentoService.AddAsync(new Documento
+                    var urlArchivo1 = await FileServices.UploadFileAsync(documentos, (int)proyectoDTO.Proyecto.PryIdCliente, proyectoDTO.Proyecto.PryId);
+                    var documento = await _documentoService.AddAsync(new Documento
                     {
-                        DocExtencion = file1.ContentType,
-                        DocNombre = file1.FileName,
+                        DocExtencion = documentos.ContentType,
+                        DocNombre = documentos.FileName,
                         DocUrl = urlArchivo1.ToString(),
                         DocIdCliente = proyectoDTO.Proyecto.PryIdCliente,
                         TdoId = 1
                     });
-                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento1.DocId, TdoId = 1 });
-
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento.DocId, TdoId = 1 });
                 }
-
-                if (file2 != null)
-                {
-                    var urlArchivo2 = await FileServices.UploadFileAsync(file2, (int)proyectoDTO.Proyecto.PryIdCliente, proyectoDTO.Proyecto.PryId);
-                    var documento2 = await _documentoService.AddAsync(new Documento
-                    {
-                        DocExtencion = file2.ContentType,
-                        DocNombre = file2.FileName,
-                        DocUrl = urlArchivo2.ToString(),
-                        DocIdCliente = proyectoDTO.Proyecto.PryIdCliente,
-                        TdoId = 1
-                    });
-                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento2.DocId,TdoId=1});
-
-                }
+                
+                
                 
                 await _unitOfWork.CommitAsync();
 
