@@ -14,6 +14,7 @@ namespace look.domain.entities.Common
         public static string ErrorServidor { get; } = "Error interno del servidor: ";
         public static string IdNull { get; } = "ID Invalido";
         public static string ParticipanteCrear { get; } = "Creando Participante";
+        public static string GetParticipanteById{ get; } = "Get Participante";
 
     }
 }

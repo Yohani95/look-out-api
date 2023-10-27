@@ -13,4 +13,17 @@ public interface IProyectoParticipanteService: IService<ProyectoParticipante>
     /// <param name="profesionalesDTO">el dto de profesionales(personas,Participantes)</param>
     /// <returns>retorna resultado de la transaccion</returns>
     Task<ServiceResult> CreateDTOAsync(ProfesionalesDTO profesionalesDTO);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<ServiceResult> deletedAsync(string rut);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<ResponseGeneric<List<ProyectoParticipante>>> GetByIdProyecto(int id);
+
 }

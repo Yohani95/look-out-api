@@ -924,13 +924,13 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PrfId)
                     .HasColumnType("int(11)")
                     .HasColumnName("prf_id");
-                entity.HasOne(d => d.Per).WithMany()
+                entity.HasOne(d => d.Persona).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Propuesta_Estado_Propuesta");
                 entity.HasOne(d => d.Car).WithMany()
                     .HasForeignKey(d => d.CarId)
                     .HasConstraintName("FK_Propuesta_Moneda");
-                entity.HasOne(d => d.Pro).WithMany()
+                entity.HasOne(d => d.Proyecto).WithMany()
                     .HasForeignKey(d => d.PryId)
                     .HasConstraintName("FK_Propuesta_Prospecto");
                 entity.HasOne(d => d.Perfil).WithMany()

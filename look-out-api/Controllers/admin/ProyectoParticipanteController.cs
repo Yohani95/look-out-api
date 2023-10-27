@@ -32,11 +32,43 @@ namespace look_out_api.Controllers.admin
         [HttpPost("CreateAsync")]
         public async Task<ActionResult<ServiceResult>> CreateDTOAsync(ProfesionalesDTO profesionales)
         {
-            //TEST
-            return Ok();
             var result = await _participanteService.CreateDTOAsync(profesionales);
 
             switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        [HttpDelete("deletedAsync/{rut}")]
+        public async Task<ActionResult<ServiceResult>> CreateDTOAsync(string rut)
+        {
+            var result = await _participanteService.deletedAsync(rut);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
+        }
+        [HttpGet("GetByIdProyecto/{id}")]
+        public async Task<ActionResult<IEnumerable<ProyectoParticipante>>> GetAllWithEntities(int id)
+        {
+            var result = await _participanteService.GetByIdProyecto(id);
+
+            switch (result.serviceResult.MessageCode)
             {
                 case ServiceResultMessage.Success:
                     return Ok(result);

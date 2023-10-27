@@ -20,9 +20,9 @@ namespace look.domain.entities.admin
         
         public virtual Car? Car { get; set; }
         
-        public virtual Persona? Per { get; set; }
+        public virtual Persona? Persona { get; set; }
         
-        public virtual Proyecto? Pro { get; set; }
+        public virtual Proyecto? Proyecto { get; set; }
         
         public virtual Perfil? Perfil { get; set; }
     }
