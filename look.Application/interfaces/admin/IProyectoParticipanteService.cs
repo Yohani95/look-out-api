@@ -13,11 +13,11 @@ public interface IProyectoParticipanteService: IService<ProyectoParticipante>
     /// <param name="profesionalesDTO">el dto de profesionales(personas,Participantes)</param>
     /// <returns>retorna resultado de la transaccion</returns>
     Task<ServiceResult> CreateDTOAsync(ProfesionalesDTO profesionalesDTO);
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+   /// <summary>
+   /// elimina segun el rut
+   /// </summary>
+   /// <param name="rut">rut o dni de la persona</param>
+   /// <returns></returns>
     Task<ServiceResult> deletedAsync(string rut);
     /// <summary>
     /// 

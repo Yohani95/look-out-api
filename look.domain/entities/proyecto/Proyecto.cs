@@ -26,6 +26,7 @@ namespace look.domain.entities.proyecto
         public DateTime? PryFechaCierre { get; set; }
         public int? PryIdContacto { get; set; }
         public int? PryIdContactoClave { get; set; }
+        public int? PaisId { get; set; } 
 
         public virtual Cliente? Cli { get; set; }
 

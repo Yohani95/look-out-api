@@ -924,6 +924,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PrfId)
                     .HasColumnType("int(11)")
                     .HasColumnName("prf_id");
+                entity.Property(e => e.FechaAsignacion)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_asignacion");
                 entity.HasOne(d => d.Persona).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Propuesta_Estado_Propuesta");
@@ -1035,6 +1038,10 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PryIdContactoClave)
                  .HasColumnType("int(11)")
                  .HasColumnName("pry_id_contacto_clave");
+                entity.Property(e => e.PaisId)
+                 .HasColumnType("int(11)")
+                 .HasColumnName("pai_id");
+
                 entity.HasOne(d => d.Cli).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
                     .HasConstraintName("FK_Proyecto_Cliente");

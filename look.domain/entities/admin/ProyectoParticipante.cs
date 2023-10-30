@@ -17,7 +17,9 @@ namespace look.domain.entities.admin
         public int? PerTartifa { get; set; }
         
         public int PrfId {get; set; }
-        
+
+        public DateTime? FechaAsignacion { get; set; }
+
         public virtual Car? Car { get; set; }
         
         public virtual Persona? Persona { get; set; }

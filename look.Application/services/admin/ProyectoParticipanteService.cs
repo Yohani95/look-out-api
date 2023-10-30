@@ -88,6 +88,7 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
             var profecionales=await _proyectoParticipanteRepository.GetAllAsync();
             var profesional = profecionales.FirstOrDefault(p => p.PerId == persona.Id);
             await _proyectoParticipanteRepository.DeleteAsync(profesional);
+            await _personaRepository.DeleteAsync(persona);
             _logger.Information(Message.PeticionOk);
             await _unitOfWork.CommitAsync();
             return new ServiceResult
