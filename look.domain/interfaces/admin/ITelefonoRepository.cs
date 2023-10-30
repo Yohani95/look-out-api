@@ -5,5 +5,7 @@ namespace look.domain.interfaces.admin
     public interface ITelefonoRepository:IRepository<Telefono>
     {
         Task<List<Telefono>> GetComplete();
+        
+        Task<List<Telefono>> ListCompleteById(int id);
     }
 }

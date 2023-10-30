@@ -19,6 +19,11 @@ namespace look.Infrastructure.repository.admin
                 .Include(u=>u.cliente)
                 .Include(u=>u.persona).ToListAsync();
         }
+        
+        public async Task<List<Telefono>> ListCompleteById(int id)
+        {
+            return await _dbContext.Telefono.Include(u=>u.tipoTelefono).Include(u=>u.cliente).Include(u=>u.persona).Where(p => p.perId == id).ToListAsync();
+        }
     }
 }
 

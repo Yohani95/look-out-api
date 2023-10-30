@@ -6,6 +6,8 @@ namespace look.Application.interfaces.admin
     public interface IEmailService: IService<Email>
     {
         Task<List<Email>> ListComplete();
+        
+        Task<List<Email>> ListCompleteById(int id);
         Task<ServiceResult> Create(Email email);
         Task<ServiceResult> Edit(Email email, int id);
     }

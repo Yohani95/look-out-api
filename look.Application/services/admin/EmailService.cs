@@ -123,5 +123,17 @@ namespace look.Application.services.admin
                 return null;
             }
         }
+        
+        public async Task<List<Email>> ListCompleteById(int id)
+        {
+            try
+            {
+                return await _emailRepository.ListCompleteById(id);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }
