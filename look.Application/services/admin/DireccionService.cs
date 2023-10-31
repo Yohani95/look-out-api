@@ -134,8 +134,8 @@ public class DireccionService: Service<Direccion>, IDireccionService
     {
         try
         {
-            var telefonos =await _direccionRepository.GetAllAsync();
-            return telefonos.Where(t=>t.PerId == id).ToList();
+            return await _direccionRepository.ListCompleteByIdPersona(id);
+            
         }
         catch (Exception ex)
         {

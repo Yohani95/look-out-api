@@ -16,6 +16,11 @@ namespace look.Infrastructure.repository.admin
         {
             return await _dbContext.Direccion.Include(e=>e.Cli).Include(e=>e.Per).Include(e=>e.Tdi).ToListAsync();
         }
+        
+        public async Task<List<Direccion>> ListCompleteByIdPersona(int id)
+        {
+            return await _dbContext.Direccion.Include(e=>e.Cli).Include(e=>e.Per).Include(e=>e.Tdi).Where(p => p.PerId == id).ToListAsync();
+        }
     }
 }
 
