@@ -129,4 +129,18 @@ public class DireccionService: Service<Direccion>, IDireccionService
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
     }
+
+    public async Task<List<Direccion>> GetbyIdPersona(int id)
+    {
+        try
+        {
+            var telefonos =await _direccionRepository.GetAllAsync();
+            return telefonos.Where(t=>t.PerId == id).ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(Message.ErrorServidor + ex.Message);
+            return null;
+        }
+    }
 }

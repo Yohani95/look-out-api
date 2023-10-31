@@ -29,7 +29,7 @@ namespace look_out_api.Controllers.admin
             return Ok(email);
         }
         
-        [HttpGet("getAllEmailById")]
+        [HttpGet("getAllEmailById/{id}")]
         public async Task<IActionResult> getAllEmailById(int id)
         {
             Log.Information("Solicitud GetAll email");

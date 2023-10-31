@@ -116,6 +116,7 @@ namespace look.Application.services.admin
         {
             try
             {
+                _logger.Information("Obteniendo Emails");
                 return await _emailRepository.GetComplete();
             }
             catch (Exception ex)
@@ -128,10 +129,12 @@ namespace look.Application.services.admin
         {
             try
             {
-                return await _emailRepository.ListCompleteById(id);
+                _logger.Information("Obteniendo Emails de Idpersona: "+id);
+                return await _emailRepository.ListCompleteByIdPersona(id);
             }
             catch (Exception ex)
             {
+                _logger.Error(Message.ErrorServidor+ex.Message);
                 return null;
             }
         }

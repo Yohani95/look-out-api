@@ -119,7 +119,17 @@ namespace look.Application.services.admin
         
         public async Task<List<Telefono>> ListCompleteById(int id)
         {
-            return await _telefonoRepository.ListCompleteById(id);
+            try
+            {
+                _logger.Information("Obteniendo telefonos de Idpersona: " + id);
+                return await _telefonoRepository.ListCompleteByIdPersona(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Message.ErrorServidor + ex.Message);
+                return null;
+            }
+
         }
     }
 }

@@ -9,6 +9,12 @@ namespace look.Application.interfaces.admin
         
         Task<ServiceResult> Create(Direccion email);
         Task<ServiceResult> Edit(Direccion email, int id);
+        /// <summary>
+        /// obtiene la direcciones segun el id de persona
+        /// </summary>
+        /// <param name="id">id de persona</param>
+        /// <returns>retorna una lista de direcciones</returns>
+        Task<List<Direccion>> GetbyIdPersona(int id);
     }
 }
 
