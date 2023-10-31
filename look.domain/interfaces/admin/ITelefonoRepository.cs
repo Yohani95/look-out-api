@@ -6,6 +6,6 @@ namespace look.domain.interfaces.admin
     {
         Task<List<Telefono>> GetComplete();
         
-        Task<List<Telefono>> ListCompleteById(int id);
+        Task<List<Telefono>> ListCompleteByIdPersona(int id);
     }
 }

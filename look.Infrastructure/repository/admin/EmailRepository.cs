@@ -17,7 +17,7 @@ namespace look.Infrastructure.repository.admin
             return await _dbContext.Email.Include(e=>e.Cli).Include(e=>e.Per).Include(e=>e.Tem).ToListAsync();
         }
         
-        public async Task<List<Email>> ListCompleteById(int id)
+        public async Task<List<Email>> ListCompleteByIdPersona(int id)
         {
             return await _dbContext.Email.Include(e=>e.Cli).Include(e=>e.Per).Include(e=>e.Tem).Where(p => p.PerId == id).ToListAsync();
         }
