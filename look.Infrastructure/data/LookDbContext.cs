@@ -1113,9 +1113,10 @@ namespace look.Infrastructure.data
             {
                 entity.HasKey(e => e.id).HasName("PRIMARY");
                 entity.ToTable("novedades");
-                entity.HasIndex(e => e.idProyecto, "novedades_FK_2");
-                entity.HasIndex(e => e.idPersona, "novedades_FK");
-                entity.HasIndex(e => e.IdPerfil, "novedades_FK_1");
+                entity.HasIndex(e => e.idProyecto, "FK_proyecto_proyecto");
+                entity.HasIndex(e => e.idPersona, "FK_proyecto_persona");
+                entity.HasIndex(e => e.IdPerfil, "FK_proyecto_perfil");
+                entity.HasIndex(e => e.IdTipoNovedad, "FK_proyecto_tipo_novedad");
                 
                 entity.Property(e => e.id)
                     .HasColumnType("int(11)")
@@ -1138,17 +1139,24 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.IdPerfil)
                     .HasColumnType("int(11)")
                     .HasColumnName("idperfil");
+                entity.Property(e => e.IdTipoNovedad)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("idTipoNovedad");
                 entity.HasOne(d => d.Persona).WithMany()
                     .HasForeignKey(d => d.idPersona)
-                    .HasConstraintName("novedades_FK");
+                    .HasConstraintName("FK_proyecto_persona");
 
                 entity.HasOne(d => d.Perfil).WithMany()
                     .HasForeignKey(d => d.IdPerfil)
-                    .HasConstraintName("novedades_FK_1");
+                    .HasConstraintName("FK_proyecto_perfil");
 
                 entity.HasOne(d => d.Proyecto).WithMany()
                     .HasForeignKey(d => d.idProyecto)
-                    .HasConstraintName("novedades_FK_2");
+                    .HasConstraintName("FK_proyecto_proyecto");
+                
+                entity.HasOne(d => d.TipoNovedades).WithMany()
+                    .HasForeignKey(d => d.IdTipoNovedad)
+                    .HasConstraintName("FK_proyecto_tipo_novedad");
             });
 
             modelBuilder.Entity<TipoNovedades>(entity =>
