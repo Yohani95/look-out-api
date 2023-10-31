@@ -51,6 +51,8 @@ namespace look.Infrastructure.data
         
         public DbSet<ProyectoDocumento> ProyectoDocumento { get; set; }
         public DbSet<TarifarioConvenio> TarifarioConvenio { get; set; }
+        public DbSet<Novedades> Novedades { get; set; }
+        public DbSet<TipoNovedades> TipoNovedades { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -1105,6 +1107,63 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Moneda).WithMany()
                     .HasForeignKey(d => d.TcMoneda)
                     .HasConstraintName("FK_tarifario_convenido_moneda");
+            });
+            
+            modelBuilder.Entity<Novedades>(entity =>
+            {
+                entity.HasKey(e => e.id).HasName("PRIMARY");
+                entity.ToTable("novedades");
+                entity.HasIndex(e => e.idProyecto, "novedades_FK_2");
+                entity.HasIndex(e => e.idPersona, "novedades_FK");
+                entity.HasIndex(e => e.IdPerfil, "novedades_FK_1");
+                
+                entity.Property(e => e.id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+                entity.Property(e => e.idPersona)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("idPersona");
+                entity.Property(e => e.idProyecto)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("idProyecto");
+                entity.Property(e => e.fechaInicio)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaInicio");      
+                entity.Property(e => e.fechaHasta)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fechaHasta");      
+                entity.Property(e => e.observaciones)
+                    .HasColumnType("text")
+                    .HasColumnName("observaciones");
+                entity.Property(e => e.IdPerfil)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("idperfil");
+                entity.HasOne(d => d.Persona).WithMany()
+                    .HasForeignKey(d => d.idPersona)
+                    .HasConstraintName("novedades_FK");
+
+                entity.HasOne(d => d.Perfil).WithMany()
+                    .HasForeignKey(d => d.IdPerfil)
+                    .HasConstraintName("novedades_FK_1");
+
+                entity.HasOne(d => d.Proyecto).WithMany()
+                    .HasForeignKey(d => d.idProyecto)
+                    .HasConstraintName("novedades_FK_2");
+            });
+
+            modelBuilder.Entity<TipoNovedades>(entity =>
+            {
+                entity.HasKey(e => e.id).HasName("PRIMARY");
+                entity.ToTable("tipo_novedad");
+                entity.Property(e => e.id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+                entity.Property(e => e.nombre)
+                    .HasMaxLength(50)
+                    .HasColumnName("nombre");
+                entity.Property(e => e.descripcion)
+                    .HasColumnType("text")
+                    .HasColumnName("descripcion");
             });
 
 
