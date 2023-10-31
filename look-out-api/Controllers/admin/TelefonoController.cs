@@ -64,7 +64,7 @@ namespace look_out_api.Controllers.admin
             }
         }
         
-        [HttpGet("getAllTelefonoById")]
+        [HttpGet("getAllTelefonoById/{id}")]
         public async Task<IActionResult> getAllTelefonoById(int id)
         {
             Log.Information("Solicitud GetAll email");

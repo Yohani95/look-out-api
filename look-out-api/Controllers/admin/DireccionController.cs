@@ -64,6 +64,14 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
+        
+        [HttpGet("getAllDireccionById/{id}")]
+        public async Task<IActionResult> getAllDireccionById(int id)
+        {
+            Log.Information("Solicitud GetAll Direcciones");
+            var email = await _direccionService.GetbyIdPersona(id);
+            return Ok(email);
+        }
         protected override int GetEntityId(Direccion entity)
         {
             return entity.DirId;

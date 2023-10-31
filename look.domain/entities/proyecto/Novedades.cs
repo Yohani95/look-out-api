@@ -17,11 +17,15 @@ namespace look.domain.entities.proyecto
         public string? observaciones { get; set; }
         
         public int? IdPerfil { get; set; }
+        
+        public int? IdTipoNovedad { get; set; }
 
 
         public virtual Persona? Persona { get; set; }
 
         public virtual Proyecto? Proyecto { get; set; }
+        
+        public virtual TipoNovedades? TipoNovedades { get; set; }
 
         public virtual Perfil? Perfil { get; set; }
     }

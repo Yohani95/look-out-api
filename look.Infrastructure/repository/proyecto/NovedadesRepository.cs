@@ -18,6 +18,7 @@ namespace look.Infrastructure.repository.proyecto
                 .Include(p=>p.Proyecto)
                 .Include(p=>p.Persona)
                 .Include(p=>p.Perfil)
+                .Include(p=>p.TipoNovedades)
                 .ToListAsync();
         }
     }
