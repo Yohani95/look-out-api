@@ -47,7 +47,7 @@ namespace look_out_api.Controllers.admin
             }
         }
         [HttpDelete("deletedAsync/{rut}")]
-        public async Task<ActionResult<ServiceResult>> CreateDTOAsync(string rut)
+        public async Task<ActionResult<ServiceResult>> deletedAsync(string rut)
         {
             var result = await _participanteService.deletedAsync(rut);
 
