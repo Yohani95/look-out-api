@@ -415,13 +415,11 @@ namespace look.Application.services.proyecto
                     });
                     await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento.DocId, TdoId = 1 });
                 }
-                
-                
-                
-                await _unitOfWork.CommitAsync();
 
                 // Llama al repositorio para guardar los cambios en la base de datos.
                 await _proyectoRepository.UpdateAsync(existingProyecto);
+                
+                await _unitOfWork.CommitAsync();
 
                 _logger.Information("Proyecto con documentos actualizado exitosamente");
                 return new ServiceResult
