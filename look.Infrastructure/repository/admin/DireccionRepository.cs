@@ -19,7 +19,7 @@ namespace look.Infrastructure.repository.admin
         
         public async Task<List<Direccion>> ListCompleteByIdPersona(int id)
         {
-            return await _dbContext.Direccion.Include(e=>e.Cli).Include(e=>e.Per).Include(e=>e.Tdi).Where(p => p.PerId == id).ToListAsync();
+            return await _dbContext.Direccion.Include(e=>e.Cli).Include(e=>e.Per).Include(e=>e.Tdi).Include(d=>d.Com).Where(p => p.PerId == id).ToListAsync();
         }
     }
 }

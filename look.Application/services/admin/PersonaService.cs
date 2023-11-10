@@ -214,116 +214,140 @@ namespace look.Application.services.admin
                 {
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "El objeto persona proporcionado es nulo." };
                 }
-                
-                var existingPersona = await _personaRepository.GetByIdAsync(id);
-
-                if (existingPersona == null)
+               
+                if (personaDTO.IdCliente!=personaDTO.ClientePersona.CliId)
                 {
-                    return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.NotFound, Message = "La persona no fue encontrada." };
-                }
-                var clientesPersona = await _clientePersonaService.GetAllAsync(); // Obtiene todos los registros
-
-                var clientePersonaFiltrado = clientesPersona
-                    .Where(clientePersona =>
-                          clientePersona.PerId == personaDTO.Persona.Id).FirstOrDefault();
-
-                if (clientePersonaFiltrado != null && clientePersonaFiltrado.CliId!=personaDTO.IdCliente)
-                {
-                    clientePersonaFiltrado.CliId = personaDTO.IdCliente; 
-                    await _clientePersonaService.UpdateAsync(clientePersonaFiltrado);
-                }
-                
-                if (personaDTO.Emails.Count > 0)
-                {
-                    //elimina los antiguos email enviadas
-                    var emailListSearch = await _emailService.ListComplete();
-                    var emailListSearchFiltrado =emailListSearch.Where(d=>d.PerId == id).ToList();
-                    if (emailListSearchFiltrado.Count > 0)
-                    {
+                    var clientePersona = await _clientePersonaService.GetByIdAsync((int)personaDTO.IdCliente);
                     
-                        foreach (var emailList in emailListSearchFiltrado)
+                    if (clientePersona != null)
+                    {
+                        await _clientePersonaService.DeleteAsync(personaDTO.ClientePersona);
+                    }
+                    else
+                    {
+                        personaDTO.ClientePersona.CliId = personaDTO.IdCliente;
+                        await _clientePersonaService.UpdateAsync(clientePersona);
+                    }
+                }
+
+                if (personaDTO.Emails != null && personaDTO.Emails.Count > 0)
+                {
+                    // Buscar y eliminar los correos electrónicos antiguos
+                    var emailListSearch = await _emailService.ListComplete();
+                    var emailListSearchFiltrado = emailListSearch.Where(d => d.PerId == id).ToList();
+                    var emailListIds = personaDTO.Emails.Select(email => email.EmaId).ToList(); //comparar el id 
+
+                    foreach (var emailList in emailListSearchFiltrado)
+                    {
+                        if (!emailListIds.Contains(emailList.EmaId))
                         {
                             await _emailService.DeleteAsync(emailList);
                         }
                     }
-                    //agrega las email nuevos enviadas
-                    foreach (var emailList in personaDTO.Emails)
-                    {
-                        var email = new Email();
-                        email.CliId = personaDTO.IdCliente;
-                        email.PerId = id;
-                        email.EmaVigente = emailList.EmaVigente;
-                        email.EmaPrincipal = emailList.EmaPrincipal;
-                        email.TemId = emailList.TemId;
-                        email.EmaEmail = emailList.EmaEmail;
-                    
-                        await _emailService.AddAsync(email);
-                    }
-                }
-                if (personaDTO.Telefonos.Count > 0)
-                {
-                    //elimina los telefonos antiguos
-                    var telefonoListSearch = await _telefonoService.ListComplete();
-                    var telefonoListSearchFiltrado =telefonoListSearch.Where(d=>d.perId == id).ToList();
-                    if (telefonoListSearchFiltrado.Count > 0)
-                    {
-                    
-                        foreach (var telefonosList in telefonoListSearchFiltrado)
-                        {
-                            await _telefonoService.DeleteAsync(telefonosList);
-                        }
-                    }
-                    
-                    //agrega los nuevos telefonos enviadas
-                    foreach (var telefonosList in personaDTO.Telefonos)
-                    {
-                        var telefono = new Telefono();
-                        telefono.cliId = personaDTO.IdCliente;
-                        telefono.perId = id;
-                        telefono.telNumero = telefonosList.telNumero;
-                        telefono.tteId = telefonosList.tteId;
-                        telefono.telVigente = telefonosList.telVigente;
-                        telefono.TelPrincipal = telefonosList.TelPrincipal;
-                    
-                        await _telefonoService.AddAsync(telefono);
-                    }
-                }
-                if (personaDTO.direcciones.Count > 0)
-                {
-                    //elimina las direcciones antiguas
-                    var direccionListSearch = await _direccionService.ListComplete();
-                    var direccionListSearchFiltrado =direccionListSearch.Where(d=>d.PerId == id).ToList();
-                    if (direccionListSearchFiltrado.Count > 0)
-                    {
-                    
-                        foreach (var direccionList in direccionListSearchFiltrado)
-                        {
-                            await _direccionService.DeleteAsync(direccionList);
-                        }
-                    }
-                    //agrega las direcciones nuevas enviadas
-                    foreach (var direccionList in personaDTO.direcciones)
-                    {
-                        var direccion = new Direccion();
-                        direccion.PerId = id;
-                        direccion.CliId = personaDTO.IdCliente;
-                        direccion.DirCalle = direccionList.DirCalle;
-                        direccion.DirNumero = direccionList.DirNumero;
-                        direccion.ComId = direccionList.ComId;
-                        direccion.DirBlock = direccionList.DirBlock;
-                        direccion.TdiId = direccionList.TdiId;
-                        direccion.DirPrincipal = direccionList.DirPrincipal;
-                    
-                        await _direccionService.AddAsync(direccion);
-                    }
-                }
-                
 
+                    // Contador para rastrear si ya se encontró un email principal
+                    var principalCount = 0;
+
+                    // Agregar los nuevos correos electrónicos enviados
+                    foreach (var emailList in personaDTO.Emails.Where(e => e.EmaId < 1)) // filtra donde sea menor 1, ya que lógicamente en la bbdd son autoincrement
+                    {
+                        emailList.PerId = id;
+
+                        // Si es el email principal, establecerlo como principal y los demás como no principales
+                        if (emailList.EmaPrincipal == 1)
+                        {
+                            principalCount++;
+                            await _emailService.AddAsync(emailList);
+                        }
+                        else
+                        {
+                            // Si ya hay un principal, establecer los demás como no principales
+                            if (principalCount > 0)
+                            {
+                                emailList.EmaPrincipal = 0;
+                            }
+
+                            await _emailService.AddAsync(emailList);
+                        }
+                    }
+
+                    // Actualizar los emails existentes si ya hay uno principal
+                    if (principalCount > 0)
+                    {
+                        var existingPrincipalEmail = emailListSearchFiltrado.FirstOrDefault(e => e.EmaPrincipal == 1);
+                        if (existingPrincipalEmail != null)
+                        {
+                            existingPrincipalEmail.EmaPrincipal = 0;
+                            await _emailService.UpdateAsync(existingPrincipalEmail);
+                        }
+                    }
+                }
+
+                if (personaDTO.Telefonos != null && personaDTO.Telefonos.Any())
+                {
+                    // Eliminar teléfonos antiguos
+                    var oldPhones = await _telefonoService.ListComplete();
+
+                    // Filtrar teléfonos existentes por el ID de persona
+                    oldPhones = oldPhones.Where(p => p.perId == id).ToList();
+
+                    var phoneIds = personaDTO.Telefonos.Select(phone => phone.telId);
+
+                    foreach (var oldPhone in oldPhones.Where(p => !phoneIds.Contains(p.telId)))
+                    {
+                        await _telefonoService.DeleteAsync(oldPhone);
+                    }
+
+                    // Agregar nuevos teléfonos
+                    foreach (var newPhone in personaDTO.Telefonos.Where(p=>p.telId<1))
+                    {
+                            // Nuevo teléfono, asignar IDs y agregar
+                            newPhone.cliId = personaDTO.IdCliente;
+                            newPhone.perId = id;
+                            await _telefonoService.AddAsync(newPhone);
+                    }
+                }
+
+                if (personaDTO.direcciones != null && personaDTO.direcciones.Any())
+                {
+                    // Obtener direcciones existentes del servicio
+                    var oldAddresses = await _direccionService.ListComplete();
+
+                    // Filtrar direcciones existentes por el ID de persona
+                    oldAddresses = oldAddresses.Where(d => d.PerId == id).ToList();
+
+                    // Eliminar direcciones antiguas que no están en la lista de nuevas direcciones
+                    var addressIds = personaDTO.direcciones.Select(address => address.DirId);
+
+                    foreach (var oldAddress in oldAddresses.Where(d => !addressIds.Contains(d.DirId)))
+                    {
+                        await _direccionService.DeleteAsync(oldAddress);
+                    }
+
+                    // Agregar o actualizar nuevas direcciones
+                    foreach (var newAddress in personaDTO.direcciones.Where(d => d.DirId < 1))
+                    {
+                        // Nueva dirección, asignar IDs y agregar
+                        newAddress.PerId = id;
+                        newAddress.CliId = personaDTO.IdCliente;
+                        await _direccionService.AddAsync(newAddress);
+                        //else
+                        //{
+                        //    // Actualizar dirección existente
+                        //    await _direccionService.UpdateAsync(newAddress);
+                        //}
+                    }
+                }
+
+                var existingPersona = await _personaRepository.GetByIdAsync(id);
+                existingPersona.PerIdNacional = personaDTO.Persona.PerIdNacional;
                 existingPersona.PerNombres = personaDTO.Persona.PerNombres;
                 existingPersona.PerApellidoPaterno = personaDTO.Persona.PerApellidoPaterno;
                 existingPersona.PerApellidoMaterno = personaDTO.Persona.PerApellidoMaterno;
-                existingPersona.PerIdNacional=personaDTO.Persona.PerIdNacional;
-                existingPersona.PerFechaNacimiento = personaDTO.Persona.PerFechaNacimiento;
+                existingPersona.PaiId = personaDTO.Persona.PaiId;
+                existingPersona.TpeId = personaDTO.Persona.TpeId;
+
+                // Actualizar la entidad en el servicio de Persona
                 await _personaRepository.UpdateAsync(existingPersona);
                 await _unitOfWork.CommitAsync();
                 _logger.Information("La Persona ha sido editada con éxito");

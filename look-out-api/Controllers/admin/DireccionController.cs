@@ -65,8 +65,8 @@ namespace look_out_api.Controllers.admin
             }
         }
         
-        [HttpGet("getAllDireccionById/{id}")]
-        public async Task<IActionResult> getAllDireccionById(int id)
+        [HttpGet("getAllDireccionByIdPerson/{id}")]
+        public async Task<IActionResult> getAllDireccionByIdPerson(int id)
         {
             Log.Information("Solicitud GetAll Direcciones");
             var email = await _direccionService.GetbyIdPersona(id);

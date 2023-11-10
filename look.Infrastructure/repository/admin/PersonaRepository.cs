@@ -47,7 +47,8 @@ namespace look.Infrastructure.repository.admin
                             Email = email != null ? email.EmaEmail : null,
                             Telefono = telefono != null ? telefono.telNumero : null,
                             Persona = p,
-                            Cuenta = cliente != null ? cliente.CliNombre : null
+                            Cuenta = cliente != null ? cliente.CliNombre : null,
+                            IdCliente= cliente != null ? cliente.CliId : null,
                         };
 
             return await query.ToListAsync();

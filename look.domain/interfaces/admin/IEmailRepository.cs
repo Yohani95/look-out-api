@@ -11,5 +11,6 @@ namespace look.domain.interfaces.admin
         /// <param name="id">id de persona</param>
         /// <returns>retonar una lista de email </returns>
         Task<List<Email>> ListCompleteByIdPersona(int id);
+        //Task<bool> UpdatePrincipal(int idPersona,int idEmail);
     }
 }
