@@ -1000,6 +1000,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.MonId, "FK_Proyecto_Moneda");
                 entity.HasIndex(e => e.PrpId, "FK_Proyecto_Propuesta");
                 entity.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
+                entity.HasIndex(e => e.PaisId, "FK_Proyecto_Pais");
                 entity.Property(e => e.PryId)
                     
                     .HasColumnType("int(11)")
@@ -1043,7 +1044,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PaisId)
                  .HasColumnType("int(11)")
                  .HasColumnName("pai_id");
-
+                entity.Property(e => e.FechaCorte)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_corte");
                 entity.HasOne(d => d.Cli).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
                     .HasConstraintName("FK_Proyecto_Cliente");
@@ -1059,6 +1062,9 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.TipSer).WithMany()
                   .HasForeignKey(d => d.TseId)
                   .HasConstraintName("FK_Proyecto_Tipo_Servicio");
+                entity.HasOne(d => d.PaisesId).WithMany()
+                    .HasForeignKey(d => d.PaisId)
+                    .HasConstraintName("FK_Proyecto_Pais");
             });
             
             modelBuilder.Entity<TarifarioConvenio>(entity =>
