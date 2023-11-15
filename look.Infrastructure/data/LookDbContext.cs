@@ -54,6 +54,8 @@ namespace look.Infrastructure.data
         public DbSet<Novedades> Novedades { get; set; }
         public DbSet<TipoNovedades> TipoNovedades { get; set; }
         
+        public DbSet<PeriodoProyectos> PeriodoProyectos { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -948,7 +950,6 @@ namespace look.Infrastructure.data
                 entity.HasKey(e => e.CarId).HasName("PRIMARY");
                 entity.ToTable("car");
                 entity.Property(e => e.CarId)
-                    
                     .HasColumnType("int(11)")
                     .HasColumnName("car_id");
                 entity.Property(e => e.CarNombre)
@@ -958,6 +959,32 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.CarDescripcion)
                     .HasMaxLength(50)
                     .HasColumnName("car_descripcion");
+            });
+            
+            modelBuilder.Entity<PeriodoProyectos>(entity =>
+            {
+                entity.HasKey(e => e.id).HasName("PRIMARY");
+                entity.ToTable("periodos_proyecto");
+                entity.HasIndex(e => e.PryId, "fk_periodos_proyecto_proyecto");
+                entity.Property(e => e.id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+                entity.Property(e => e.PryId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id_proyecto");
+                entity.Property(e => e.FechaPeriodoDesde)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_periodo_desde");
+                entity.Property(e => e.FechaPeriodoHasta)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_periodo_hasta");
+                entity.Property(e => e.estado)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("estado");
+                entity.HasOne(d => d.Proyecto).WithMany()
+                    .HasForeignKey(d => d.PryId)
+                    .HasConstraintName("fk_periodos_proyecto_proyecto");
+                
             });
             
             modelBuilder.Entity<ProyectoDocumento>(entity =>
