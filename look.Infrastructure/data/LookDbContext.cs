@@ -929,6 +929,12 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.FechaAsignacion)
                     .HasColumnType("datetime")
                     .HasColumnName("fecha_asignacion");
+                entity.Property(e => e.FechaTermino)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_termino");
+                entity.Property(e => e.estado)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("estado");
                 entity.HasOne(d => d.Persona).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Propuesta_Estado_Propuesta");
