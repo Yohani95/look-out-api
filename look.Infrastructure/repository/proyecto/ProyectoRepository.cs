@@ -22,6 +22,7 @@ namespace look.Infrastructure.repository.proyecto
             return await _dbContext.Proyecto
                 .Include(p=>p.Cli)
                 .Include(p=>p.TipSer)
+                .Include(p=>p.PaisesId)
                 .ToListAsync();
         }
     }

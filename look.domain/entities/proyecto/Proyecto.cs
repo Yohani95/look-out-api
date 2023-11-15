@@ -27,6 +27,8 @@ namespace look.domain.entities.proyecto
         public int? PryIdContacto { get; set; }
         public int? PryIdContactoClave { get; set; }
         public int? PaisId { get; set; } 
+        
+        public DateTime? FechaCorte  { get; set; }
 
         public virtual Cliente? Cli { get; set; }
 
@@ -37,5 +39,7 @@ namespace look.domain.entities.proyecto
         public virtual Propuesta? Prop { get; set; } 
         
         public virtual TipoServicio? TipSer { get; set; }
+        
+        public virtual Pais? PaisesId { get; set; }
     }
 }
