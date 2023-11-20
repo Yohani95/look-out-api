@@ -1071,9 +1071,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PryIdContacto)
                   .HasColumnType("int(11)")
                   .HasColumnName("pry_id_contacto");
-                entity.Property(e => e.PryIdContactoClave)
+                entity.Property(e => e.kamId)
                  .HasColumnType("int(11)")
-                 .HasColumnName("pry_id_contacto_clave");
+                 .HasColumnName("pry_kamId");
                 entity.Property(e => e.PaisId)
                  .HasColumnType("int(11)")
                  .HasColumnName("pai_id");
