@@ -1078,7 +1078,7 @@ namespace look.Infrastructure.data
                  .HasColumnType("int(11)")
                  .HasColumnName("pai_id");
                 entity.Property(e => e.FechaCorte)
-                    .HasColumnType("datetime")
+                    .HasColumnType("int")
                     .HasColumnName("fecha_corte");
                 entity.HasOne(d => d.Cliente).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
