@@ -14,7 +14,7 @@ namespace look.domain.entities.admin
         
         public int? CarId { get; set; }
         
-        public int? PerTartifa { get; set; }
+        public int? PerTarifa { get; set; }
         
         public int PrfId {get; set; }
 

@@ -30,16 +30,14 @@ namespace look.domain.entities.proyecto
         
         public DateTime? FechaCorte  { get; set; }
 
-        public virtual Cliente? Cli { get; set; }
+        public virtual Cliente? Cliente { get; set; }
 
         public virtual EstadoProyecto? EsProy { get; set; }
 
         public virtual Moneda? Mon { get; set; }
-
-        public virtual Propuesta? Prop { get; set; } 
         
-        public virtual TipoServicio? TipSer { get; set; }
+        public virtual TipoServicio? TipoServicio { get; set; }
         
-        public virtual Pais? PaisesId { get; set; }
+        public virtual Pais? Pais { get; set; }
     }
 }

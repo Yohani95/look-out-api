@@ -20,9 +20,9 @@ namespace look.Infrastructure.repository.proyecto
         public async Task<List<Proyecto>> GetComplete()
         {
             return await _dbContext.Proyecto
-                .Include(p=>p.Cli)
-                .Include(p=>p.TipSer)
-                .Include(p=>p.PaisesId)
+                .Include(p=>p.Cliente)
+                .Include(p=>p.TipoServicio)
+                .Include(p=>p.Pais)
                 .ToListAsync();
         }
     }

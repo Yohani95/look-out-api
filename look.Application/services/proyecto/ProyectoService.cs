@@ -368,7 +368,8 @@ namespace look.Application.services.proyecto
                 existingProyecto.EsProy= proyectoDTO.Proyecto.EsProy;
                 existingProyecto.PrpId= proyectoDTO.Proyecto.PrpId;
                 existingProyecto.PryFechaCierre= proyectoDTO.Proyecto.PryFechaCierre;
-                existingProyecto.PryFechaInicioEstimada= proyectoDTO.Proyecto.PryFechaCierreEstimada;
+                existingProyecto.PryFechaInicioEstimada= proyectoDTO.Proyecto.PryFechaInicioEstimada;
+                existingProyecto.FechaCorte = proyectoDTO.Proyecto.FechaCorte;
                 existingProyecto.PryValor= proyectoDTO.Proyecto.PryValor;
 
                 var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
