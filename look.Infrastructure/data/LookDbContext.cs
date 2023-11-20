@@ -922,7 +922,7 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PryId)
                     .HasColumnType("int(11)")
                     .HasColumnName("pry_id");
-                entity.Property(e => e.PerTartifa)
+                entity.Property(e => e.PerTarifa)
                     .HasColumnType("int(11)")
                     .HasColumnName("per_tarifa");
                 entity.Property(e => e.PrfId)
@@ -931,6 +931,12 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.FechaAsignacion)
                     .HasColumnType("datetime")
                     .HasColumnName("fecha_asignacion");
+                entity.Property(e => e.FechaTermino)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_termino");
+                entity.Property(e => e.estado)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("estado");
                 entity.HasOne(d => d.Persona).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Propuesta_Estado_Propuesta");
@@ -1074,7 +1080,7 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.FechaCorte)
                     .HasColumnType("int")
                     .HasColumnName("fecha_corte");
-                entity.HasOne(d => d.Cli).WithMany()
+                entity.HasOne(d => d.Cliente).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
                     .HasConstraintName("FK_Proyecto_Cliente");
                 entity.HasOne(d => d.EsProy).WithMany()
@@ -1083,13 +1089,10 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Mon).WithMany()
                     .HasForeignKey(d => d.MonId)
                     .HasConstraintName("FK_Proyecto_Moneda");
-                entity.HasOne(d => d.Prop).WithMany()
-                    .HasForeignKey(d => d.PrpId)
-                    .HasConstraintName("FK_Proyecto_Propuesta");
-                entity.HasOne(d => d.TipSer).WithMany()
+                entity.HasOne(d => d.TipoServicio).WithMany()
                   .HasForeignKey(d => d.TseId)
                   .HasConstraintName("FK_Proyecto_Tipo_Servicio");
-                entity.HasOne(d => d.PaisesId).WithMany()
+                entity.HasOne(d => d.Pais).WithMany()
                     .HasForeignKey(d => d.PaisId)
                     .HasConstraintName("FK_Proyecto_Pais");
             });

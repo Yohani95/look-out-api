@@ -14,11 +14,13 @@ namespace look.domain.entities.admin
         
         public int? CarId { get; set; }
         
-        public int? PerTartifa { get; set; }
+        public int? PerTarifa { get; set; }
         
         public int PrfId {get; set; }
 
         public DateTime? FechaAsignacion { get; set; }
+        public DateTime? FechaTermino { get; set; }
+        public int? estado { get; set; }
 
         public virtual Car? Car { get; set; }
         
