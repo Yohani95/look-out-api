@@ -47,28 +47,16 @@ namespace look.Application.services.proyecto
                 novedades.IdPerfil =  novedad.IdPerfil;
                 novedades.IdTipoNovedad =  novedad.IdTipoNovedad;
                 await _novedadesRepository.UpdateAsync(novedades);
+
+                var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
                 
-                foreach (var participante in personas.Where(p => p.PryId == novedad.idProyecto).Where(p=>p.PerId==novedad.idPersona))
+                if (participante != null && novedad.IdPerfil != participante.PrfId)
                 {
-                    if (novedad.IdPerfil != 0)
-                    {
                         
-                        var proyectoParticipante = new ProyectoParticipante();
-                        proyectoParticipante.PpaId = participante.PpaId;
-                        proyectoParticipante.PryId = participante.PryId;
-                        proyectoParticipante.PerId = participante.PerId;
-                        proyectoParticipante.CarId = participante.CarId;
-                        proyectoParticipante.PerTarifa = participante.PerTarifa;
-                        proyectoParticipante.PrfId = novedad.IdPerfil;
-                        proyectoParticipante.FechaAsignacion = participante.FechaAsignacion;
-                        proyectoParticipante.FechaTermino = participante.FechaTermino;
-                        proyectoParticipante.estado = participante.estado;
-                        
-                        await _proyectoParticipanteRepository.UpdateAsync(proyectoParticipante);
-                    }
-                
-                    
+                        participante.PrfId = novedad.IdPerfil;
+                        await _proyectoParticipanteRepository.UpdateAsync(participante);
                 }
+                
                 _logger.Information("novedades y proyecto participante actualizados correctamente");
                 await _unitOfWork.CommitAsync();
                 return new ServiceResult
