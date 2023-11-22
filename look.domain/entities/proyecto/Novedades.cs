@@ -16,7 +16,7 @@ namespace look.domain.entities.proyecto
         
         public string? observaciones { get; set; }
         
-        public int? IdPerfil { get; set; }
+        public int IdPerfil { get; set; }
         
         public int? IdTipoNovedad { get; set; }
 
