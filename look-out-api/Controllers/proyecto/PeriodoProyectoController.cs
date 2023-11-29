@@ -28,7 +28,13 @@ namespace look_out_api.Controllers.proyecto
 
             return proyectosDocumentos;
         }
-        
+        [HttpGet("GetByIdProyecto/{id}")]
+        public async Task<ActionResult<IEnumerable<PeriodoProyecto>>> GetByIdProyecto(int id)
+        {
+            var periodo = await _periodoProyectoService.ListByProyecto(id);
+            return Ok(periodo);
+        }
+
         protected override int GetEntityId(PeriodoProyecto entity)
         {
             // Implementa la lógica para obtener el ID de la entidad TipoDocumento

@@ -13,6 +13,13 @@ namespace look.Application.services.proyecto
         {
             _periodoProyectoRepository = periodoProyectoRepository;
         }
+
+        public async Task<List<PeriodoProyecto>> ListByProyecto(int id)
+        {
+            var periodos= await _periodoProyectoRepository.GetComplete();
+            return periodos.Where(p=>p.PryId==id).ToList();
+        }
+
         public async Task<List<PeriodoProyecto>> ListComplete()
         {
             return await _periodoProyectoRepository.GetComplete();
