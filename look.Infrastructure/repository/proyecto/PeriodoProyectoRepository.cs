@@ -6,13 +6,13 @@ using MyApp.Infrastructure.Data;
 
 namespace look.Infrastructure.repository.proyecto
 {
-    public class PeriodoProyectoRepository: Repository<PeriodoProyectos>, IPeriodoProyectoRepository
+    public class PeriodoProyectoRepository: Repository<PeriodoProyecto>, IPeriodoProyectoRepository
     {
         public PeriodoProyectoRepository(LookDbContext dbContext) : base(dbContext)
         {
         }
 
-        public async Task<List<PeriodoProyectos>> GetComplete()
+        public async Task<List<PeriodoProyecto>> GetComplete()
         {
             return await _dbContext.PeriodoProyectos
                 .Include(p=>p.Proyecto)

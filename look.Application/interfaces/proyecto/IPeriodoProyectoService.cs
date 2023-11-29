@@ -2,9 +2,9 @@ using look.domain.entities.proyecto;
 
 namespace look.Application.interfaces.proyecto
 {
-    public interface IPeriodoProyectoService: IService<PeriodoProyectos>
+    public interface IPeriodoProyectoService: IService<PeriodoProyecto>
     {
-        Task<List<PeriodoProyectos>> ListComplete();
+        Task<List<PeriodoProyecto>> ListComplete();
     }
 }
 

@@ -80,13 +80,6 @@ namespace look.Application.services.proyecto
                 }
                 #endregion
 
-
-                foreach (var tarifario in proyectoDTO.TarifarioConvenio)
-                {
-                    tarifario.PRpId = proyectoCreated.PryId;
-                    await _tarifarioConvenioService.AddAsync(tarifario);
-                }
-
                 await _unitOfWork.CommitAsync();
                 _logger.Information("Proyecto creado exitosamente");
                 return new ServiceResult
@@ -335,9 +328,10 @@ namespace look.Application.services.proyecto
 
         public async Task<ServiceResult> updateAsync(List<IFormFile> files, ProyectoDTO proyectoDTO)
         {
+            List<Documento> doc = new List<Documento>();
             try
             {
-          
+                await _unitOfWork.BeginTransactionAsync();
                 _logger.Information("Actualizar proyecto con documentos");
                 if (proyectoDTO == null || proyectoDTO.Proyecto.PryId == 0)
                 {
@@ -360,7 +354,7 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-                await _unitOfWork.BeginTransactionAsync();
+
                 // Actualiza los campos del proyecto con los valores proporcionados.
                 existingProyecto.MonId = proyectoDTO.Proyecto.MonId;
                 existingProyecto.EpyId = proyectoDTO.Proyecto.EpyId;
@@ -379,29 +373,6 @@ namespace look.Application.services.proyecto
                     FileServices.DeleteFile(documento.DocUrl);
                     await _documentoService.DeleteAsync(documento);
                 }
-                // Actualiza los tarifarios si se proporcionan nuevos tarifarios.
-                if (proyectoDTO.TarifarioConvenio != null)
-                {
-                    var TarifarioConvenido = await _tarifarioConvenioService.GetAllAsync();
-                    foreach (var proyectoDocumento in TarifarioConvenido.Where(p => p.PRpId == existingProyecto.PryId))
-                    {
-                        var tarifario = await _tarifarioConvenioService.GetByIdAsync(proyectoDocumento.TcId);
-                        await _tarifarioConvenioService.DeleteAsync(tarifario);
-                    }
-                    foreach (var tarifariolist in proyectoDTO.TarifarioConvenio)
-                    {
-                        var tarifarioConvenido = new TarifarioConvenio();
-                        tarifarioConvenido.TcPerfilAsignado = tarifariolist.TcPerfilAsignado;
-                        tarifarioConvenido.TcBase = tarifariolist.TcBase;
-                        tarifarioConvenido.TcMoneda = tarifariolist.TcMoneda;
-                        tarifarioConvenido.TcStatus = tarifariolist.TcStatus;
-                        tarifarioConvenido.TcTarifa = tarifariolist.TcTarifa;
-                        tarifarioConvenido.PRpId = proyectoDTO.Proyecto.PryId;
-                    
-                        await _tarifarioConvenioService.AddAsync(tarifarioConvenido);
-                    }
-                }
-
                 // Actualiza los documentos si se proporcionan archivos actualizados.
                 foreach (var documentos in files)
                 {
@@ -432,6 +403,8 @@ namespace look.Application.services.proyecto
             }
             catch (Exception ex)
             {
+                //doc.ForEach(documento => { FileServices.DeleteFile(documento.DocUrl); });
+                await _unitOfWork.RollbackAsync();
                 _logger.Error("Error al actualizar el proyecto con documentos: " + ex.Message);
                 return new ServiceResult
                 {

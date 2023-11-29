@@ -4,7 +4,7 @@ using look.domain.interfaces.proyecto;
 
 namespace look.Application.services.proyecto
 {
-    public class PeriodoProyectoService: Service<PeriodoProyectos>, IPeriodoProyectoService
+    public class PeriodoProyectoService: Service<PeriodoProyecto>, IPeriodoProyectoService
     {
         //instanciar repository si se requiere 
         private readonly IPeriodoProyectoRepository _periodoProyectoRepository;
@@ -13,7 +13,7 @@ namespace look.Application.services.proyecto
         {
             _periodoProyectoRepository = periodoProyectoRepository;
         }
-        public async Task<List<PeriodoProyectos>> ListComplete()
+        public async Task<List<PeriodoProyecto>> ListComplete()
         {
             return await _periodoProyectoRepository.GetComplete();
         }

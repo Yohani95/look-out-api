@@ -54,7 +54,7 @@ namespace look.Infrastructure.data
         public DbSet<Novedades> Novedades { get; set; }
         public DbSet<TipoNovedades> TipoNovedades { get; set; }
         
-        public DbSet<PeriodoProyectos> PeriodoProyectos { get; set; }
+        public DbSet<PeriodoProyecto> PeriodoProyectos { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -967,7 +967,7 @@ namespace look.Infrastructure.data
                     .HasColumnName("car_descripcion");
             });
             
-            modelBuilder.Entity<PeriodoProyectos>(entity =>
+            modelBuilder.Entity<PeriodoProyecto>(entity =>
             {
                 entity.HasKey(e => e.id).HasName("PRIMARY");
                 entity.ToTable("periodos_proyecto");
@@ -987,6 +987,12 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.estado)
                     .HasColumnType("int(11)")
                     .HasColumnName("estado");
+                entity.Property(e => e.NumeroProfesionales)
+                  .HasColumnType("int(11)")
+                  .HasColumnName("numero_profesionales");
+                entity.Property(e => e.Monto)
+                  .HasColumnType("DOUBLE")
+                  .HasColumnName("monto");
                 entity.HasOne(d => d.Proyecto).WithMany()
                     .HasForeignKey(d => d.PryId)
                     .HasConstraintName("fk_periodos_proyecto_proyecto");

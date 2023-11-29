@@ -6,7 +6,7 @@ namespace look_out_api.Controllers.proyecto
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PeriodoProyectosController: BaseController<PeriodoProyectos>
+    public class PeriodoProyectosController: BaseController<PeriodoProyecto>
     {
         //se instancia para acceder algun servicio no generico y se asigna en el constructor
         private readonly IPeriodoProyectoService _periodoProyectoService;
@@ -17,7 +17,7 @@ namespace look_out_api.Controllers.proyecto
         }
         
         [HttpGet("WithEntities")]
-        public async Task<ActionResult<IEnumerable<PeriodoProyectos>>> GetAllWithEntities()
+        public async Task<ActionResult<IEnumerable<PeriodoProyecto>>> GetAllWithEntities()
         {
             var proyectosDocumentos = await _periodoProyectoService.ListComplete();
 
@@ -29,7 +29,7 @@ namespace look_out_api.Controllers.proyecto
             return proyectosDocumentos;
         }
         
-        protected override int GetEntityId(PeriodoProyectos entity)
+        protected override int GetEntityId(PeriodoProyecto entity)
         {
             // Implementa la lógica para obtener el ID de la entidad TipoDocumento
             return entity.id;
