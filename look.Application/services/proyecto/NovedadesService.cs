@@ -53,7 +53,7 @@ namespace look.Application.services.proyecto
                 if (participante != null && novedad.IdPerfil != participante.PrfId)
                 {
                         
-                        participante.PrfId = novedad.IdPerfil;
+                        participante.PrfId = (int)novedad.IdPerfil;
                         await _proyectoParticipanteRepository.UpdateAsync(participante);
                 }
                 
