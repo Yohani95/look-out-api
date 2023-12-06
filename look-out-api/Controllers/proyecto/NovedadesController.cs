@@ -8,9 +8,21 @@ namespace look_out_api.Controllers.proyecto
     [Route("api/[controller]")]
     [ApiController]
     public class NovedadesController:BaseController<Novedades>
-    {
+    {   
         
-        [HttpPatch("NovedadesParticipante")]
+        private readonly INovedadesService _novedadesService;
+
+        public NovedadesController(INovedadesService service) : base(service)
+        {
+            _novedadesService = service;
+        }
+
+        protected override int GetEntityId(Novedades entity)
+        {
+            return entity.id;
+        }
+
+        [HttpPost("NovedadesParticipante")]
         public async Task<IActionResult> novedadesParticipante(Novedades novedad)
         {
             var result = await _novedadesService.updateNovedad(novedad);
@@ -27,18 +39,11 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-        
-        
-        private readonly INovedadesService _novedadesService;
-
-        public NovedadesController(INovedadesService service) : base(service)
+        [HttpGet("NovedadesWithEntities")]
+        public async Task<ActionResult<Novedades>> NovedadesWithEntities()
         {
-            _novedadesService = service;
-        }
-
-        protected override int GetEntityId(Novedades entity)
-        {
-            return entity.id;
+            var result = await _novedadesService.ListComplete();
+            return Ok(result);
         }
     }
 }
