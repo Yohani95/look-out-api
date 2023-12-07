@@ -22,8 +22,8 @@ namespace look_out_api.Controllers.proyecto
             return entity.id;
         }
 
-        [HttpPost("NovedadesParticipante")]
-        public async Task<IActionResult> novedadesParticipante(Novedades novedad)
+        [HttpPut("updateNovedadesParticipante/{id}")]
+        public async Task<IActionResult> novedadesParticipante(Novedades novedad,int id)
         {
             var result = await _novedadesService.updateNovedad(novedad);
 
@@ -44,6 +44,23 @@ namespace look_out_api.Controllers.proyecto
         {
             var result = await _novedadesService.ListComplete();
             return Ok(result);
+        }
+        [HttpPost("createNovedades")]
+        public async Task<IActionResult> createParticipante(Novedades novedad)
+        {
+            var result = await _novedadesService.updateNovedad(novedad);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
         }
     }
 }

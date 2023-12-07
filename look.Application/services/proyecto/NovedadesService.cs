@@ -77,5 +77,44 @@ namespace look.Application.services.proyecto
                 };
             }
         }
+        public async Task<ServiceResult> createNovedad(Novedades novedad)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                await _novedadesRepository.AddAsync(novedad);
+ #region "Cambio de rol"
+                if (novedad.IdPerfil!=null || novedad.IdPerfil==0){
+                    var personas = await _proyectoParticipanteRepository.GetAllAsync();
+                    var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
+
+                    if (participante != null && novedad.IdPerfil != participante.PrfId)
+                    {
+                        participante.PrfId = (int)novedad.IdPerfil;
+                        await _proyectoParticipanteRepository.UpdateAsync(participante);
+                    }
+                }
+#endregion
+                _logger.Information("novedades");
+                await _unitOfWork.CommitAsync();
+                return new ServiceResult
+                {
+                    IsSuccess = true,
+                    Message = Message.PeticionOk,
+                    MessageCode = ServiceResultMessage.Success
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error al actualizar novedades " + ex.Message);
+                await _unitOfWork.RollbackAsync();
+                return new ServiceResult
+                {
+                    IsSuccess = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    MessageCode = ServiceResultMessage.InternalServerError
+                };
+            }
+        }
     }
 }

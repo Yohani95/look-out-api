@@ -8,6 +8,7 @@ namespace look.Application.interfaces.proyecto
         Task<List<Novedades>> ListComplete();
         
         Task<ServiceResult> updateNovedad(Novedades novedad);
+        Task<ServiceResult> createNovedad(Novedades novedad);
     }
 }
 
