@@ -25,7 +25,7 @@ namespace look_out_api.Controllers.proyecto
         [HttpPut("updateNovedadesParticipante/{id}")]
         public async Task<IActionResult> novedadesParticipante(Novedades novedad,int id)
         {
-            var result = await _novedadesService.updateNovedad(novedad);
+            var result = await _novedadesService.updateNovedad(novedad,id);
 
             switch (result.MessageCode)
             {
@@ -48,7 +48,7 @@ namespace look_out_api.Controllers.proyecto
         [HttpPost("createNovedades")]
         public async Task<IActionResult> createParticipante(Novedades novedad)
         {
-            var result = await _novedadesService.updateNovedad(novedad);
+            var result = await _novedadesService.createNovedad(novedad);
 
             switch (result.MessageCode)
             {

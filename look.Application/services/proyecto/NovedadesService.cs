@@ -31,14 +31,21 @@ namespace look.Application.services.proyecto
             return await _novedadesRepository.GetComplete();
         }
 
-        public async Task<ServiceResult> updateNovedad(Novedades novedad)
+        public async Task<ServiceResult> updateNovedad(Novedades novedad, int id)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                var personas = await _proyectoParticipanteRepository.GetAllAsync();
-                var novedades = new Novedades();
-                novedades.id = novedad.id;
+                var novedades = await _novedadesRepository.GetByIdAsync(id);
+                if (novedades != null)
+                {
+                    return new ServiceResult
+                    {
+                        IsSuccess = false,
+                        Message = Message.EntidadNull,
+                        MessageCode = ServiceResultMessage.NotFound
+                    };
+                }
                 novedades.idPersona =  novedad.idPersona;
                 novedades.idProyecto =novedad.idProyecto;
                 novedades.fechaInicio =novedad.fechaInicio;
@@ -47,15 +54,20 @@ namespace look.Application.services.proyecto
                 novedades.IdPerfil =  novedad.IdPerfil;
                 novedades.IdTipoNovedad =  novedad.IdTipoNovedad;
                 await _novedadesRepository.UpdateAsync(novedades);
-
-                var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
-                
-                if (participante != null && novedad.IdPerfil != participante.PrfId)
+                #region "Cambio de rol"
+                if (novedad.IdPerfil != null && novedad.IdPerfil > 0)
                 {
+                    var personas = await _proyectoParticipanteRepository.GetAllAsync();
+                    var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
+
+                    if (participante != null && novedad.IdPerfil != participante.PrfId)
+                    {
                         participante.PrfId = (int)novedad.IdPerfil;
+                        participante.PerTarifa = 1;
                         await _proyectoParticipanteRepository.UpdateAsync(participante);
+                    }
                 }
-                
+                #endregion
                 _logger.Information("novedades y proyecto participante actualizados correctamente");
                 await _unitOfWork.CommitAsync();
                 return new ServiceResult
@@ -82,9 +94,18 @@ namespace look.Application.services.proyecto
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
+                if (novedad != null)
+                {
+                    return new ServiceResult
+                    {
+                        IsSuccess = false,
+                        Message = Message.EntidadNull,
+                        MessageCode = ServiceResultMessage.NotFound
+                    };
+                }
                 await _novedadesRepository.AddAsync(novedad);
  #region "Cambio de rol"
-                if (novedad.IdPerfil!=null || novedad.IdPerfil==0){
+                if (novedad.IdPerfil!=null && novedad.IdPerfil>0){
                     var personas = await _proyectoParticipanteRepository.GetAllAsync();
                     var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
 
