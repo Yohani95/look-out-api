@@ -370,8 +370,36 @@ namespace look.Application.services.proyecto
                 foreach (var proyectoDocumento in proyectoDocumentos.Where(p => p.PryId == existingProyecto.PryId))
                 {
                     var documento = await _documentoService.GetByIdAsync(proyectoDocumento.DocId);
-                    FileServices.DeleteFile(documento.DocUrl);
-                    await _documentoService.DeleteAsync(documento);
+                    IFormFile archivoEncontrado = files.FirstOrDefault(file =>
+                    {
+                        string nombreArchivo = file.FileName; 
+                        return nombreArchivo.Equals(documento.DocNombre, StringComparison.OrdinalIgnoreCase);
+                    });
+
+                    if (archivoEncontrado != null)
+                    { 
+                        using (var reader = new StreamReader(archivoEncontrado.OpenReadStream()))
+                        {
+                            var fileContent = reader.ReadToEnd();
+                            if (!string.IsNullOrWhiteSpace(fileContent))
+                            {
+                                string pathArchivo = Path.GetFileName(documento.DocUrl);
+                                FileServices.UploadFileAsyncEdit(archivoEncontrado,proyectoDTO.Proyecto.PryIdCliente,existingProyecto.PryId,pathArchivo);
+                                files.Remove(archivoEncontrado);
+                            }
+                            else
+                            {
+                                
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        FileServices.DeleteFile(documento.DocUrl);
+                        await _documentoService.DeleteAsync(documento);
+                        
+                    }
                 }
                 // Actualiza los documentos si se proporcionan archivos actualizados.
                 foreach (var documentos in files)
@@ -387,7 +415,6 @@ namespace look.Application.services.proyecto
                     });
                     await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento.DocId, TdoId = 1 });
                 }
-
                 // Llama al repositorio para guardar los cambios en la base de datos.
                 await _proyectoRepository.UpdateAsync(existingProyecto);
                 

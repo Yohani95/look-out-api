@@ -21,7 +21,7 @@ namespace look.domain.entities.proyecto
         public DateTime? PryFechaInicioEstimada { get; set; }
         public double? PryValor { get; set; }
         public int? MonId { get; set; }
-        public int? PryIdCliente { get; set; }
+        public int PryIdCliente { get; set; }
         public DateTime? PryFechaCierreEstimada { get; set; }
         public DateTime? PryFechaCierre { get; set; }
         public int? PryIdContacto { get; set; }
