@@ -29,6 +29,7 @@ namespace look.domain.entities.proyecto
         public int? PaisId { get; set; } 
         
         public int? FechaCorte  { get; set; }
+        public bool TipoFacturacion { get; set; }
 
         public virtual Cliente? Cliente { get; set; }
 
