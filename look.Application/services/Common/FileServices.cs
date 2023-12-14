@@ -46,6 +46,38 @@ namespace look.Application.services.Common
 
             return filePath; // Devuelve la ruta del archivo guardado en el servidor
         }
+        
+        public static  async Task<string> UploadFileAsyncEdit(IFormFile file, int clientId,int projectId,string pathArchivo)
+        {
+
+            string fileName= null;
+            // Combina la ruta de la carpeta de carga en el servidor con la carpeta raíz de tu proyecto
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("El archivo no es válido.");
+            if (pathArchivo != null)
+            {
+                fileName = Path.GetFileNameWithoutExtension(pathArchivo) + Path.GetExtension(pathArchivo);
+            }
+            else
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            }
+
+            // Construye la ruta de la carpeta del cliente y el archivo
+            var clientFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "File", clientId.ToString(),projectId.ToString());
+            var filePath = Path.Combine(clientFolderPath, fileName);
+
+            // Asegúrate de que la carpeta del cliente exista
+            if (!Directory.Exists(clientFolderPath))
+                Directory.CreateDirectory(clientFolderPath);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return filePath; // Devuelve la ruta del archivo guardado en el servidor
+        }
 
         /// <summary>
         /// Método para eliminar un archivo
