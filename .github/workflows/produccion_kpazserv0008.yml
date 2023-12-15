@@ -54,4 +54,4 @@ jobs:
           app-name: 'kpazserv0008'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_66BF2EF670EE4E78B5E7906941D77501 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BA337DDED0A24FB3921D00309BC1E8F7 }}
