@@ -143,11 +143,6 @@ namespace look_out_api.Controllers.proyecto
         {
             var proyectosDocumentos = await _proyectoService.GetComplete();
 
-            if (proyectosDocumentos == null)
-            {
-                return NotFound();
-            }
-
             return proyectosDocumentos;
         }
     }
