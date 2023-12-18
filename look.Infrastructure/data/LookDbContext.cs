@@ -1086,6 +1086,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.FechaCorte)
                     .HasColumnType("int")
                     .HasColumnName("fecha_corte");
+                entity.Property(e => e.FacturacionDiaHabil)
+                  .HasColumnType("tinyint(2)")
+                  .HasColumnName("facturacion_dia_habil");
                 entity.HasOne(d => d.Cliente).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
                     .HasConstraintName("FK_Proyecto_Cliente");
