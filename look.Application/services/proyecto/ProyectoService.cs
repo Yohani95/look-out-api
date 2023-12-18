@@ -134,10 +134,6 @@ namespace look.Application.services.proyecto
                     };
                 }
 
-                // Elimina la propuesta asociada al proyecto.
-                var propuesta=await _propuestaRepository.GetByIdAsync((int)existingProyecto.PrpId);
-                await _propuestaRepository.DeleteAsync(propuesta);
-
                 // Elimina los documentos asociados al proyecto.
                 var proyectoDocumentos = await _proyectoDocumentoService.ListComplete();
                 var proyectoDocumentoFiltrado =proyectoDocumentos.Where(d=>d.PryId == id).ToList();
