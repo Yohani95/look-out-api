@@ -21,12 +21,13 @@ namespace look.domain.entities.proyecto
         public DateTime? PryFechaInicioEstimada { get; set; }
         public double? PryValor { get; set; }
         public int? MonId { get; set; }
-        public int? PryIdCliente { get; set; }
+        public int PryIdCliente { get; set; }
         public DateTime? PryFechaCierreEstimada { get; set; }
         public DateTime? PryFechaCierre { get; set; }
         public int? PryIdContacto { get; set; }
         public int? kamId { get; set; }
-        public int? PaisId { get; set; }      
+        public int? PaisId { get; set; }
+        public sbyte? FacturacionDiaHabil { get; set; }
         public int? FechaCorte  { get; set; }
         public virtual Cliente? Cliente { get; set; }
 

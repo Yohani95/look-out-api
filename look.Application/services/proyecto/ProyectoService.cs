@@ -134,10 +134,6 @@ namespace look.Application.services.proyecto
                     };
                 }
 
-                // Elimina la propuesta asociada al proyecto.
-                var propuesta=await _propuestaRepository.GetByIdAsync((int)existingProyecto.PrpId);
-                await _propuestaRepository.DeleteAsync(propuesta);
-
                 // Elimina los documentos asociados al proyecto.
                 var proyectoDocumentos = await _proyectoDocumentoService.ListComplete();
                 var proyectoDocumentoFiltrado =proyectoDocumentos.Where(d=>d.PryId == id).ToList();
@@ -365,13 +361,42 @@ namespace look.Application.services.proyecto
                 existingProyecto.PryFechaInicioEstimada= proyectoDTO.Proyecto.PryFechaInicioEstimada;
                 existingProyecto.FechaCorte = proyectoDTO.Proyecto.FechaCorte;
                 existingProyecto.PryValor= proyectoDTO.Proyecto.PryValor;
+                existingProyecto.FacturacionDiaHabil= proyectoDTO.Proyecto.FacturacionDiaHabil;
 
                 var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
                 foreach (var proyectoDocumento in proyectoDocumentos.Where(p => p.PryId == existingProyecto.PryId))
                 {
                     var documento = await _documentoService.GetByIdAsync(proyectoDocumento.DocId);
-                    FileServices.DeleteFile(documento.DocUrl);
-                    await _documentoService.DeleteAsync(documento);
+                    IFormFile archivoEncontrado = files.FirstOrDefault(file =>
+                    {
+                        string nombreArchivo = file.FileName; 
+                        return nombreArchivo.Equals(documento.DocNombre, StringComparison.OrdinalIgnoreCase);
+                    });
+
+                    if (archivoEncontrado != null)
+                    { 
+                        using (var reader = new StreamReader(archivoEncontrado.OpenReadStream()))
+                        {
+                            var fileContent = reader.ReadToEnd();
+                            if (!string.IsNullOrWhiteSpace(fileContent))
+                            {
+                                string pathArchivo = Path.GetFileName(documento.DocUrl);
+                                FileServices.UploadFileAsyncEdit(archivoEncontrado,proyectoDTO.Proyecto.PryIdCliente,existingProyecto.PryId,pathArchivo);
+                                files.Remove(archivoEncontrado);
+                            }
+                            else
+                            {
+                                
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        FileServices.DeleteFile(documento.DocUrl);
+                        await _documentoService.DeleteAsync(documento);
+                        
+                    }
                 }
                 // Actualiza los documentos si se proporcionan archivos actualizados.
                 foreach (var documentos in files)
@@ -387,7 +412,6 @@ namespace look.Application.services.proyecto
                     });
                     await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento.DocId, TdoId = 1 });
                 }
-
                 // Llama al repositorio para guardar los cambios en la base de datos.
                 await _proyectoRepository.UpdateAsync(existingProyecto);
                 
