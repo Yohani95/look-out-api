@@ -1,4 +1,6 @@
 using look.Application.interfaces.proyecto;
+using look.domain.dto.proyecto;
+using look.domain.entities.Common;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +35,24 @@ namespace look_out_api.Controllers.proyecto
         {
             var periodo = await _periodoProyectoService.ListByProyecto(id);
             return Ok(periodo);
+        }
+        
+        [HttpPost("calculateCloseBusiness")]
+        public async Task<IActionResult> CalculateCloseBusiness(PeriodoProyecto proyectoDto)
+        {
+            var result = await _periodoProyectoService.CalculateCloseBusiness(proyectoDto);
+
+            switch (result.MessageCode)
+            {
+                case ServiceResultMessage.Success:
+                    return Ok(result);
+                case ServiceResultMessage.InvalidInput:
+                    return BadRequest(result);
+                case ServiceResultMessage.NotFound:
+                    return NotFound(result);
+                default:
+                    return StatusCode(500, result);
+            }
         }
 
         protected override int GetEntityId(PeriodoProyecto entity)

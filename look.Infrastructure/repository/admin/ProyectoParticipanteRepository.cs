@@ -1,4 +1,5 @@
 using look.domain.entities.admin;
+using look.domain.entities.proyecto;
 using look.domain.interfaces.admin;
 using look.Infrastructure.data;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace look.Infrastructure.repository.admin
         {
             return await _dbContext.ProyectoParticipante.Include(e=>e.Persona).Include(e=>e.Proyecto).Include(e=>e.Car).Include(e=>e.Perfil).ToListAsync();
         }
+
+        
     }
 }
 
