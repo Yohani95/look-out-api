@@ -92,12 +92,8 @@ namespace look.Application.services.proyecto
                     {
                         int añoActual = DateTime.Now.Year;
                         var diasFeriados = await ObtenerDiasFeriados(añoActual);
-
-                        var idTarifario = 1;
-                        var tarifarioConvenio=await _tarifarioConvenioRepository.GetByIdAsync(idTarifario);
+                        var tarifarioConvenio=await _tarifarioConvenioRepository.GetByIdAsync((int)participante.TarifarioId);
                         var moneda = await _monedaRepository.GetByIdAsync(tarifarioConvenio.TcMoneda);
-
-                        ///
                         var monedaconvertida = await _monedaService.consultaMonedaConvertida((string)moneda.MonNombre,"CLF",(int) tarifarioConvenio.TcTarifa);
                         
                         if (existingProyecto.FacturacionDiaHabil==1)
