@@ -924,7 +924,7 @@ namespace look.Infrastructure.data
                     .HasColumnType("int(11)")
                     .HasColumnName("pry_id");
                 entity.Property(e => e.PerTarifa)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("DOUBLE")
                     .HasColumnName("per_tarifa");
                 entity.Property(e => e.PrfId)
                     .HasColumnType("int(11)")
