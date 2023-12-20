@@ -87,7 +87,6 @@ namespace look.Application.services.proyecto
             try
             {
                 _logger.Information("Calculando monto de periodo");
-                await _unitOfWork.BeginTransactionAsync();
                 var existingProyecto = await _proyectoRepository.GetByIdAsync((int)periodo.PryId);
                 if (existingProyecto!=null)
                 {
@@ -117,7 +116,7 @@ namespace look.Application.services.proyecto
                             dynamic json = JObject.Parse(result);
                             tarifaConvertida = json.MonedaConvertida;
                         }
-
+                        _logger.Information("Monto calculado de periodo");
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
@@ -126,7 +125,6 @@ namespace look.Application.services.proyecto
             catch (Exception ex)
             {
                 _logger.Error("Error interno del servidor al calcular: " + ex.Message);
-                await _unitOfWork.RollbackAsync();
                 return tarifa;
             }
         }
