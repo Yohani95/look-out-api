@@ -10,7 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b0ec8cd-c75c-4076-8c93-f9c33d0415b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/look.Application/services/proyecto/ProyectoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/look.Application/services/proyecto/ProyectoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +38,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/multidocumentos",
+    "git-widget-placeholder": "Desarrollo",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -88,6 +88,7 @@
       <workItem from="1697458039637" duration="327000" />
       <workItem from="1698667901740" duration="7458000" />
       <workItem from="1699360443475" duration="3005000" />
+      <workItem from="1702475695099" duration="1282000" />
     </task>
     <servers />
   </component>
