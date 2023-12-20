@@ -24,8 +24,9 @@ namespace look.Application.services.proyecto
         private readonly IProyectoRepository _proyectoRepository;
         private readonly IMonedaRepository _monedaRepository;
         private readonly IMonedaService _monedaService;
+        private readonly INovedadesRepository _novedadesRepository;
 
-        public PeriodoProyectoService(IPeriodoProyectoRepository periodoProyectoRepository,IUnitOfWork unitOfWork, ITarifarioConvenioRepository tarifarioConvenioService,IProyectoParticipanteRepository proyectoParticipanteService,IProyectoRepository proyectoRepository,IMonedaRepository monedaRepository,IMonedaService monedaService) : base(periodoProyectoRepository)
+        public PeriodoProyectoService(IPeriodoProyectoRepository periodoProyectoRepository,IUnitOfWork unitOfWork, ITarifarioConvenioRepository tarifarioConvenioService,IProyectoParticipanteRepository proyectoParticipanteService,IProyectoRepository proyectoRepository,IMonedaRepository monedaRepository,IMonedaService monedaService,INovedadesRepository novedadesRepository) : base(periodoProyectoRepository)
         {
             _periodoProyectoRepository = periodoProyectoRepository;
             _unitOfWork = unitOfWork;
@@ -34,6 +35,7 @@ namespace look.Application.services.proyecto
             _proyectoRepository = proyectoRepository;
             _monedaRepository = monedaRepository;
             _monedaService = monedaService;
+            _novedadesRepository = novedadesRepository;
         }
 
         public async Task<List<PeriodoProyecto>> ListByProyecto(int id)
@@ -95,17 +97,19 @@ namespace look.Application.services.proyecto
                         var tarifarioConvenio=await _tarifarioConvenioRepository.GetByIdAsync((int)participante.TarifarioId);
                         var moneda = await _monedaRepository.GetByIdAsync(tarifarioConvenio.TcMoneda);
                         var monedaconvertida = await _monedaService.consultaMonedaConvertida((string)moneda.MonNombre,"CLF",(int) tarifarioConvenio.TcTarifa);
-                        
+                        var novedades = await _novedadesRepository.GetAllAsync();
+                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
                         if (existingProyecto.FacturacionDiaHabil==1)
                         {
-                            int diasHabiles = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
-                            tarifa =((int)tarifarioConvenio.TcTarifa * int.Parse(monedaconvertida))* diasHabiles;
+                            int diasHabilesSinNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
+                            tarifa =((int)tarifarioConvenio.TcTarifa * int.Parse(monedaconvertida))* diasHabilesSinNovedades;
                             
                         }
                         else
                         {
-                            int diasTotales = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
-                            tarifa =((int)tarifarioConvenio.TcTarifa * int.Parse(monedaconvertida)) * diasTotales;
+                            int diasTotalesSinNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
+                            
+                            tarifa =((int)tarifarioConvenio.TcTarifa * int.Parse(monedaconvertida)) * diasTotalesSinNovedades;
                         }
                     }
                 }
@@ -220,4 +224,5 @@ namespace look.Application.services.proyecto
         }
     }
 }
+
 
