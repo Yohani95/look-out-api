@@ -6,7 +6,7 @@ namespace look.domain.entities.proyecto
     {
         [Key]
         public int id { get; set; }
-        public int PryId { get; set; }
+        public int? PryId { get; set; }
         public DateTime? FechaPeriodoDesde { get; set; }
         public DateTime? FechaPeriodoHasta { get; set; }
         public int? estado { get; set; }

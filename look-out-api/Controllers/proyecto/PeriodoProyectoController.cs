@@ -37,10 +37,10 @@ namespace look_out_api.Controllers.proyecto
             return Ok(periodo);
         }
         
-        [HttpPost("calculateCloseBusiness")]
-        public async Task<IActionResult> CalculateCloseBusiness(PeriodoProyecto proyectoDto)
+        [HttpPost("CreateAsync")]
+        public async Task<IActionResult> CreateAsync(PeriodoProyecto periodo)
         {
-            var result = await _periodoProyectoService.CalculateCloseBusiness(proyectoDto);
+            var result = await _periodoProyectoService.CreateAsync(periodo);
 
             switch (result.MessageCode)
             {

@@ -10,6 +10,7 @@ using look.domain.entities.cuentas;
 using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using look.domain.interfaces;
+using look.domain.interfaces.admin;
 using look.domain.interfaces.proyecto;
 using look.domain.interfaces.unitOfWork;
 using Microsoft.AspNetCore.Http;
@@ -27,15 +28,25 @@ namespace look.Application.services.proyecto
         private readonly IDocumentoService _documentoService;
         private readonly IProyectoDocumentoService _proyectoDocumentoService;
         private readonly ITarifarioConvenioService _tarifarioConvenioService;
+        private readonly IProyectoParticipanteRepository _proyectoParticipanteRepository;
+        private readonly IPeriodoProyectoRepository _periodoProyectoRepository;
 
 
-        public ProyectoService(IProyectoRepository proyectoRepository, IPropuestaRepository propuestaRepository, IDocumentoService documentoService, IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork, ITarifarioConvenioService tarifarioConvenioService) : base(proyectoRepository)
+        public ProyectoService(IProyectoRepository proyectoRepository,
+            IPropuestaRepository propuestaRepository, IDocumentoService documentoService, 
+            IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork, 
+            ITarifarioConvenioService tarifarioConvenioService,
+            IProyectoParticipanteRepository proyectoParticipanteRepository,
+            IPeriodoProyectoRepository periodoProyectoRepository
+            ) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
             _propuestaRepository = propuestaRepository;         
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
             _tarifarioConvenioService = tarifarioConvenioService;
+            _proyectoParticipanteRepository=proyectoParticipanteRepository;
+            _periodoProyectoRepository=periodoProyectoRepository;
             _unitOfWork= unitOfWork;
         }
 
@@ -156,6 +167,16 @@ namespace look.Application.services.proyecto
                     await _tarifarioConvenioService.DeleteAsync(tarifariolist);
                 }
                 // Elimina el proyecto después de eliminar la propuesta y los documentos.
+                var participantes=await _proyectoParticipanteRepository.GetAllAsync();
+                foreach (var item in participantes.Where(p=>p.PryId==id))
+                {
+                    await _proyectoParticipanteRepository.DeleteAsync(item);
+                }
+                var periodos = await _periodoProyectoRepository.GetAllAsync();
+                foreach (var item in periodos.Where(p => p.PryId == id))
+                {
+                    await _periodoProyectoRepository.DeleteAsync(item);
+                }
                 await _proyectoRepository.DeleteAsync(existingProyecto);
                 
                 _logger.Information("Proyecto con propuesta y documentos eliminado exitosamente");

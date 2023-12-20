@@ -19,24 +19,6 @@ namespace look.Infrastructure.repository.proyecto
                 .Include(p=>p.Proyecto)
                 .ToListAsync();
         }
-        
-        public async Task<List<ProyectoParticipante>> GetListProyectoParticipante(PeriodoProyecto proyectoDto)
-        {
-            var startDate = proyectoDto.FechaPeriodoDesde;
-            var endDate = proyectoDto.FechaPeriodoHasta;
- 
-            var queryWithNullEndDate = _dbContext.ProyectoParticipante
-                .Where(p => p.PryId == proyectoDto.PryId && p.FechaTermino == null &&
-                            p.FechaAsignacion >= startDate && p.FechaAsignacion<= endDate);
- 
-            var queryWithValidEndDate = _dbContext.ProyectoParticipante
-                .Where(p => p.PryId == proyectoDto.PryId && p.FechaTermino != null &&
-                            p.FechaAsignacion <= startDate && p.FechaTermino >= endDate);
- 
-            var combinedQuery = queryWithNullEndDate.Union(queryWithValidEndDate);
- 
-            return await combinedQuery.Include(p => p.Proyecto).ToListAsync();
-        }
     }
 }
 

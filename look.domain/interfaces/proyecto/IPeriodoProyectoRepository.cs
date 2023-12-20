@@ -6,8 +6,6 @@ namespace look.domain.interfaces.proyecto
     public interface IPeriodoProyectoRepository: IRepository<PeriodoProyecto>
     {
         Task<List<PeriodoProyecto>> GetComplete();
-        
-        Task<List<ProyectoParticipante>> GetListProyectoParticipante(PeriodoProyecto proyectoDto);
     }
 }
 

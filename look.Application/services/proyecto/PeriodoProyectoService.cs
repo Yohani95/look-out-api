@@ -41,68 +41,94 @@ namespace look.Application.services.proyecto
             var periodos= await _periodoProyectoRepository.GetComplete();
             return periodos.Where(p=>p.PryId==id).ToList();
         }
-
-        public async Task<ServiceResult> CalculateCloseBusiness(PeriodoProyecto periodoProyecto)
+        public async Task<ServiceResult> CreateAsync(PeriodoProyecto periodo)
         {
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
-                _logger.Information("Actualizar proyecto con documentos");
-                
-                var existingProyecto = await _proyectoRepository.GetByIdAsync(periodoProyecto.PryId);
-                if (existingProyecto!=null)
+                _logger.Information("Creando periodo");
+                periodo.Monto =await  CalcularMontoPeriodo(periodo);
+                await _periodoProyectoRepository.AddAsync(periodo);
+                return new ServiceResult
                 {
-                    
-                    var proyectoParticipante = await _periodoProyectoRepository.GetListProyectoParticipante(periodoProyecto);
-                    foreach (var participante in proyectoParticipante)
-                    {
-                        int añoActual = DateTime.Now.Year;
-                        var diasFeriados = await ObtenerDiasFeriados(añoActual);
-                        var perfilParticipante =await _tarifarioConvenioRepository.GetByIdAsync(participante.PrfId);
-                        var moneda = await _monedaRepository.GetByIdAsync(perfilParticipante.TcMoneda);
-                        var monedaconvertida = await _monedaService.consultaMonedaConvertida((string)moneda.MonNombre,"CLF",(int) perfilParticipante.TcTarifa);
-                        
-                        if (existingProyecto.FacturacionDiaHabil==1)
-                        {
-                            int diasHabiles = CalcularDiasHabiles((DateTime) periodoProyecto.FechaPeriodoDesde, (DateTime) periodoProyecto.FechaPeriodoHasta,diasFeriados);
-                            double tarifa =((int) perfilParticipante.TcTarifa * int.Parse(monedaconvertida))* diasHabiles;
-                        }
-                        else
-                        {
-                            int diasTotales = CalcularDiasTotales((DateTime) periodoProyecto.FechaPeriodoDesde, (DateTime) periodoProyecto.FechaPeriodoHasta,diasFeriados);
-                            double tarifa =((int) perfilParticipante.TcTarifa * int.Parse(monedaconvertida)) * diasTotales;
-                        }
-                        
-
-                    }
-                    await _unitOfWork.CommitAsync();
-                    return new ServiceResult
-                    {
-                        IsSuccess = true,
-                        Message = Message.PeticionOk,
-                        MessageCode = ServiceResultMessage.Success
-                    };
-                }
-                return null;
+                    IsSuccess = true,
+                    Message = Message.PeticionOk,
+                    MessageCode = ServiceResultMessage.Success
+                };
             }
-            catch (Exception ex)
+            catch (Exception ex )
             {
-                _logger.Error("Error al eliminar el proyecto con propuesta y documentos: " + ex.Message);
-                await _unitOfWork.RollbackAsync();
+                _logger.Error("Error interno del servidor: " + ex.Message);
                 return new ServiceResult
                 {
                     IsSuccess = false,
                     Message = $"Error interno del servidor: {ex.Message}",
                     MessageCode = ServiceResultMessage.InternalServerError
                 };
+                throw;
             }
         }
-
         public async Task<List<PeriodoProyecto>> ListComplete()
         {
             return await _periodoProyectoRepository.GetComplete();
         }
-        
+        /// <summary>
+        /// calcula el monto segun la novedad de los participantes 
+        /// </summary>
+        /// <param name="periodo">espera un periodo</param>
+        /// <returns>retorna el monto total del periodo a facturar</returns>
+        private async Task<double> CalcularMontoPeriodo(PeriodoProyecto periodo)
+        {
+            double tarifa = 0;
+            try
+            {
+                _logger.Information("Calculando monto de periodo");
+                
+                var existingProyecto = await _proyectoRepository.GetByIdAsync((int)periodo.PryId);
+                if (existingProyecto!=null)
+                {
+
+                    var proyectoParticipante = await _proyectoParticipanteService.GetParticipanteByIdProAndDate(periodo);
+                    foreach (var participante in proyectoParticipante)
+                    {
+                        int añoActual = DateTime.Now.Year;
+                        var diasFeriados = await ObtenerDiasFeriados(añoActual);
+
+                        var idTarifario = 1;
+                        var tarifarioConvenio=await _tarifarioConvenioRepository.GetByIdAsync(idTarifario);
+                        var moneda = await _monedaRepository.GetByIdAsync(tarifarioConvenio.TcMoneda);
+
+                        ///
+                        var monedaconvertida = await _monedaService.consultaMonedaConvertida((string)moneda.MonNombre,"CLF",(int) tarifarioConvenio.TcTarifa);
+                        
+                        if (existingProyecto.FacturacionDiaHabil==1)
+                        {
+                            int diasHabiles = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
+                            tarifa =((int)tarifarioConvenio.TcTarifa * int.Parse(monedaconvertida))* diasHabiles;
+                            
+                        }
+                        else
+                        {
+                            int diasTotales = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
+                            tarifa =((int)tarifarioConvenio.TcTarifa * int.Parse(monedaconvertida)) * diasTotales;
+                        }
+                    }
+                }
+                return tarifa;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error interno del servidor al calcular: " + ex.Message);
+               return tarifa;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="diasFeriados"></param>
+        /// <returns></returns>
         static int CalcularDiasTotales(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados)
         {
             // Calcula la cantidad total de días, teniendo en cuenta los días feriados
@@ -118,7 +144,13 @@ namespace look.Application.services.proyecto
 
             return diasTotales;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="diasFeriados"></param>
+        /// <returns></returns>
         static int CalcularDiasHabiles(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados)
         {
             // Calcula la cantidad de días hábiles, sin contar feriados
@@ -134,19 +166,32 @@ namespace look.Application.services.proyecto
 
             return diasHabiles;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fecha"></param>
+        /// <param name="diasFeriados"></param>
+        /// <returns></returns>
         static bool EsDiaFeriado(DateTime fecha, List<DateTime> diasFeriados)
         {
             // Verifica si la fecha es un día feriado
             return diasFeriados.Contains(fecha.Date);
         }
-
+        /// <summary>
+        /// verifica si es dia habil 
+        /// </summary>
+        /// <param name="fecha">espera una fecha</param>
+        /// <returns>retorna true o false </returns>
         static bool EsDiaHabil(DateTime fecha)
         {
             // Verifica si el día no es sábado ni domingo
             return fecha.DayOfWeek != DayOfWeek.Saturday && fecha.DayOfWeek != DayOfWeek.Sunday;
         }
-
+        /// <summary>
+        /// obtiene los dias feriados de la api
+        /// </summary>
+        /// <param name="year">espera el año</param>
+        /// <returns>retorna una lista de fechas</returns>
         static async Task<List<DateTime>> ObtenerDiasFeriados(int year)
         {
             // URL del servicio web
@@ -177,7 +222,6 @@ namespace look.Application.services.proyecto
                 }
             }
         }
-        
     }
 }
 
