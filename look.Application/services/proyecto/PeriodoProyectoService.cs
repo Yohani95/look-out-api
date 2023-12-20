@@ -120,7 +120,9 @@ namespace look.Application.services.proyecto
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
-                return tarifaTotal;
+                string numeroFormateado = tarifaTotal.ToString("0.00");
+                double format = double.Parse(numeroFormateado);
+                return format;
             }
             catch (Exception ex)
             {
