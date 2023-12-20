@@ -1126,7 +1126,7 @@ namespace look.Infrastructure.data
                     .HasColumnType("int(11)")
                     .HasColumnName("tc_perfil_asignado");
                 entity.Property(e => e.TcTarifa)
-                    .HasColumnType("int(50)")
+                    .HasColumnType("DOUBLE")
                     .HasColumnName("tc_tarifa");
                 entity.Property(e => e.TcMoneda)
                     .HasColumnType("int(11)")
