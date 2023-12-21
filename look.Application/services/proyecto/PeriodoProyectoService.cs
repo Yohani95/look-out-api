@@ -4,6 +4,7 @@ using look.domain.dto.proyecto;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.proyecto;
+using look.domain.entities.world;
 using look.domain.interfaces.admin;
 using look.domain.interfaces.proyecto;
 using look.domain.interfaces.unitOfWork;
@@ -102,19 +103,15 @@ namespace look.Application.services.proyecto
                         var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
                         if (existingProyecto.FacturacionDiaHabil==1)
                         {
-                            int diasHabilesSinNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
+                            int diasHabilesSinNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
                             tarifa = (Double) tarifarioConvenio.TcTarifa * diasHabilesSinNovedades;
-                            var result = await _monedaService.consultaMonedaConvertida("CLF",(string)moneda.MonNombre,(int) tarifa);
-                            dynamic json = JObject.Parse(result);
-                            tarifaConvertida = json.MonedaConvertida;
+                            tarifaConvertida = await ConvertirMonedas("UF",moneda,tarifa);
                         }
                         else
                         {
-                            int diasTotalesSinNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados);
+                            int diasTotalesSinNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
                             tarifa = (Double)tarifarioConvenio.TcTarifa * diasTotalesSinNovedades;
-                            var result =await _monedaService.consultaMonedaConvertida("CLF",(string)moneda.MonNombre,(int) tarifa);
-                            dynamic json = JObject.Parse(result);
-                            tarifaConvertida = json.MonedaConvertida;
+                            tarifaConvertida = await ConvertirMonedas("UF",moneda,tarifa);
                         }
                         _logger.Information("Monto calculado de periodo");
                         tarifaTotal = tarifaTotal + tarifaConvertida;
@@ -138,14 +135,13 @@ namespace look.Application.services.proyecto
         /// <param name="endDate"></param>
         /// <param name="diasFeriados"></param>
         /// <returns></returns>
-        static int CalcularDiasTotales(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados)
+        static int CalcularDiasTotales(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados,IEnumerable<Novedades> novedades)
         {
-            // Calcula la cantidad total de días, teniendo en cuenta los días feriados
             int diasTotales = 0;
 
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
-                if (!EsDiaFeriado(fecha, diasFeriados))
+                if (!EsDiaFeriado(fecha, diasFeriados) && !NovedadesEnRango(fecha, novedades))
                 {
                     diasTotales++;
                 }
@@ -160,14 +156,13 @@ namespace look.Application.services.proyecto
         /// <param name="endDate"></param>
         /// <param name="diasFeriados"></param>
         /// <returns></returns>
-        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados)
+        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados,IEnumerable<Novedades> novedades)
         {
-            // Calcula la cantidad de días hábiles, sin contar feriados
             int diasHabiles = 0;
 
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
-                if (EsDiaHabil(fecha) && !EsDiaFeriado(fecha, diasFeriados))
+                if (EsDiaHabil(fecha) && !EsDiaFeriado(fecha, diasFeriados) && !NovedadesEnRango(fecha, novedades))
                 {
                     diasHabiles++;
                 }
@@ -183,7 +178,6 @@ namespace look.Application.services.proyecto
         /// <returns></returns>
         static bool EsDiaFeriado(DateTime fecha, List<DateTime> diasFeriados)
         {
-            // Verifica si la fecha es un día feriado
             return diasFeriados.Contains(fecha.Date);
         }
         /// <summary>
@@ -196,6 +190,12 @@ namespace look.Application.services.proyecto
             // Verifica si el día no es sábado ni domingo
             return fecha.DayOfWeek != DayOfWeek.Saturday && fecha.DayOfWeek != DayOfWeek.Sunday;
         }
+        
+        static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
+        {
+            return novedades.Any(n => fecha >= n.fechaInicio && fecha <= n.fechaHasta);
+        }
+        
         /// <summary>
         /// obtiene los dias feriados de la api
         /// </summary>
@@ -203,10 +203,7 @@ namespace look.Application.services.proyecto
         /// <returns>retorna una lista de fechas</returns>
         static async Task<List<DateTime>> ObtenerDiasFeriados(int year)
         {
-            // URL del servicio web
             string url = "https://apis.digital.gob.cl/fl/feriados/"+year;
-
-            // Realiza la solicitud HTTP y obtiene la respuesta
             using (HttpClient httpClient = new HttpClient())
             {
                 try
@@ -215,8 +212,6 @@ namespace look.Application.services.proyecto
                     HttpResponseMessage response = await httpClient.GetAsync(url);
                     response.EnsureSuccessStatusCode();
                     string contenido = await response.Content.ReadAsStringAsync();
-
-                    // Deserializa la respuesta JSON a una lista de objetos Feriado
                     List<Feriado> feriados = JsonConvert.DeserializeObject<List<Feriado>>(contenido);
                     foreach (var fecha in feriados)
                     {
@@ -229,6 +224,91 @@ namespace look.Application.services.proyecto
                     Console.WriteLine($"Error al obtener los feriados: {e.Message}");
                     return null;
                 }
+            }
+        }
+        
+        static async Task<double> ObtenerUf(string year)
+        {
+            string url = "https://mindicador.cl/api/uf"+year;
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                try
+                {
+                    
+                    string apiUrl = "https://mindicador.cl/api/uf/21-12-2023";
+
+                    string jsonResult = await ObtenerJson(apiUrl);
+
+                    double valorUF = ObtenerValorUF(jsonResult);
+                    return valorUF;
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Error al obtener los feriados: {e.Message}");
+                    return 0;
+                }
+            }
+        }
+        static async Task<string> ObtenerJson(string apiUrl)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
+                    response.EnsureSuccessStatusCode();
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Error al obtener los datos: {e.Message}");
+                    return null;
+                }
+            }
+        }
+        
+        static double ObtenerValorUF(string jsonResult)
+        {
+            try
+            {
+                // Deserializa la respuesta JSON y obtiene el valor de la serie
+                var resultado = JsonConvert.DeserializeObject<Resultado>(jsonResult);
+                double valorUF = resultado.Serie[0].Valor;
+                return valorUF;
+            }
+            catch (JsonException e)
+            {
+                Console.WriteLine($"Error al deserializar los datos: {e.Message}");
+                return 0;
+            }
+        }
+        
+        private async Task<double> ConvertirMonedas(string tipoMoneda,Moneda moneda,double tarifa )
+        {
+            try
+            {
+                double resultado=0;
+                if (tipoMoneda.Equals("UF"))
+                {
+                    DateTime fechaHoy = DateTime.Now;
+                    string fechaFormateada = fechaHoy.ToString("dd-MM-yyyy");
+                    resultado = await ObtenerUf(fechaFormateada);
+                }
+                else
+                {
+                    var result = await _monedaService.consultaMonedaConvertida("CLF",(string)moneda.MonNombre,(int) tarifa);
+                    dynamic json= JObject.Parse(result);
+                    result = json.MonedaConvertida;
+                    resultado = Double.Parse(result);
+                }
+                return resultado;
+               
+            }
+            catch (JsonException e)
+            {
+                Console.WriteLine($"Error al deserializar los datos: {e.Message}");
+                return 0;
             }
         }
     }
