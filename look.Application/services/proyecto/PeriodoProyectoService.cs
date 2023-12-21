@@ -49,10 +49,10 @@ namespace look.Application.services.proyecto
         {
             try
             {
-                _logger.Information("Creando periodo");
                 var periodoExisting= await _periodoProyectoRepository.GetByPeriodoRange(periodo);
                 if (periodoExisting != null)
                 {
+                    _logger.Information("Actualizando periodo");
                     periodoExisting.NumeroProfesionales = periodo.NumeroProfesionales;
                     periodoExisting.estado = periodo.estado;
                     periodoExisting.Monto = await CalcularMontoPeriodo(periodo);
@@ -60,6 +60,7 @@ namespace look.Application.services.proyecto
                 }
                 else
                 {
+                    _logger.Information("Creando periodo");
                     periodo.Monto = await CalcularMontoPeriodo(periodo);
                     await _periodoProyectoRepository.AddAsync(periodo);
                 }
