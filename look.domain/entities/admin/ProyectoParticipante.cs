@@ -14,9 +14,10 @@ namespace look.domain.entities.admin
         
         public int? CarId { get; set; }
         
-        public int? PerTarifa { get; set; }
+        public double? PerTarifa { get; set; }
         
         public int PrfId {get; set; }
+        public int? TarifarioId { get; set; }
 
         public DateTime? FechaAsignacion { get; set; }
         public DateTime? FechaTermino { get; set; }
@@ -29,6 +30,7 @@ namespace look.domain.entities.admin
         public virtual Proyecto? Proyecto { get; set; }
         
         public virtual Perfil? Perfil { get; set; }
+        public virtual TarifarioConvenio? TarifarioConvenio { get; set; }
     }
 }
 

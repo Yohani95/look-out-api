@@ -45,8 +45,8 @@ namespace look_out_api.Controllers.proyecto
             var result = await _novedadesService.ListComplete();
             return Ok(result);
         }
-        [HttpPost("createNovedades")]
-        public async Task<IActionResult> createParticipante(Novedades novedad)
+        [HttpPost("CreateAsync")]
+        public async Task<IActionResult> CreateAsync(Novedades novedad)
         {
             var result = await _novedadesService.createNovedad(novedad);
 

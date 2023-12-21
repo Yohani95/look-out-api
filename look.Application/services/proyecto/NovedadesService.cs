@@ -94,7 +94,7 @@ namespace look.Application.services.proyecto
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                if (novedad != null)
+                if (novedad == null)
                 {
                     return new ServiceResult
                     {

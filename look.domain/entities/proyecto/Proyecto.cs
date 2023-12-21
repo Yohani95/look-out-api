@@ -26,8 +26,8 @@ namespace look.domain.entities.proyecto
         public DateTime? PryFechaCierre { get; set; }
         public int? PryIdContacto { get; set; }
         public int? kamId { get; set; }
-        public int? PaisId { get; set; } 
-        
+        public int? PaisId { get; set; }
+        public sbyte? FacturacionDiaHabil { get; set; }
         public int? FechaCorte  { get; set; }
         public bool TipoFacturacion { get; set; }
 

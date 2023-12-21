@@ -18,7 +18,7 @@ namespace look_out_api.Controllers.world
         }
         
         [HttpGet("getTipoMoneda")]
-        public async Task<IActionResult> getTipoMoneda(int idTo,int idFrom,string amount)
+        public async Task<IActionResult> getTipoMoneda(string idTo,string idFrom,int amount)
         {
             Log.Information("Solicitud getTipoMoneda");
             string result = await _monedaService.consultaMonedaConvertida(idFrom,idTo,amount);
