@@ -909,6 +909,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PerId, "FK_Proyecto_Participantes_Persona");
                 entity.HasIndex(e => e.PryId, "FK_Proyecto_Participantes_Proyecto");
                 entity.HasIndex(e => e.PrfId, "FK_Proyecto_participantes_Perfil");
+                entity.HasIndex(e => e.TarifarioId, "FK_Proyecto_participantes_Tarifario");
                 entity.Property(e => e.PpaId)
                     
                     .HasColumnType("int(11)")
@@ -923,7 +924,7 @@ namespace look.Infrastructure.data
                     .HasColumnType("int(11)")
                     .HasColumnName("pry_id");
                 entity.Property(e => e.PerTarifa)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("DOUBLE")
                     .HasColumnName("per_tarifa");
                 entity.Property(e => e.PrfId)
                     .HasColumnType("int(11)")
@@ -937,6 +938,12 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.estado)
                     .HasColumnType("int(11)")
                     .HasColumnName("estado");
+                entity.Property(e => e.TarifarioId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("tarifario_id");
+                entity.HasOne(d => d.TarifarioConvenio).WithMany()
+                    .HasForeignKey(d => d.TarifarioId)
+                    .HasConstraintName("FK_Proyecto_participantes_Tarifario"); 
                 entity.HasOne(d => d.Persona).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Propuesta_Estado_Propuesta");
@@ -1119,7 +1126,7 @@ namespace look.Infrastructure.data
                     .HasColumnType("int(11)")
                     .HasColumnName("tc_perfil_asignado");
                 entity.Property(e => e.TcTarifa)
-                    .HasColumnType("int(50)")
+                    .HasColumnType("DOUBLE")
                     .HasColumnName("tc_tarifa");
                 entity.Property(e => e.TcMoneda)
                     .HasColumnType("int(11)")

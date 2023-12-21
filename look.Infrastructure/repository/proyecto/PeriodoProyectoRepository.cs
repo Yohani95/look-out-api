@@ -1,3 +1,4 @@
+using look.domain.entities.admin;
 using look.domain.entities.proyecto;
 using look.domain.interfaces.proyecto;
 using look.Infrastructure.data;
@@ -10,6 +11,15 @@ namespace look.Infrastructure.repository.proyecto
     {
         public PeriodoProyectoRepository(LookDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<PeriodoProyecto> GetByPeriodoRange(PeriodoProyecto periodo)
+        {
+            DateTime fechaDesde = periodo.FechaPeriodoDesde.Value.Date;
+            DateTime fechahasta = periodo.FechaPeriodoHasta.Value.Date;
+            return await _dbContext.PeriodoProyectos
+                .FirstOrDefaultAsync(p => p.FechaPeriodoHasta == fechahasta
+                && p.FechaPeriodoDesde == fechaDesde);
         }
 
         public async Task<List<PeriodoProyecto>> GetComplete()

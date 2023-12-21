@@ -10,8 +10,8 @@ public class TarifarioConvenio
     /// id de Entidad Perfil 
     /// </summary>
     public int? TcPerfilAsignado { get; set; }
-    public int? TcTarifa { get; set; }
-    public int? TcMoneda { get; set; }
+    public double? TcTarifa { get; set; }
+    public int TcMoneda { get; set; }
     public int? TcBase { get; set; }
     public int? TcStatus { get; set; }
     public DateTime? TcInicioVigencia { get; set; }
