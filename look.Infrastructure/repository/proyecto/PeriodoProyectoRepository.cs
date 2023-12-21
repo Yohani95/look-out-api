@@ -15,9 +15,11 @@ namespace look.Infrastructure.repository.proyecto
 
         public async Task<PeriodoProyecto> GetByPeriodoRange(PeriodoProyecto periodo)
         {
+            DateTime fechaDesde = periodo.FechaPeriodoDesde.Value.Date;
+            DateTime fechahasta = periodo.FechaPeriodoHasta.Value.Date;
             return await _dbContext.PeriodoProyectos
-                .FirstAsync(p => p.FechaPeriodoHasta == periodo.FechaPeriodoHasta
-                && p.FechaPeriodoDesde == periodo.FechaPeriodoDesde);
+                .FirstOrDefaultAsync(p => p.FechaPeriodoHasta == fechahasta
+                && p.FechaPeriodoDesde == fechaDesde);
         }
 
         public async Task<List<PeriodoProyecto>> GetComplete()
