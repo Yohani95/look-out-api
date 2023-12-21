@@ -293,14 +293,15 @@ namespace look.Application.services.proyecto
                 {
                     DateTime fechaHoy = DateTime.Now;
                     string fechaFormateada = fechaHoy.ToString("dd-MM-yyyy");
-                    resultado = await ObtenerUf(fechaFormateada);
+                    var result = await ObtenerUf(fechaFormateada);
+                    resultado = result * tarifa;
                 }
                 else
                 {
                     var result = await _monedaService.consultaMonedaConvertida("CLF",(string)moneda.MonNombre,(int) tarifa);
                     dynamic json= JObject.Parse(result);
                     result = json.MonedaConvertida;
-                    resultado = Double.Parse(result);
+                    resultado = Double.Parse(result) * tarifa;
                 }
                 return resultado;
                
