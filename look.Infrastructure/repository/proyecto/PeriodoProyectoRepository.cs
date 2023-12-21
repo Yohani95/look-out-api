@@ -13,6 +13,13 @@ namespace look.Infrastructure.repository.proyecto
         {
         }
 
+        public async Task<PeriodoProyecto> GetByPeriodoRange(PeriodoProyecto periodo)
+        {
+            return await _dbContext.PeriodoProyectos
+                .FirstAsync(p => p.FechaPeriodoHasta == periodo.FechaPeriodoHasta
+                && p.FechaPeriodoDesde == periodo.FechaPeriodoDesde);
+        }
+
         public async Task<List<PeriodoProyecto>> GetComplete()
         {
             return await _dbContext.PeriodoProyectos

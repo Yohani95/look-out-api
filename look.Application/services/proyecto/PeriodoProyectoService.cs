@@ -50,8 +50,19 @@ namespace look.Application.services.proyecto
             try
             {
                 _logger.Information("Creando periodo");
-                periodo.Monto =await  CalcularMontoPeriodo(periodo);
-                await _periodoProyectoRepository.AddAsync(periodo);
+                var periodoExisting= await _periodoProyectoRepository.GetByPeriodoRange(periodo);
+                if (periodoExisting != null)
+                {
+                    periodoExisting.NumeroProfesionales = periodo.NumeroProfesionales;
+                    periodoExisting.estado = periodo.estado;
+                    periodoExisting.Monto = await CalcularMontoPeriodo(periodo);
+                    await _periodoProyectoRepository.UpdateAsync(periodoExisting);
+                }
+                else
+                {
+                    periodo.Monto = await CalcularMontoPeriodo(periodo);
+                    await _periodoProyectoRepository.AddAsync(periodo);
+                }
                 return new ServiceResult
                 {
                     IsSuccess = true,
@@ -75,6 +86,7 @@ namespace look.Application.services.proyecto
         {
             return await _periodoProyectoRepository.GetComplete();
         }
+ #region "logica de calcular monto"
         /// <summary>
         /// calcula el monto segun la novedad de los participantes 
         /// </summary>
@@ -129,7 +141,7 @@ namespace look.Application.services.proyecto
         }
 
         /// <summary>
-        /// 
+        /// calcula los dias totales del periodo
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
@@ -150,12 +162,12 @@ namespace look.Application.services.proyecto
             return diasTotales;
         }
         /// <summary>
-        /// 
+        /// calcula los dias habiles segun corresponda del periodo
         /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="diasFeriados"></param>
-        /// <returns></returns>
+        /// <param name="startDate">desde</param>
+        /// <param name="endDate">hasta</param>
+        /// <param name="diasFeriados"> lista de dias feriados</param>
+        /// <returns>retorna un entero</returns>
         static int CalcularDiasHabiles(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados,IEnumerable<Novedades> novedades)
         {
             int diasHabiles = 0;
@@ -171,7 +183,7 @@ namespace look.Application.services.proyecto
             return diasHabiles;
         }
         /// <summary>
-        /// 
+        /// obtiene los dias feriados por año
         /// </summary>
         /// <param name="fecha"></param>
         /// <param name="diasFeriados"></param>
@@ -190,7 +202,12 @@ namespace look.Application.services.proyecto
             // Verifica si el día no es sábado ni domingo
             return fecha.DayOfWeek != DayOfWeek.Saturday && fecha.DayOfWeek != DayOfWeek.Sunday;
         }
-        
+        /// <summary>
+        /// obtiene si hubo una novedad dentro del periodo
+        /// </summary>
+        /// <param name="fecha">fecha</param>
+        /// <param name="novedades"> lista de novedad </param>
+        /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
             return novedades.Any(n => fecha >= n.fechaInicio && fecha <= n.fechaHasta);
@@ -226,7 +243,11 @@ namespace look.Application.services.proyecto
                 }
             }
         }
-        
+        /// <summary>
+        /// obtiene uf de api https://mindicador.cl/api/uf
+        /// </summary>
+        /// <param name="year">espera fecha formato {DD-MM-YYYY}</param>
+        /// <returns>retorna un double </returns>
         static async Task<double> ObtenerUf(string year)
         {
             string url = "https://mindicador.cl/api/uf"+year;
@@ -250,6 +271,11 @@ namespace look.Application.services.proyecto
                 }
             }
         }
+        /// <summary>
+        /// obtiene json de api UF "https://mindicador.cl/api/uf
+        /// </summary>
+        /// <param name="apiUrl">espera url</param>
+        /// <returns>retorna un cuerpo de resultado</returns>
         static async Task<string> ObtenerJson(string apiUrl)
         {
             using (HttpClient httpClient = new HttpClient())
@@ -267,7 +293,11 @@ namespace look.Application.services.proyecto
                 }
             }
         }
-        
+        /// <summary>
+        /// deserializa el json dela api uf
+        /// </summary>
+        /// <param name="jsonResult"></param>
+        /// <returns></returns>
         static double ObtenerValorUF(string jsonResult)
         {
             try
@@ -283,7 +313,13 @@ namespace look.Application.services.proyecto
                 return 0;
             }
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tipoMoneda"></param>
+        /// <param name="moneda"></param>
+        /// <param name="tarifa"></param>
+        /// <returns></returns>
         private async Task<double> ConvertirMonedas(string tipoMoneda,Moneda moneda,double tarifa )
         {
             try
@@ -312,6 +348,7 @@ namespace look.Application.services.proyecto
                 return 0;
             }
         }
+#endregion
     }
 }
 
