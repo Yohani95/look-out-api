@@ -111,7 +111,7 @@ namespace look.Application.services.proyecto
                         int añoActual = DateTime.Now.Year;
                         var diasFeriados = await ObtenerDiasFeriados(añoActual);
                         var tarifarioConvenio=await _tarifarioConvenioRepository.GetByIdAsync((int)participante.TarifarioId);
-                        var moneda = await _monedaRepository.GetByIdAsync(tarifarioConvenio.TcMoneda);
+                        var moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
                         var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
                         if (existingProyecto.FacturacionDiaHabil==1)
@@ -251,14 +251,18 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un double </returns>
         static async Task<double> ObtenerUf(string year)
         {
-            string url = "https://mindicador.cl/api/uf"+year;
+            int añoActual = DateTime.Now.Year;
+            int diaActual = DateTime.Now.Year-1;
+            int mesActual = DateTime.Now.Year;
+            string año = diaActual + "-" + mesActual + "-" + añoActual;
+            string url = "https://mindicador.cl/api/uf"+año;
 
             using (HttpClient httpClient = new HttpClient())
             {
                 try
                 {
                     
-                    string apiUrl = "https://mindicador.cl/api/uf/21-12-2023";
+                    string apiUrl = url;
 
                     string jsonResult = await ObtenerJson(apiUrl);
 
@@ -335,7 +339,7 @@ namespace look.Application.services.proyecto
                 }
                 else
                 {
-                    var result = await _monedaService.consultaMonedaConvertida("CLF",(string)moneda.MonNombre,(int) tarifa);
+                    var result = await _monedaService.consultaMonedaConvertida(tipoMoneda,(string)moneda.MonNombre,(int) tarifa);
                     dynamic json= JObject.Parse(result);
                     result = json.MonedaConvertida;
                     resultado = Double.Parse(result) * tarifa;

@@ -10,7 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b0ec8cd-c75c-4076-8c93-f9c33d0415b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/look.Application/services/proyecto/ProyectoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/look.Application/services/proyecto/ProyectoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +26,25 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1681edfb7d22e92762a47f7ad24b9c3e49499c53750a9dbeedb20bd20615b/Double.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/575c31ecc35a636b6f962cb71d53992552941a18982aae1c8e6c16305cc3761b/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look-out-api/Controllers/proyecto/NovedadesController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look-out-api/Controllers/proyecto/NovedadesController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/NovedadesService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/NovedadesService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Infrastructure/repository/proyecto/PeriodoProyectoRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Infrastructure/repository/proyecto/PeriodoProyectoRepository.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -33,27 +53,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/multidocumentos",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Desarrollo&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache",
-      "C:\\Users\\Giovanni Benvenuto\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Giovanni Benvenuto\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="look-out-api: look_out_api" type="LaunchSettings" factoryName=".NET Launch Settings Profile" temporary="true">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/look-out-api/look-out-api.csproj" />
@@ -88,13 +108,147 @@
       <workItem from="1697458039637" duration="327000" />
       <workItem from="1698667901740" duration="7458000" />
       <workItem from="1699360443475" duration="3005000" />
+      <workItem from="1703620177173" duration="3001000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>104</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="104" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="4857" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4884" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>107</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="107" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="4924" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5025" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>108</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="108" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5046" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5096" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>110</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="110" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5143" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5177" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>111</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="111" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5202" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5258" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>112</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="112" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5283" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5384" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>113</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="113" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5409" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5488" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>114</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="114" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5513" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5570" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>116</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="116" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5762" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5806" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Type#look.domain.entities.cuentas.ClienteWithIds" memberName="Cliente" />
