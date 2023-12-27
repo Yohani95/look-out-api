@@ -118,13 +118,13 @@ namespace look.Application.services.proyecto
                         {
                             int diasHabilesSinNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
                             tarifa = (Double) tarifarioConvenio.TcTarifa * diasHabilesSinNovedades;
-                            tarifaConvertida = await ConvertirMonedas("UF",moneda,tarifa);
+                            tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifa);
                         }
                         else
                         {
                             int diasTotalesSinNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
                             tarifa = (Double)tarifarioConvenio.TcTarifa * diasTotalesSinNovedades;
-                            tarifaConvertida = await ConvertirMonedas("UF",moneda,tarifa);
+                            tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifa);
                         }
                         _logger.Information("Monto calculado de periodo");
                         tarifaTotal = tarifaTotal + tarifaConvertida;
@@ -249,7 +249,7 @@ namespace look.Application.services.proyecto
         /// </summary>
         /// <param name="year">espera fecha formato {DD-MM-YYYY}</param>
         /// <returns>retorna un double </returns>
-        static async Task<double> ObtenerUf(string year)
+        static async Task<double> ObtenerUf(string date)
         {
             int añoActual = DateTime.Now.Year;
             int diaActual = DateTime.Now.Year-1;
@@ -325,7 +325,7 @@ namespace look.Application.services.proyecto
         /// <param name="moneda"></param>
         /// <param name="tarifa"></param>
         /// <returns></returns>
-        private async Task<double> ConvertirMonedas(string tipoMoneda,Moneda moneda,double tarifa )
+        private async Task<double> ConvertirMonedas(string tipoMoneda,string tarifarioMoneda,double tarifa )
         {
             try
             {
@@ -339,7 +339,7 @@ namespace look.Application.services.proyecto
                 }
                 else
                 {
-                    var result = await _monedaService.consultaMonedaConvertida(tipoMoneda,(string)moneda.MonNombre,(int) tarifa);
+                    var result = await _monedaService.consultaMonedaConvertida(tipoMoneda,(string)tarifarioMoneda,(int) tarifa);
                     dynamic json= JObject.Parse(result);
                     result = json.MonedaConvertida;
                     resultado = Double.Parse(result) * tarifa;
