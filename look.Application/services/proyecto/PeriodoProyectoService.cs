@@ -98,6 +98,7 @@ namespace look.Application.services.proyecto
             double tarifa = 0;
             double tarifaConvertida = 0;
             double tarifaTotal = 0;
+            double tarifaconvenio = 0;
             try
             {
                 _logger.Information("Calculando monto de periodo");
@@ -114,16 +115,17 @@ namespace look.Application.services.proyecto
                         var moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
                         var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
-                        if (existingProyecto.FacturacionDiaHabil==1)
+                        if (tarifarioConvenio.TcBase == 3)
                         {
-                            int diasHabilesSinNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
-                            tarifa = (Double) tarifarioConvenio.TcTarifa * diasHabilesSinNovedades;
-                            tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifa);
-                        }
-                        else
+                            int diasHabilesNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
+                            double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
+                            tarifaconvenio = Horadia * diasHabilesNovedades;
+                            tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifaconvenio);
+
+                        }else if (tarifarioConvenio.TcBase == 1)
                         {
-                            int diasTotalesSinNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
-                            tarifa = (Double)tarifarioConvenio.TcTarifa * diasTotalesSinNovedades;
+                            int diasTotalesNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
+                            tarifa = (Double)tarifarioConvenio.TcTarifa * diasTotalesNovedades;
                             tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifa);
                         }
                         _logger.Information("Monto calculado de periodo");

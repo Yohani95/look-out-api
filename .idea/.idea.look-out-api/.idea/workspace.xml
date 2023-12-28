@@ -11,7 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3b0ec8cd-c75c-4076-8c93-f9c33d0415b3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +107,8 @@
       <workItem from="1697458039637" duration="327000" />
       <workItem from="1698667901740" duration="7458000" />
       <workItem from="1699360443475" duration="3005000" />
-      <workItem from="1703620177173" duration="3001000" />
+      <workItem from="1703620177173" duration="8531000" />
+      <workItem from="1703700648291" duration="1082000" />
     </task>
     <servers />
   </component>
@@ -246,6 +246,97 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>118</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="118" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5861" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6018" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>119</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="119" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6047" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6118" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>120</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="120" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6147" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6249" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>126</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="126" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6644" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6746" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>125</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="125" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6545" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6615" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>124</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="124" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6359" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6516" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>129</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="129" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6872" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6917" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
