@@ -117,11 +117,11 @@ namespace look.Application.services.proyecto
                         var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
                         if (existingProyecto.FacturacionDiaHabil == 1)
                         {
-                            calculartarifas(tarifarioConvenio, periodo, moneda,diasFeriados,novedadesFiltrada);
+                            tarifaConvertida = await calculartarifas(tarifarioConvenio, periodo, moneda,diasFeriados,novedadesFiltrada);
                         }
                         else
                         {
-                            calculartarifas(tarifarioConvenio, periodo, moneda,diasFeriados,novedadesFiltrada);
+                            tarifaConvertida = await calculartarifas(tarifarioConvenio, periodo, moneda,diasFeriados,novedadesFiltrada);
                         }
                         _logger.Information("Monto calculado de periodo");
                         tarifaTotal = tarifaTotal + tarifaConvertida;

@@ -9,7 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b0ec8cd-c75c-4076-8c93-f9c33d0415b3" name="Changes" comment="" />
+    <list default="true" id="3b0ec8cd-c75c-4076-8c93-f9c33d0415b3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,6 +110,8 @@
       <workItem from="1703620177173" duration="8531000" />
       <workItem from="1703700648291" duration="1082000" />
       <workItem from="1703783896705" duration="4274000" />
+      <workItem from="1703855905640" duration="1663000" />
+      <workItem from="1704203292589" duration="5192000" />
     </task>
     <servers />
   </component>
@@ -202,7 +206,7 @@
               <option value="5322" />
             </startOffsets>
             <endOffsets>
-              <option value="5423" />
+              <option value="5382" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="6" />
@@ -235,16 +239,237 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
-          <line>131</line>
+          <line>126</line>
           <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="129" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
             <startOffsets>
-              <option value="6975" />
+              <option value="6304" />
             </startOffsets>
             <endOffsets>
-              <option value="7020" />
+              <option value="6349" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>351</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="351" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15464" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15492" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>353</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="353" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15531" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15564" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>354</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="354" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15585" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15642" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>355</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="355" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15663" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15709" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>357</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="357" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15775" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15776" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>356</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="356" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15730" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15758" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>359</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="359" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15814" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15815" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>360</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="360" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15836" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15944" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>361</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="361" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15965" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16001" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>362</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="362" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16022" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16053" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>363</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="363" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16074" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16116" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>365</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="365" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16151" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16168" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>348</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="348" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15394" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16372" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>370</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="370" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16265" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16332" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>371</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="371" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16349" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16358" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>349</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="349" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15410" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15411" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>350</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="350" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15428" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15447" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
