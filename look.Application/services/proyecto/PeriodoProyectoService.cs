@@ -111,7 +111,7 @@ namespace look.Application.services.proyecto
                     {
                         int añoActual = DateTime.Now.Year;
                         var diasFeriados = await ObtenerDiasFeriados(añoActual);
-                        var tarifarioConvenio=await _tarifarioConvenioRepository.GetByIdAsync((int)participante.TarifarioId);
+                        var tarifarioConvenio=await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
                         var moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
                         var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
@@ -271,10 +271,10 @@ namespace look.Application.services.proyecto
         static async Task<double> ObtenerUf(string date)
         {
             int añoActual = DateTime.Now.Year;
-            int diaActual = DateTime.Now.Year-1;
-            int mesActual = DateTime.Now.Year;
+            int diaActual = DateTime.Now.Day-1;
+            int mesActual = DateTime.Now.Month;
             string año = diaActual + "-" + mesActual + "-" + añoActual;
-            string url = "https://mindicador.cl/api/uf"+año;
+            string url = "https://mindicador.cl/api/uf/"+año;
 
             using (HttpClient httpClient = new HttpClient())
             {

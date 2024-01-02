@@ -5,6 +5,8 @@ namespace look.domain.interfaces.proyecto
     public interface ITarifarioConvenioRepository:IRepository<TarifarioConvenio>
     {
         Task<List<TarifarioConvenio>> GetComplete();
+        Task<TarifarioConvenio> GetbyIdEntities(int id);
+
     }
 }
 
