@@ -9,6 +9,7 @@ using look.domain.interfaces.admin;
 using look.domain.interfaces.proyecto;
 using look.domain.interfaces.unitOfWork;
 using look.domain.interfaces.world;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -95,10 +96,8 @@ namespace look.Application.services.proyecto
         /// <returns>retorna el monto total del periodo a facturar</returns>
         private async Task<double> CalcularMontoPeriodo(PeriodoProyecto periodo)
         {
-            double tarifa = 0;
             double tarifaConvertida = 0;
             double tarifaTotal = 0;
-            double tarifaconvenio = 0;
             try
             {
                 _logger.Information("Calculando monto de periodo");
@@ -115,26 +114,21 @@ namespace look.Application.services.proyecto
                         var moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
                         var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
-                        if (existingProyecto.FacturacionDiaHabil == 1)
-                        {
-                            tarifaConvertida = await calculartarifas(tarifarioConvenio, periodo, moneda,diasFeriados,novedadesFiltrada);
-                        }
-                        else
-                        {
-                            tarifaConvertida = await calculartarifas(tarifarioConvenio, periodo, moneda,diasFeriados,novedadesFiltrada);
-                        }
-                        _logger.Information("Monto calculado de periodo");
+
+                        //llamar a metodo para calcular dias habiles o mensuales
+                        tarifaConvertida = await calculartarifas(tarifarioConvenio, periodo, moneda, diasFeriados, novedadesFiltrada);
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
+                _logger.Information("Monto calculado de periodo :"+ tarifaTotal);
                 string numeroFormateado = tarifaTotal.ToString("0.00");
                 double format = double.Parse(numeroFormateado);
-                return format;
+                return tarifaTotal;
             }
             catch (Exception ex)
             {
                 _logger.Error("Error interno del servidor al calcular: " + ex.Message);
-                return tarifa;
+                return tarifaTotal;
             }
         }
 
@@ -348,28 +342,38 @@ namespace look.Application.services.proyecto
         {
             try
             {
-                double resultado=0;
                 if (tipoMoneda.Equals("UF"))
                 {
                     DateTime fechaHoy = DateTime.Now;
                     string fechaFormateada = fechaHoy.ToString("dd-MM-yyyy");
-                    var result = await ObtenerUf(fechaFormateada);
-                    resultado = result * tarifa;
+                    var valorUf = await ObtenerUf(fechaFormateada);
+
+                    if (!tarifarioMoneda.Equals("CLP"))
+                    {
+                        var resultCLP = await _monedaService.consultaMonedaConvertida( (string)tarifarioMoneda, "CLP", (int)tarifa);
+                        dynamic json = JObject.Parse(resultCLP);
+                        resultCLP = json.MonedaConvertida;
+                        var culture = System.Globalization.CultureInfo.InvariantCulture;
+
+                        var result = Double.Parse(resultCLP, culture) / valorUf;
+                        var resultadoFormateado = result.ToString("0.###", culture);
+
+                        return Double.Parse(resultadoFormateado, culture);
+                    }
+                    return  tarifa/ valorUf ;
                 }
                 else
                 {
-                    var result = await _monedaService.consultaMonedaConvertida(tipoMoneda,(string)tarifarioMoneda,(int) tarifa);
-                    dynamic json= JObject.Parse(result);
+                    var result = await _monedaService.consultaMonedaConvertida(tipoMoneda, (string)tarifarioMoneda, (int)tarifa);
+                    dynamic json = JObject.Parse(result);
                     result = json.MonedaConvertida;
-                    resultado = Double.Parse(result) * tarifa;
+                    return Double.Parse(result) * tarifa;
                 }
-                return resultado;
-               
             }
-            catch (JsonException e)
+            catch (Exception e)
             {
-                Console.WriteLine($"Error al deserializar los datos: {e.Message}");
-                return 0;
+                Log.Error($"Error al deserializar los datos: {e.Message}");
+                throw;
             }
         }
 #endregion
