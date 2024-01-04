@@ -12,6 +12,11 @@ namespace look.Infrastructure.repository.proyecto
         {
         }
 
+        public Task<List<Novedades>> GetByProjectIdPersonId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Novedades>> GetComplete()
         {
             return await _dbContext.Novedades

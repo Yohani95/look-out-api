@@ -380,6 +380,7 @@ namespace look.Application.services.proyecto
                 existingProyecto.PrpId= proyectoDTO.Proyecto.PrpId;
                 existingProyecto.PryFechaCierre= proyectoDTO.Proyecto.PryFechaCierre;
                 existingProyecto.PryFechaInicioEstimada= proyectoDTO.Proyecto.PryFechaInicioEstimada;
+                existingProyecto.PryFechaCierreEstimada= proyectoDTO.Proyecto.PryFechaCierreEstimada;
                 existingProyecto.FechaCorte = proyectoDTO.Proyecto.FechaCorte;
                 existingProyecto.PryValor= proyectoDTO.Proyecto.PryValor;
                 existingProyecto.FacturacionDiaHabil= proyectoDTO.Proyecto.FacturacionDiaHabil;

@@ -20,6 +20,14 @@ namespace look.Infrastructure.repository.proyecto
                 .Include(t=>t.Moneda)
                 .ToListAsync();
         }
+        public async Task<TarifarioConvenio> GetbyIdEntities(int id)
+        {
+            return await _dbContext.TarifarioConvenio
+                .Include(t => t.Perfil)
+                .Include(t => t.Proyecto)
+                .Include(t => t.Moneda)
+                .FirstAsync(t=>t.TcId==id);
+        }
     }
 }
 
