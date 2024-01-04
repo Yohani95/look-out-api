@@ -5,6 +5,7 @@ namespace look.domain.interfaces.proyecto
     public interface INovedadesRepository: IRepository<Novedades>
     {
         Task<List<Novedades>> GetComplete();
+        Task<List<Novedades>> GetByProjectIdPersonId(int id);
     }
     
 }

@@ -28,4 +28,11 @@ public class TarifarioConvenio
     public virtual Proyecto? Proyecto { get; set; }
     public virtual Perfil? Perfil { get; set; } 
     public virtual Moneda? Moneda{ get; set; } 
+    public static class ConstantesTcBase
+    {
+        public const int Mes= 1;
+        public const int Semana = 2;
+        public const int Hora = 3;
+        public const int Dia = 4;
+    }
 }

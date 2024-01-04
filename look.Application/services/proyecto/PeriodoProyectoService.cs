@@ -98,6 +98,7 @@ namespace look.Application.services.proyecto
         {
             double tarifaConvertida = 0;
             double tarifaTotal = 0;
+            Moneda moneda = new Moneda();
             try
             {
                 _logger.Information("Calculando monto de periodo");
@@ -108,22 +109,24 @@ namespace look.Application.services.proyecto
                     var proyectoParticipante = await _proyectoParticipanteService.GetParticipanteByIdProAndDate(periodo);
                     foreach (var participante in proyectoParticipante)
                     {
-                        int añoActual = DateTime.Now.Year;
-                        var diasFeriados = await ObtenerDiasFeriados(añoActual);
+                        var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
                         var tarifarioConvenio=await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
-                        var moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
+                        moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
-                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2);
+                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2).ToList();
 
                         //llamar a metodo para calcular dias habiles o mensuales
-                        tarifaConvertida = await calculartarifas(tarifarioConvenio, periodo, moneda, diasFeriados, novedadesFiltrada);
+                        tarifaConvertida = await calculartarifas(existingProyecto,tarifarioConvenio, periodo, moneda, diasFeriados, novedadesFiltrada);
+
+
+
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
-                _logger.Information("Monto calculado de periodo :"+ tarifaTotal);
-                string numeroFormateado = tarifaTotal.ToString("0.00");
-                double format = double.Parse(numeroFormateado);
-                return tarifaTotal;
+                var culture = System.Globalization.CultureInfo.InvariantCulture;
+                string numeroFormateado = tarifaTotal.ToString("0.###",culture);
+                _logger.Information("Monto calculado de periodo :" + tarifaTotal + ", moneda :" + moneda.MonNombre);
+                return Double.Parse(numeroFormateado, culture);
             }
             catch (Exception ex)
             {
@@ -153,25 +156,46 @@ namespace look.Application.services.proyecto
 
             return diasTotales;
         }
+        static int CalcularDiasHabilesSinNovedad(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados)
+        {
+            int diasHabiles = 0;
 
-        async Task<double> calculartarifas( TarifarioConvenio tarifarioConvenio,PeriodoProyecto periodo,Moneda moneda,List<DateTime> diasFeriados,IEnumerable<Novedades> novedadesFiltrada)
+            for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
+            {
+                if (!EsDiaFeriado(fecha, diasFeriados) && fecha.DayOfWeek != DayOfWeek.Saturday && fecha.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    diasHabiles++;
+                }
+            }
+
+            return diasHabiles;
+        }
+
+        async Task<double> calculartarifas(Proyecto proyecto, TarifarioConvenio tarifarioConvenio,PeriodoProyecto periodo,Moneda moneda,List<DateTime> diasFeriados,IEnumerable<Novedades> novedadesFiltrada)
         {
             double tarifaConvertida = 0;
             double tarifa = 0;
             double tarifaconvenio = 0;
-            if (tarifarioConvenio.TcBase == 3)
-            {
-                int diasHabilesNovedades = CalcularDiasHabiles((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
-                double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
-                tarifaconvenio = Horadia * diasHabilesNovedades;
-                tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifaconvenio);
+            double tarifaTotalTrabajado=0;
+            TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta - periodo.FechaPeriodoDesde);
 
-            }else if (tarifarioConvenio.TcBase == 1)
-            {
-                int diasTotalesNovedades = CalcularDiasTotales((DateTime) periodo.FechaPeriodoDesde, (DateTime) periodo.FechaPeriodoHasta,diasFeriados,novedadesFiltrada);
-                tarifa = (Double)tarifarioConvenio.TcTarifa * diasTotalesNovedades;
-                tarifaConvertida = await ConvertirMonedas(moneda.MonNombre,tarifarioConvenio.Moneda.MonNombre,tarifa);
-            }
+            int diasTotalesPeriodo = diferencia.Days;
+            //int diasHabilesPeriodo = CalcularDiasHabilesSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
+
+            if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
+                {
+                    int diasTrabajadosTotales = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados, novedadesFiltrada);
+                    double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
+                    tarifaconvenio = Horadia * diasTrabajadosTotales;
+                }
+                else
+                {
+                    int diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados, novedadesFiltrada);
+                    var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa /30);// se calcula en base si es mensual
+                    tarifaTotalTrabajado= tarifaDiario * diasTotalesTrabajados;
+
+                }
+                tarifaConvertida = await ConvertirMonedas(moneda.MonNombre, tarifarioConvenio.Moneda.MonNombre, tarifaTotalTrabajado);       
 
             return tarifaConvertida;
         }
@@ -224,7 +248,7 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
-            return novedades.Any(n => fecha >= n.fechaInicio && fecha <= n.fechaHasta);
+            return novedades.Any(n => fecha >= n.fechaInicio && fecha <= n.fechaHasta.Value.AddDays(1));
         }
         
         /// <summary>
@@ -350,7 +374,7 @@ namespace look.Application.services.proyecto
 
                     if (!tarifarioMoneda.Equals("CLP"))
                     {
-                        var resultCLP = await _monedaService.consultaMonedaConvertida( (string)tarifarioMoneda, "CLP", (int)tarifa);
+                        var resultCLP = await _monedaService.consultaMonedaConvertida( (string)tarifarioMoneda, "CLP", tarifa);
                         dynamic json = JObject.Parse(resultCLP);
                         resultCLP = json.MonedaConvertida;
                         var culture = System.Globalization.CultureInfo.InvariantCulture;
@@ -372,7 +396,7 @@ namespace look.Application.services.proyecto
             }
             catch (Exception e)
             {
-                Log.Error($"Error al deserializar los datos: {e.Message}");
+                _logger.Error($"Error al deserializar los datos: {e.Message}");
                 throw;
             }
         }
