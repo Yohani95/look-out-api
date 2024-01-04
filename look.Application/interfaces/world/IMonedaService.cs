@@ -9,6 +9,6 @@ namespace look.Application.interfaces.world
 {
     public interface IMonedaService : IService<Moneda>
     {
-         Task<string>  consultaMonedaConvertida(string idTo,string idFrom,int amount);
+        Task<string> consultaMonedaConvertida(string fromCurrency, string toCurrency, double amount);
     }
 }

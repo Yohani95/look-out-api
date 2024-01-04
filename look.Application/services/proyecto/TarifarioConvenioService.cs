@@ -66,6 +66,11 @@ namespace look.Application.services.proyecto
             }
         }
 
+        public async Task<TarifarioConvenio> GetbyIdEntities(int id)
+        {
+            return await _tarifarioConvenioService.GetbyIdEntities(id);
+        }
+
         public async Task<ResponseGeneric<List<TarifarioConvenio>>> GetByIdProyectoEntities(int idProyecto)
         {
             try

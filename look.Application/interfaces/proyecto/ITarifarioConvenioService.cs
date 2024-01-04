@@ -17,6 +17,12 @@ namespace look.Application.interfaces.proyecto
         /// <returns>retorna un tarifario</returns>
         Task<ResponseGeneric<TarifarioConvenio>> GetByIdEntities(int id);
         Task<ResponseGeneric<List<TarifarioConvenio>>> GetByIdProyectoEntities(int idProyecto);
+        /// <summary>
+        /// obtiene por id con sus entidades
+        /// </summary>
+        /// <param name="id">id de tarifario</param>
+        /// <returns>retornar un tarifario</returns>
+        Task<TarifarioConvenio> GetbyIdEntities(int id);
     }
 }
 

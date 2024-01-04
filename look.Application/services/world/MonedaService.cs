@@ -3,8 +3,10 @@ using look.domain.dto.admin;
 using look.domain.entities.world;
 using look.domain.interfaces;
 using look.domain.interfaces.world;
+using Microsoft.Office.SharePoint.Tools;
 using Newtonsoft.Json;
 using Serilog;
+using System.Text.RegularExpressions;
 
 
 namespace look.Application.services.world
@@ -19,16 +21,23 @@ namespace look.Application.services.world
             _monedaRepository = monedaRepository;
         }
 
-        public async Task<string> consultaMonedaConvertida(string idTo,string idFrom,int amount)
+        public async Task<string> consultaMonedaConvertida(string fromCurrency,string toCurrency,double amount)
         {
             string responseBody = "";
+
+            var culture = System.Globalization.CultureInfo.InvariantCulture;
+            var amountFormat = amount.ToString("0.###",culture);
+
             double MonedaConvertida = 0.0;
+            string baseUrl = "https://api.exchangeratesapi.io/v1/convert";
+            string apiKey = "7a2d122af2e9771c0dc8165fa0399598";
+            string apiUrl = $"{baseUrl}?access_key={apiKey}&from={fromCurrency}&to={toCurrency}&amount={amountFormat}";
+
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    string url = "https://api.exchangeratesapi.io/v1/convert?access_key=7a2d122af2e9771c0dc8165fa0399598&from="+idTo+"&to="+idFrom+"&amount="+amount;
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
                     if (response.IsSuccessStatusCode)
                     {
                         responseBody= await response.Content.ReadAsStringAsync();
@@ -43,6 +52,7 @@ namespace look.Application.services.world
                     }
                     else
                     {
+                        responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"Error: {response.StatusCode}");
                     }
                 }
@@ -51,7 +61,16 @@ namespace look.Application.services.world
                     Console.WriteLine($"Error: {ex.Message}");
                 }
             }
-            
+
+            //var client = new RestClient("https://api.apilayer.com/exchangerates_data/convert?to=CLP&from=PEN&amount=0.70000000000000007");
+            //client.Timeout = -1;
+
+            //var request = new RestRequest(Method.GET);
+            //request.AddHeader("apikey", "QsYlLVhYUKpIy3oqGgk8MmX6trh7rxrj");
+
+            //IRestResponse response = client.Execute(request);
+            //Console.WriteLine(response.Content);
+
             return responseBody;
         }
     }

@@ -10,7 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b0ec8cd-c75c-4076-8c93-f9c33d0415b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/look.Application/services/proyecto/ProyectoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/look.Application/services/proyecto/ProyectoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.look-out-api/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +25,25 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1681edfb7d22e92762a47f7ad24b9c3e49499c53750a9dbeedb20bd20615b/Double.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/575c31ecc35a636b6f962cb71d53992552941a18982aae1c8e6c16305cc3761b/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look-out-api/Controllers/proyecto/NovedadesController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look-out-api/Controllers/proyecto/NovedadesController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/NovedadesService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/NovedadesService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Application/services/proyecto/PeriodoProyectoService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Infrastructure/repository/proyecto/PeriodoProyectoRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Giovanni Benvenuto/git-reale/look-out-api/look.Infrastructure/repository/proyecto/PeriodoProyectoRepository.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -33,27 +52,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feature/multidocumentos",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Desarrollo&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache",
-      "C:\\Users\\Giovanni Benvenuto\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Giovanni Benvenuto\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Giovanni Benvenuto\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="look-out-api: look_out_api" type="LaunchSettings" factoryName=".NET Launch Settings Profile" temporary="true">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/look-out-api/look-out-api.csproj" />
@@ -88,13 +107,372 @@
       <workItem from="1697458039637" duration="327000" />
       <workItem from="1698667901740" duration="7458000" />
       <workItem from="1699360443475" duration="3005000" />
+      <workItem from="1703620177173" duration="8531000" />
+      <workItem from="1703700648291" duration="1082000" />
+      <workItem from="1703783896705" duration="4274000" />
+      <workItem from="1703855905640" duration="1663000" />
+      <workItem from="1704203292589" duration="5192000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>105</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="104" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="4896" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4923" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>108</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="107" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="4963" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5064" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>109</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="108" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5085" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5135" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>111</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="110" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5182" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5216" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>112</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="111" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5241" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5297" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>113</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="112" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5322" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5382" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>114</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="113" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5448" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5527" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>115</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="114" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="5552" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5609" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>126</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="129" containingFunctionPresentation="Method 'CalcularMontoPeriodo'">
+            <startOffsets>
+              <option value="6304" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6349" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>351</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="351" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15464" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15492" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>353</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="353" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15531" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15564" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>354</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="354" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15585" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15642" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>355</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="355" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15663" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15709" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>357</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="357" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15775" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15776" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>356</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="356" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15730" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15758" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>359</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="359" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15814" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15815" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>360</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="360" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15836" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15944" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>361</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="361" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15965" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16001" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>362</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="362" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16022" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16053" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>363</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="363" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16074" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16116" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>365</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="365" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16151" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16168" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>348</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="348" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15394" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16372" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>370</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="370" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16265" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16332" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>371</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="371" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="16349" />
+            </startOffsets>
+            <endOffsets>
+              <option value="16358" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>349</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="349" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15410" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15411" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/look.Application/services/proyecto/PeriodoProyectoService.cs</url>
+          <line>350</line>
+          <properties documentPath="C:\Users\Giovanni Benvenuto\git-reale\look-out-api\look.Application\services\proyecto\PeriodoProyectoService.cs" initialLine="350" containingFunctionPresentation="Method 'ConvertirMonedas'">
+            <startOffsets>
+              <option value="15428" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15447" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Type#look.domain.entities.cuentas.ClienteWithIds" memberName="Cliente" />
