@@ -248,7 +248,7 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
-            return novedades.Any(n => fecha >= n.fechaInicio && fecha <= n.fechaHasta.Value.AddDays(1));
+            return novedades.Any(n => fecha >= n.fechaInicio && fecha <= n.fechaHasta);
         }
         
         /// <summary>
