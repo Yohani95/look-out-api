@@ -144,7 +144,7 @@ namespace look.Application.services.proyecto
         {
             int diasTotales = 0;
 
-            for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
+            for (DateTime fecha = startDate; fecha < endDate; fecha = fecha.AddDays(1))
             {
                 if (!EsDiaFeriado(fecha, diasFeriados) && !NovedadesEnRango(fecha, novedades))
                 {
@@ -176,9 +176,9 @@ namespace look.Application.services.proyecto
             //double tarifaconvenio = 0;
             int diasTotalesTrabajados = 0;
             double tarifaTotalTrabajado = 0;
-            TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta - periodo.FechaPeriodoDesde);
+            TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta.Value.Date - periodo.FechaPeriodoDesde.Value.AddDays(1));
 
-            int diasTotalesPeriodo = diferencia.Days;
+            int diasTotalesPeriodo = 30;
 
             //int diasHabilesPeriodo = CalcularDiasHabilesSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
 
@@ -191,7 +191,25 @@ namespace look.Application.services.proyecto
             else
             {
                 diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados, novedadesFiltrada);
-                var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / 30);// se calcula en base si es mensual
+                //Cuando es febrero se calcula si es bisiesto o no
+                if(periodo.FechaPeriodoDesde.Value.Month==2 && periodo.FechaPeriodoHasta.Value.Month == 2)
+                {
+                    var diasTotalesTrabajadosBisiesto = 29;
+                    if(periodo.FechaPeriodoDesde.Value.Year % 4 == 0)
+                    {
+                        diasTotalesPeriodo = diasTotalesTrabajadosBisiesto-1;
+                    }
+                    if (diasTotalesTrabajados > 28)
+                    {
+                        diasTotalesTrabajados= diasTotalesPeriodo;
+                    }
+                }
+                //cuando es 31 los dias totales son 30, regla de negocio
+                if (diasTotalesTrabajados > 30)
+                {
+                    diasTotalesTrabajados = 30;
+                }
+                var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);// se calcula en base si es mensual
                 tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
             }
              
@@ -229,7 +247,11 @@ namespace look.Application.services.proyecto
         /// <returns></returns>
         static bool EsDiaFeriado(DateTime fecha, List<DateTime> diasFeriados)
         {
-            return diasFeriados.Contains(fecha.Date);
+            if (EsDiaHabil(fecha))
+            {
+                return diasFeriados.Contains(fecha.Date);
+            }
+            return false;
         }
         /// <summary>
         /// verifica si es dia habil 
