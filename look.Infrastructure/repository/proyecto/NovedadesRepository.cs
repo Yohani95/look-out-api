@@ -1,3 +1,4 @@
+using look.domain.entities.admin;
 using look.domain.entities.proyecto;
 using look.domain.interfaces.proyecto;
 using look.Infrastructure.data;
@@ -12,8 +13,13 @@ namespace look.Infrastructure.repository.proyecto
         {
         }
 
-        public Task<List<Novedades>> GetByProjectIdPersonId(int id)
+        public async Task<List<Novedades>> GetByProjectIdPersonId(ProyectoParticipante proyectoParticipante)
         {
+            return await _dbContext.Novedades
+                .Where(p => p.idProyecto == proyectoParticipante.PryId)
+                .Where(p => p.idPersona == proyectoParticipante.PerId)
+                .Where(p=>p.IdTipoNovedad==Novedades.ConstantesTipoNovedad.licencia)
+                .ToListAsync();
             throw new NotImplementedException();
         }
 
