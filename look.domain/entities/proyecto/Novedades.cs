@@ -30,10 +30,10 @@ namespace look.domain.entities.proyecto
         public virtual Perfil? Perfil { get; set; }
          static public class ConstantesTipoNovedad
         {
-            const int vacaciones = 1;
-            const int licencia = 2;
-            const int permiso = 3;
-            const int cambioRol = 4;
+            public const int vacaciones = 1;
+            public const int licencia = 2;
+            public const int permiso = 3;
+            public const int cambioRol = 4;
 
         }
     }
