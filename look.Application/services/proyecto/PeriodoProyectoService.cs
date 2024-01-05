@@ -113,13 +113,11 @@ namespace look.Application.services.proyecto
                         var tarifarioConvenio = await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
                         moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
-                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && p.idPersona == participante.PerId && p.IdTipoNovedad == 2).ToList();
-
+                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && 
+                        p.idPersona == participante.PerId && p.IdTipoNovedad 
+                        != Novedades.ConstantesTipoNovedad.cambioRol).ToList();
                         //llamar a metodo para calcular dias habiles o mensuales
                         tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, diasFeriados, novedadesFiltrada);
-
-
-
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
