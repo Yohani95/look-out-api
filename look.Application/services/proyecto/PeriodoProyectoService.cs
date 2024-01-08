@@ -109,15 +109,25 @@ namespace look.Application.services.proyecto
                     var proyectoParticipante = await _proyectoParticipanteService.GetParticipanteByIdProAndDate(periodo);
                     foreach (var participante in proyectoParticipante)
                     {
-                        var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
                         var tarifarioConvenio = await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
                         moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
-                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && 
-                        p.idPersona == participante.PerId && p.IdTipoNovedad 
-                        != Novedades.ConstantesTipoNovedad.cambioRol).ToList();
-                        //llamar a metodo para calcular dias habiles o mensuales
-                        tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, diasFeriados, novedadesFiltrada);
+
+                        var novedadesFiltrada = novedades
+                            .Where(p => p.idProyecto == participante.PryId && 
+                                p.idPersona == participante.PerId && p.IdTipoNovedad 
+                                != Novedades.ConstantesTipoNovedad.cambioRol && p.fechaInicio>=periodo.FechaPeriodoDesde
+                                &&  p.fechaHasta<=periodo.FechaPeriodoHasta).ToList();
+                        if (novedadesFiltrada.Count > 0)
+                        {
+                            //llamar a metodo para calcular dias habiles o mensuales
+                            tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, novedadesFiltrada);
+                        }
+                        else
+                        {
+                            tarifaConvertida=(double)tarifarioConvenio.TcTarifa;
+                        }
+                        
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
@@ -140,13 +150,13 @@ namespace look.Application.services.proyecto
         /// <param name="endDate"></param>
         /// <param name="diasFeriados"></param>
         /// <returns></returns>
-        static int CalcularDiasTotales(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados, IEnumerable<Novedades> novedades)
+        static int CalcularDiasTotales(DateTime startDate, DateTime endDate, IEnumerable<Novedades> novedades)
         {
             int diasTotales = 0;
 
             for (DateTime fecha = startDate; fecha < endDate; fecha = fecha.AddDays(1))
             {
-                if (!EsDiaFeriado(fecha, diasFeriados) && !NovedadesEnRango(fecha, novedades))
+                if (!NovedadesEnRango(fecha, novedades))
                 {
                     diasTotales++;
                 }
@@ -169,7 +179,7 @@ namespace look.Application.services.proyecto
             return diasHabiles;
         }
 
-        async Task<double> calculartarifas(Proyecto proyecto, TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, List<DateTime> diasFeriados, IEnumerable<Novedades> novedadesFiltrada)
+        async Task<double> calculartarifas(Proyecto proyecto, TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, IEnumerable<Novedades> novedadesFiltrada)
         {
             double tarifaConvertida = 0;
             double tarifa = 0;
@@ -184,13 +194,14 @@ namespace look.Application.services.proyecto
 
             if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
             {
-                diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados, novedadesFiltrada);
+
+                diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada);
                 double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
                 tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
             }
             else
             {
-                diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados, novedadesFiltrada);
+                diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada);
                 //Cuando es febrero se calcula si es bisiesto o no
                 if(periodo.FechaPeriodoDesde.Value.Month==2 && periodo.FechaPeriodoHasta.Value.Month == 2)
                 {
@@ -225,13 +236,13 @@ namespace look.Application.services.proyecto
         /// <param name="endDate">hasta</param>
         /// <param name="diasFeriados"> lista de dias feriados</param>
         /// <returns>retorna un entero</returns>
-        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate, List<DateTime> diasFeriados, IEnumerable<Novedades> novedades)
+        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate,IEnumerable<Novedades> novedades)
         {
             int diasHabiles = 0;
 
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
-                if (EsDiaHabil(fecha) && !EsDiaFeriado(fecha, diasFeriados) && !NovedadesEnRango(fecha, novedades))
+                if (EsDiaHabil(fecha) && !NovedadesEnRango(fecha, novedades))
                 {
                     diasHabiles++;
                 }
@@ -271,7 +282,11 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
-            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha <= n.fechaHasta.Value.Date);
+            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha < n.fechaHasta.Value.Date);
+                                       //10/04>=01/04 && 10/04<10/04
+                                        //true         && false
+
+            //falso
         }
 
         /// <summary>
