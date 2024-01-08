@@ -19,7 +19,7 @@ namespace look.Infrastructure.repository.proyecto
             DateTime fechahasta = periodo.FechaPeriodoHasta.Value.Date;
             return await _dbContext.PeriodoProyectos
                 .FirstOrDefaultAsync(p => p.FechaPeriodoHasta == fechahasta
-                && p.FechaPeriodoDesde == fechaDesde);
+                && p.FechaPeriodoDesde == fechaDesde && p.PryId==periodo.PryId);
         }
 
         public async Task<List<PeriodoProyecto>> GetComplete()
