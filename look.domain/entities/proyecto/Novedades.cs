@@ -32,8 +32,9 @@ namespace look.domain.entities.proyecto
         {
             public const int vacaciones = 1;
             public const int licencia = 2;
-            public const int permiso = 3;
+            public const int TerminoServicio= 3;
             public const int cambioRol = 4;
+            public const int permiso = 5;
 
         }
     }
