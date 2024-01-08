@@ -88,7 +88,7 @@ namespace look.Application.services.proyecto
         {
             return await _periodoProyectoRepository.GetComplete();
         }
-        #region "logica de calcular monto"
+#region "logica de calcular monto"
         /// <summary>
         /// calcula el monto segun la novedad de los participantes 
         /// </summary>
@@ -127,7 +127,6 @@ namespace look.Application.services.proyecto
                         {
                             tarifaConvertida=(double)tarifarioConvenio.TcTarifa;
                         }
-                        
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
@@ -186,47 +185,23 @@ namespace look.Application.services.proyecto
             //double tarifaconvenio = 0;
             int diasTotalesTrabajados = 0;
             double tarifaTotalTrabajado = 0;
-            TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta.Value.Date - periodo.FechaPeriodoDesde.Value.AddDays(1));
+            TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta.Value.Date.AddDays(1) - periodo.FechaPeriodoDesde.Value.Date);
 
-            int diasTotalesPeriodo = 30;
-
-            //int diasHabilesPeriodo = CalcularDiasHabilesSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
+            int diasTotalesPeriodo = diferencia.Days;
 
             if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
             {
-
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada);
                 double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
                 tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
             }
             else
             {
+                // se calcula en base si es mensual
                 diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada);
-                //Cuando es febrero se calcula si es bisiesto o no
-                if(periodo.FechaPeriodoDesde.Value.Month==2 && periodo.FechaPeriodoHasta.Value.Month == 2)
-                {
-                    var diasTotalesTrabajadosBisiesto = 29;
-                    if(periodo.FechaPeriodoDesde.Value.Year % 4 == 0)
-                    {
-                        diasTotalesPeriodo = diasTotalesTrabajadosBisiesto-1;
-                    }
-                    if (diasTotalesTrabajados > 28)
-                    {
-                        diasTotalesTrabajados= diasTotalesPeriodo;
-                    }
-                }
-                //cuando es 31 los dias totales son 30, regla de negocio
-                if (diasTotalesTrabajados > 30)
-                {
-                    diasTotalesTrabajados = 30;
-                }
-                var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);// se calcula en base si es mensual
+                var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
                 tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
             }
-             
-
-            //tarifaConvertida = await ConvertirMonedas(moneda.MonNombre, tarifarioConvenio.Moneda.MonNombre, tarifaTotalTrabajado);       
-            //return tarifaConvertida;
             return tarifaTotalTrabajado;
         }
         /// <summary>
