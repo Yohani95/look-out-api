@@ -112,11 +112,22 @@ namespace look.Application.services.proyecto
                         var tarifarioConvenio = await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
                         moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
-                        var novedadesFiltrada = novedades.Where(p => p.idProyecto == participante.PryId && 
-                        p.idPersona == participante.PerId && p.IdTipoNovedad 
-                        != Novedades.ConstantesTipoNovedad.cambioRol).ToList();
-                        //llamar a metodo para calcular dias habiles o mensuales
-                        tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, novedadesFiltrada);
+
+                        var novedadesFiltrada = novedades
+                            .Where(p => p.idProyecto == participante.PryId && 
+                                p.idPersona == participante.PerId && p.IdTipoNovedad 
+                                != Novedades.ConstantesTipoNovedad.cambioRol && p.fechaInicio>=periodo.FechaPeriodoDesde
+                                &&  p.fechaHasta<=periodo.FechaPeriodoHasta).ToList();
+                        if (novedadesFiltrada.Count > 0)
+                        {
+                            //llamar a metodo para calcular dias habiles o mensuales
+                            tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, novedadesFiltrada);
+                        }
+                        else
+                        {
+                            tarifaConvertida=(double)tarifarioConvenio.TcTarifa;
+                        }
+                        
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
@@ -271,7 +282,11 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
-            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha <= n.fechaHasta.Value.Date);
+            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha < n.fechaHasta.Value.Date);
+                                       //10/04>=01/04 && 10/04<10/04
+                                        //true         && false
+
+            //falso
         }
 
         /// <summary>
