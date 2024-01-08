@@ -118,15 +118,8 @@ namespace look.Application.services.proyecto
                                 p.idPersona == participante.PerId && p.IdTipoNovedad 
                                 != Novedades.ConstantesTipoNovedad.cambioRol && p.fechaInicio>=periodo.FechaPeriodoDesde
                                 &&  p.fechaHasta<=periodo.FechaPeriodoHasta).ToList();
-                        if (novedadesFiltrada.Count > 0)
-                        {
                             //llamar a metodo para calcular dias habiles o mensuales
                             tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, novedadesFiltrada);
-                        }
-                        else
-                        {
-                            tarifaConvertida=(double)tarifarioConvenio.TcTarifa;
-                        }
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
@@ -153,7 +146,7 @@ namespace look.Application.services.proyecto
         {
             int diasTotales = 0;
 
-            for (DateTime fecha = startDate; fecha < endDate; fecha = fecha.AddDays(1))
+            for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
                 if (!NovedadesEnRango(fecha, novedades))
                 {
@@ -191,7 +184,8 @@ namespace look.Application.services.proyecto
 
             if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
             {
-                diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada);
+                var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
+                diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados);
                 double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
                 tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
             }
@@ -211,15 +205,17 @@ namespace look.Application.services.proyecto
         /// <param name="endDate">hasta</param>
         /// <param name="diasFeriados"> lista de dias feriados</param>
         /// <returns>retorna un entero</returns>
-        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate,IEnumerable<Novedades> novedades)
+        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate,IEnumerable<Novedades> novedades,List<DateTime> feriados)
         {
             int diasHabiles = 0;
-
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
-                if (EsDiaHabil(fecha) && !NovedadesEnRango(fecha, novedades))
+                if(!EsDiaFeriado(fecha, feriados) && EsDiaHabil(fecha))
                 {
-                    diasHabiles++;
+                    if (!NovedadesEnRango(fecha, novedades))
+                    {
+                        diasHabiles++;
+                    }
                 }
             }
 
@@ -257,11 +253,9 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
-            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha < n.fechaHasta.Value.Date);
-                                       //10/04>=01/04 && 10/04<10/04
-                                        //true         && false
-
-            //falso
+            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha.Date <= n.fechaHasta.Value.Date);
+                                       //6/11>=06/11 && 06/04 <= 08/11
+                                              //  true && true
         }
 
         /// <summary>
