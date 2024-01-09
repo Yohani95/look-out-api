@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using System.Diagnostics.Metrics;
+using System.Security.Cryptography;
 
 namespace look.Application.services.proyecto
 {
@@ -118,9 +120,10 @@ namespace look.Application.services.proyecto
                                 p.idPersona == participante.PerId && p.IdTipoNovedad 
                                 != Novedades.ConstantesTipoNovedad.cambioRol && p.fechaInicio>=periodo.FechaPeriodoDesde
                                 &&  p.fechaHasta<=periodo.FechaPeriodoHasta).ToList();
-                            //llamar a metodo para calcular dias habiles o mensuales
-                            tarifaConvertida = await calculartarifas(existingProyecto, tarifarioConvenio, periodo, moneda, novedadesFiltrada);
-                        tarifaTotal = tarifaTotal + tarifaConvertida;
+                        //llamar a metodo para calcular dias habiles o mensuales
+                            tarifaConvertida = await calculartarifas(
+                                                    tarifarioConvenio, periodo, moneda, novedadesFiltrada,participante);
+                            tarifaTotal = tarifaTotal + tarifaConvertida;
                     }
                 }
                 var culture = System.Globalization.CultureInfo.InvariantCulture;
@@ -131,24 +134,24 @@ namespace look.Application.services.proyecto
             catch (Exception ex)
             {
                 _logger.Error("Error interno del servidor al calcular: " + ex.Message);
-                return tarifaTotal;
+                throw new Exception ("Error interno del servidor al calcular: " + ex.Message);
             }
         }
-
         /// <summary>
         /// calcula los dias totales del periodo
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="diasFeriados"></param>
+        /// <param name="novedades"></param>
+        /// <param name="participante"></param>
         /// <returns></returns>
-        static int CalcularDiasTotales(DateTime startDate, DateTime endDate, IEnumerable<Novedades> novedades)
+        static int CalcularDiasTotales(DateTime startDate, DateTime endDate, List<Novedades> novedades,ProyectoParticipante participante)
         {
             int diasTotales = 0;
 
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
-                if (!NovedadesEnRango(fecha, novedades))
+                if (!NovedadesEnRango(fecha, novedades) && CalcularFechaInicioParticipante(fecha, participante))
                 {
                     diasTotales++;
                 }
@@ -171,8 +174,9 @@ namespace look.Application.services.proyecto
             return diasHabiles;
         }
 
-        async Task<double> calculartarifas(Proyecto proyecto, TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, IEnumerable<Novedades> novedadesFiltrada)
+        async Task<double> calculartarifas(TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, List<Novedades> novedadesFiltrada,ProyectoParticipante participante)
         {
+
             double tarifaConvertida = 0;
             double tarifa = 0;
             //double tarifaconvenio = 0;
@@ -181,21 +185,21 @@ namespace look.Application.services.proyecto
             TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta.Value.Date.AddDays(1) - periodo.FechaPeriodoDesde.Value.Date);
 
             int diasTotalesPeriodo = diferencia.Days;
-
-            if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
-            {
-                var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
-                diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados);
-                double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
-                tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
-            }
-            else
-            {
-                // se calcula en base si es mensual
-                diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada);
-                var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
-                tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
-            }
+    
+                if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
+                {
+                    var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
+                    diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados);
+                    double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
+                    tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
+                }
+                else
+                {
+                    //se calcula en base si es mensual
+                    diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada,participante);
+                    var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
+                    tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                }
             return tarifaTotalTrabajado;
         }
         /// <summary>
@@ -257,7 +261,20 @@ namespace look.Application.services.proyecto
                                        //6/11>=06/11 && 06/04 <= 08/11
                                               //  true && true
         }
-
+        /// <summary>
+        /// calcula la fecha de inicio y de termino de un participante
+        /// </summary>
+        /// <param name="fecha">fecha del incio del periodo</param>
+        /// <param name="participante"> objeto participante</param>
+        /// <returns>retornar un boolean segun el caso</returns>
+        static bool CalcularFechaInicioParticipante(DateTime fecha, ProyectoParticipante participante)
+        {
+            if(participante.FechaTermino != null)
+            {
+                return fecha.Date >= participante.FechaAsignacion.Value.Date && fecha.Date<= participante.FechaTermino.Value.Date  ;
+            }
+                return fecha.Date >= participante.FechaAsignacion.Value.Date;
+        }
         /// <summary>
         /// obtiene los dias feriados de la api
         /// </summary>
