@@ -189,7 +189,7 @@ namespace look.Application.services.proyecto
                 if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
                 {
                     var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
-                    diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados);
+                    diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados,participante);
                     double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
                     tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
                 }
@@ -205,18 +205,20 @@ namespace look.Application.services.proyecto
         /// <summary>
         /// calcula los dias habiles segun corresponda del periodo
         /// </summary>
-        /// <param name="startDate">desde</param>
-        /// <param name="endDate">hasta</param>
-        /// <param name="diasFeriados"> lista de dias feriados</param>
-        /// <returns>retorna un entero</returns>
-        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate,IEnumerable<Novedades> novedades,List<DateTime> feriados)
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="novedades"></param>
+        /// <param name="feriados"></param>
+        /// <param name="participante"></param>
+        /// <returns></returns>
+        static int CalcularDiasHabiles(DateTime startDate, DateTime endDate,IEnumerable<Novedades> novedades,List<DateTime> feriados,ProyectoParticipante participante)
         {
             int diasHabiles = 0;
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
                 if(!EsDiaFeriado(fecha, feriados) && EsDiaHabil(fecha))
                 {
-                    if (!NovedadesEnRango(fecha, novedades))
+                    if (!NovedadesEnRango(fecha, novedades)&&CalcularFechaInicioParticipante(fecha,participante))
                     {
                         diasHabiles++;
                     }
