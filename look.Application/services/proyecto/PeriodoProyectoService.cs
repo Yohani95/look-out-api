@@ -1,5 +1,6 @@
 using look.Application.interfaces.proyecto;
 using look.Application.interfaces.world;
+using look.domain.dto.admin;
 using look.domain.dto.proyecto;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
@@ -10,6 +11,7 @@ using look.domain.interfaces.proyecto;
 using look.domain.interfaces.unitOfWork;
 using look.domain.interfaces.world;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SharePoint.News.DataModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -30,8 +32,14 @@ namespace look.Application.services.proyecto
         private readonly IMonedaRepository _monedaRepository;
         private readonly IMonedaService _monedaService;
         private readonly INovedadesRepository _novedadesRepository;
+        private PeriodoProfesionales periodoProfesionales;
+        private readonly IPeriodoProfesionalesRepository _periodoProfesionalesRepository;
 
-        public PeriodoProyectoService(IPeriodoProyectoRepository periodoProyectoRepository, IUnitOfWork unitOfWork, ITarifarioConvenioRepository tarifarioConvenioService, IProyectoParticipanteRepository proyectoParticipanteService, IProyectoRepository proyectoRepository, IMonedaRepository monedaRepository, IMonedaService monedaService, INovedadesRepository novedadesRepository) : base(periodoProyectoRepository)
+        public PeriodoProyectoService(IPeriodoProyectoRepository periodoProyectoRepository, IUnitOfWork unitOfWork, 
+            ITarifarioConvenioRepository tarifarioConvenioService, 
+            IProyectoParticipanteRepository proyectoParticipanteService, 
+            IProyectoRepository proyectoRepository, IMonedaRepository monedaRepository, 
+            IMonedaService monedaService, INovedadesRepository novedadesRepository,IPeriodoProfesionalesRepository periodoProfesionalesRepository) : base(periodoProyectoRepository)
         {
             _periodoProyectoRepository = periodoProyectoRepository;
             _unitOfWork = unitOfWork;
@@ -41,6 +49,7 @@ namespace look.Application.services.proyecto
             _monedaRepository = monedaRepository;
             _monedaService = monedaService;
             _novedadesRepository = novedadesRepository;
+            _periodoProfesionalesRepository = periodoProfesionalesRepository;
         }
 
         public async Task<List<PeriodoProyecto>> ListByProyecto(int id)
@@ -50,23 +59,33 @@ namespace look.Application.services.proyecto
         }
         public async Task<ServiceResult> CreateAsync(PeriodoProyecto periodo)
         {
+            List<PeriodoProfesionales> periodoProfesionales = new List<PeriodoProfesionales>();
             try
             {
+                await _unitOfWork.BeginTransactionAsync();
                 var periodoExisting = await _periodoProyectoRepository.GetByPeriodoRange(periodo);
                 if (periodoExisting != null)
                 {
                     _logger.Information("Actualizando periodo");
+                    periodo.id = periodoExisting.id;
                     periodoExisting.NumeroProfesionales = periodo.NumeroProfesionales;
                     periodoExisting.estado = periodo.estado;
-                    periodoExisting.Monto = await CalcularMontoPeriodo(periodo);
+                    periodoExisting.Monto = await CalcularMontoPeriodo(periodo,periodoProfesionales);
+                    periodoExisting.DiasTotal = periodo.DiasTotal;
                     await _periodoProyectoRepository.UpdateAsync(periodoExisting);
                 }
                 else
                 {
                     _logger.Information("Creando periodo");
-                    periodo.Monto = await CalcularMontoPeriodo(periodo);
-                    await _periodoProyectoRepository.AddAsync(periodo);
+                    periodo.Monto = await CalcularMontoPeriodo(periodo, periodoProfesionales);
+                    var periodoCreated= await _periodoProyectoRepository.AddAsync(periodo);
+                    foreach (var item in periodoProfesionales)
+                    {
+                        item.IdPeriodo = periodoCreated.id; ;
+                        await _periodoProfesionalesRepository.AddAsync(item);
+                    }
                 }
+                await _unitOfWork.CommitAsync();
                 return new ServiceResult
                 {
                     IsSuccess = true,
@@ -77,6 +96,7 @@ namespace look.Application.services.proyecto
             catch (Exception ex)
             {
                 _logger.Error("Error interno del servidor: " + ex.Message);
+                await _unitOfWork.RollbackAsync();
                 return new ServiceResult
                 {
                     IsSuccess = false,
@@ -96,11 +116,12 @@ namespace look.Application.services.proyecto
         /// </summary>
         /// <param name="periodo">espera un periodo</param>
         /// <returns>retorna el monto total del periodo a facturar</returns>
-        private async Task<double> CalcularMontoPeriodo(PeriodoProyecto periodo)
+        private async Task<double> CalcularMontoPeriodo(PeriodoProyecto periodo, List<PeriodoProfesionales> listPeriodoProfesionales)
         {
             double tarifaConvertida = 0;
             double tarifaTotal = 0;
             Moneda moneda = new Moneda();
+            var profesionales = await _periodoProfesionalesRepository.GetAllAsync();
             try
             {
                 _logger.Information("Calculando monto de periodo");
@@ -111,6 +132,9 @@ namespace look.Application.services.proyecto
                     var proyectoParticipante = await _proyectoParticipanteService.GetParticipanteByIdProAndDate(periodo);
                     foreach (var participante in proyectoParticipante)
                     {
+                        periodoProfesionales = new PeriodoProfesionales();
+                        periodoProfesionales.IdParticipante = participante.PpaId;
+                        
                         var tarifarioConvenio = await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
                         moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
                         var novedades = await _novedadesRepository.GetAllAsync();
@@ -124,6 +148,32 @@ namespace look.Application.services.proyecto
                             tarifaConvertida = await calculartarifas(
                                                     tarifarioConvenio, periodo, moneda, novedadesFiltrada,participante);
                             tarifaTotal = tarifaTotal + tarifaConvertida;
+                        if (periodo.id != null && periodo.id != 0)
+                        {
+                            periodoProfesionales.IdPeriodo = periodo.id;
+                            var periodoProfesional = profesionales.Where(p => p.IdParticipante == participante.PpaId && p.IdPeriodo == periodo.id).FirstOrDefault();
+                            if (periodoProfesional != null)
+                            {
+                                periodoProfesional.IdPeriodo = periodoProfesional.IdPeriodo;
+                                periodoProfesional.DiasTrabajados = periodoProfesionales.DiasTrabajados;
+                                periodoProfesional.DiasAusentes = periodoProfesionales.DiasAusentes;
+                                periodoProfesional.DiasVacaciones = periodoProfesionales.DiasVacaciones;
+                                periodoProfesional.DiasLicencia = periodoProfesionales.DiasLicencia;
+                                periodoProfesional.DiasFeriados = periodoProfesionales.DiasFeriados;
+                                periodoProfesional.IdParticipante = periodoProfesionales.IdParticipante;
+                                periodoProfesional.IdPeriodo = periodoProfesionales.IdPeriodo;
+                                periodoProfesional.MontoDiario = periodoProfesionales.MontoDiario;
+                                periodoProfesional.MontoTotalPagado = periodoProfesionales.MontoTotalPagado;
+                                await _periodoProfesionalesRepository.UpdateAsync(periodoProfesional);
+                            }
+                            else
+                            {
+                                await _periodoProfesionalesRepository.AddAsync(periodoProfesionales);
+                            }
+                        }
+                        
+                        listPeriodoProfesionales.Add(periodoProfesionales);
+
                     }
                 }
                 var culture = System.Globalization.CultureInfo.InvariantCulture;
@@ -182,6 +232,8 @@ namespace look.Application.services.proyecto
             //double tarifaconvenio = 0;
             int diasTotalesTrabajados = 0;
             double tarifaTotalTrabajado = 0;
+            double tarifaDiario = 0;
+            
             TimeSpan diferencia = (TimeSpan)(periodo.FechaPeriodoHasta.Value.Date.AddDays(1) - periodo.FechaPeriodoDesde.Value.Date);
 
             int diasTotalesPeriodo = diferencia.Days;
@@ -190,16 +242,24 @@ namespace look.Application.services.proyecto
                 {
                     var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
                     diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados,participante);
-                    double Horadia = (double)(tarifarioConvenio.TcTarifa * 9);
-                    tarifaTotalTrabajado = Horadia * diasTotalesTrabajados;
+                    tarifaDiario = (double)(tarifarioConvenio.TcTarifa * 9);
+                    tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
                 }
                 else
                 {
                     //se calcula en base si es mensual
                     diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada,participante);
-                    var tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
+                    tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
                     tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
-                }
+            }
+
+            periodoProfesionales.DiasTrabajados = diasTotalesTrabajados;
+            periodoProfesionales.DiasAusentes = diasTotalesPeriodo - diasTotalesTrabajados;
+            var culture = System.Globalization.CultureInfo.InvariantCulture;
+            string numeroFormateado = tarifaDiario.ToString("0.##", culture);
+            periodoProfesionales.MontoDiario = Double.Parse(numeroFormateado, culture);
+            periodoProfesionales.MontoTotalPagado = Double.Parse(tarifaTotalTrabajado.ToString("0.##",culture), culture);
+            periodo.DiasTotal = diasTotalesPeriodo;
             return tarifaTotalTrabajado;
         }
         /// <summary>
