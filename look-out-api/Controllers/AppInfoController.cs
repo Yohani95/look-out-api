@@ -14,7 +14,7 @@ namespace look_out_api.Controllers
         {
             _configuration = configuration;
         }
-        [HttpGet("status")]
+        [HttpGet]
         public IActionResult GetAppInfo()
         {
             var lastCommitInfo = GetLastCommitInfo(); // Obtener información del último commit
@@ -54,7 +54,7 @@ namespace look_out_api.Controllers
                 var format = "ddd MMM d HH:mm:ss yyyy K"; // Formato de fecha personalizado para analizar la fecha de git
                 if (DateTime.TryParseExact(commitInfoParts[1], format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime lastCommitDate))
                 {
-                    var commitMessage = $"{commitInfoParts[0]}: {commitInfoParts[2]}";
+                    var commitMessage = $"{commitInfoParts[0]}: {commitInfoParts[2].Replace("\n", " ")}"; // Reemplaza los caracteres de nueva línea con espacios
                     return (lastCommitDate, commitMessage);
                 }
             }
