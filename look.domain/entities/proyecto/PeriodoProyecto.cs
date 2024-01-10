@@ -11,6 +11,7 @@ namespace look.domain.entities.proyecto
         public DateTime? FechaPeriodoHasta { get; set; }
         public int? estado { get; set; }
         public double? Monto { get; set; }
+        public int? DiasTotal { get; set; }
         public int? NumeroProfesionales { get; set; }
         public virtual Proyecto? Proyecto { get; set; }
     }

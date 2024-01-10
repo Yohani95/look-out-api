@@ -56,6 +56,7 @@ namespace look.Infrastructure.data
         
         public DbSet<PeriodoProyecto> PeriodoProyectos { get; set; }
         
+        public DbSet<PeriodoProfesionales> PeriodoProfesionales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -997,6 +998,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.NumeroProfesionales)
                   .HasColumnType("int(11)")
                   .HasColumnName("numero_profesionales");
+                entity.Property(e => e.DiasTotal)
+                  .HasColumnType("int(11)")
+                  .HasColumnName("dias_total");
                 entity.Property(e => e.Monto)
                   .HasColumnType("DOUBLE")
                   .HasColumnName("monto");
@@ -1226,6 +1230,50 @@ namespace look.Infrastructure.data
                     .HasColumnName("descripcion");
             });
 
+            modelBuilder.Entity<PeriodoProfesionales>(entity => { 
+                
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
+                entity.ToTable("periodos_profesionales");
+                entity.HasIndex(e => e.IdPeriodo, "FK_periodo_profesionales_periodo");
+                entity.HasIndex(e => e.IdParticipante, "FK_periodo_profesionales_proyecto_partipante");
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+                entity.Property(e => e.IdPeriodo)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id_periodo");
+                entity.Property(e => e.IdParticipante)
+                .HasColumnType("int(11)")
+                    .HasColumnName("id_participante");
+                entity.Property(e => e.DiasAusentes)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dias_ausentes");
+                entity.Property(e => e.DiasTrabajados)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dias_trabajados");
+                entity.Property(e=>e.DiasFeriados)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dias_feriados");
+                entity.Property(e => e.DiasVacaciones)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dias_vacaciones");
+                entity.Property(e => e.DiasLicencia)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("dias_licencia");
+                entity.Property(e=>e.MontoDiario)
+                    .HasColumnType("DOUBLE")
+                    .HasColumnName("monto_diario");
+                entity.Property(e => e.MontoTotalPagado)
+                    .HasColumnType("DOUBLE")
+                    .HasColumnName("monto_total_pagado");
+                entity.HasOne(d => d.Periodo).WithMany()
+                    .HasForeignKey(d => d.IdPeriodo)
+                    .HasConstraintName("FK_periodo_profesionales_periodo");
+
+                entity.HasOne(d => d.Participante).WithMany()
+                    .HasForeignKey(d => d.IdParticipante)
+                    .HasConstraintName("FK_periodo_profesionales_proyecto_partipante");
+            });
 
         }
 
