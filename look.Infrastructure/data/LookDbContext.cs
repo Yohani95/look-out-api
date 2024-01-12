@@ -60,6 +60,8 @@ namespace look.Infrastructure.data
         public DbSet<PeriodoProfesionales> PeriodoProfesionales { get; set; }
 
         public DbSet<TipoFacturacion> TipoFacturacions { get; set; }
+
+        public DbSet<FacturaPeriodo> FacturaPeriodo { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -1296,6 +1298,56 @@ namespace look.Infrastructure.data
                     .HasColumnName("descripcion");  
             });
 
+            //crear modelo de datos para factura periodo
+            modelBuilder.Entity<FacturaPeriodo>(entity => { 
+                
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
+                entity.ToTable("factura_periodo");
+                entity.HasIndex(e => e.IdPeriodo, "FK_factura_periodo_periodo");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");
+                entity.Property(e => e.Rut)
+                   .HasColumnType("varchar(50)")
+                   .HasColumnName("rut");
+                entity.Property(e => e.RazonSocial)
+                    .HasColumnType("varchar(120)")
+                    .HasColumnName("razon_social");
+                entity.Property(e => e.HesCodigo)
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("hes_codigo");
+                entity.Property(e => e.OcCodigo)
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("oc_codigo");
+                  entity.Property(e => e.FechaHes)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_hes");
+                entity.Property(e => e.FechaOc)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_oc");
+                entity.Property(e => e.OrdenPeriodo)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("orden_periodo");
+                entity.Property(e=>e.Observaciones)
+                    .HasColumnType("varchar(200)")
+                    .HasColumnName("observaciones");
+                entity.Property(e => e.IdPeriodo)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id_periodo");
+                entity.Property(e=>e.Monto)
+                    .HasColumnType("DOUBLE")
+                    .HasColumnName("monto");
+                entity.Property(e => e.FechaFactura)
+                    .HasColumnType("datetime")
+                    .HasColumnName("fecha_factura");
+
+                entity.HasOne(d => d.Periodo).WithMany()
+                    .HasForeignKey(d => d.IdPeriodo)
+                    .HasConstraintName("FK_factura_periodo_periodos");
+
+                });
+            
         }
 
     }
