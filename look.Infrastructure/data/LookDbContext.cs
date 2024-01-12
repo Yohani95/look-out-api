@@ -1,5 +1,6 @@
 using look.domain.entities.admin;
 using look.domain.entities.cuentas;
+using look.domain.entities.factura;
 using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,7 @@ namespace look.Infrastructure.data
         
         public DbSet<PeriodoProfesionales> PeriodoProfesionales { get; set; }
 
+        public DbSet<TipoFacturacion> TipoFacturacions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -1100,6 +1102,11 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.FacturacionDiaHabil)
                   .HasColumnType("tinyint(2)")
                   .HasColumnName("facturacion_dia_habil");
+
+                entity.Property(e=> e.idTipoFacturacion)
+                  .HasColumnType("int(11)")
+                  .HasColumnName("id_tipo_factura");
+
                 entity.HasOne(d => d.Cliente).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
                     .HasConstraintName("FK_Proyecto_Cliente");
@@ -1273,6 +1280,20 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Participante).WithMany()
                     .HasForeignKey(d => d.IdParticipante)
                     .HasConstraintName("FK_periodo_profesionales_proyecto_partipante");
+            });
+
+            modelBuilder.Entity<TipoFacturacion>(entity => { 
+
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
+                entity.ToTable("tipo_facturacion");
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id");   
+                entity.Property(e => e.Nombre)
+                    .HasColumnType("varchar(50)").HasColumnName("nombre");
+                entity.Property(e => e.Descripcion)
+                    .HasColumnType("varchar(50)")
+                    .HasColumnName("descripcion");  
             });
 
         }

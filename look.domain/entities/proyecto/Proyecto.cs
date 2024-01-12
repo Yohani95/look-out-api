@@ -30,6 +30,8 @@ namespace look.domain.entities.proyecto
         public sbyte? FacturacionDiaHabil { get; set; }
         public int? FechaCorte  { get; set; }
 
+        public int? idTipoFacturacion { get; set; }
+
         public virtual Cliente? Cliente { get; set; }
 
         public virtual EstadoProyecto? EsProy { get; set; }
