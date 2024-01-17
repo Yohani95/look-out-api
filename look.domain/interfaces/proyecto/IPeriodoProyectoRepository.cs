@@ -12,6 +12,12 @@ namespace look.domain.interfaces.proyecto
         /// <param name="periodo"></param>
         /// <returns>retorna un periodo</returns>
         Task<PeriodoProyecto> GetByPeriodoRange(PeriodoProyecto periodo);
+        /// <summary>
+        /// obtiene el periodo segun el id del periodo con todas sus relaciones
+        /// </summary>
+        /// <param name="id">id de periodo</param>
+        /// <returns>retorna un periodo con sus relaciones</returns>
+        Task<PeriodoProyecto> GetPeriodoProyectoById(int id);
     }
 }
 

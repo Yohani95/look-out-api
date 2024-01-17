@@ -54,7 +54,12 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-
+        [HttpGet("GetPeriodoProyecto/{id}")]
+        public async Task<ActionResult<PeriodoProyecto>> GetPeriodoProyecto(int id)
+        {
+            var periodo = await _periodoProyectoService.GetPeriodoProyectoById(id);
+            return Ok(periodo);
+        }
         protected override int GetEntityId(PeriodoProyecto entity)
         {
             // Implementa la lógica para obtener el ID de la entidad TipoDocumento
