@@ -21,6 +21,11 @@ namespace look.domain.entities.factura
         public int? IdPeriodo { get; set; }
         public double? Monto { get; set; }
         public DateTime? FechaFactura { get; set; }
+        public DateTime? FechaVencimiento { get; set; }
+        public int? IdEstado { get; set; }
+
         public virtual PeriodoProyecto? Periodo { get; set; }
+        public virtual EstadoFacturaPeriodo? Estado { get; set; }
+        public List<DocumentosFactura>? DocumentosFactura { get; set; }
     }
 }

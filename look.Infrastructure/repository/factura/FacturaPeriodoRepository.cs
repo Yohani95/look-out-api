@@ -17,12 +17,43 @@ namespace look.Infrastructure.repository.factura
         {
         }
 
+        public async Task<List<FacturaPeriodo>> GetAllByPreSolicitada()
+        {
+            return await _dbContext.FacturaPeriodo
+                .Include(p => p.Estado)
+                .Include(p=>p.Periodo).ThenInclude(p=>p.Proyecto)
+                //.Include(fp => fp.DocumentosFactura)
+                .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
+                .ToListAsync();
+        }
+
         public async Task<List<FacturaPeriodo>> GetAllByIdPeriodo(int id)
         {
             return await _dbContext.FacturaPeriodo
                 .Include(p=>p.Periodo)
+                 .Include(p => p.Estado)
                 .Where(p => p.IdPeriodo == id)
                 .ToListAsync();
+        }
+
+        public async Task<Boolean> ChangeEstado(int idPeriodo, int estado)
+        {
+            var facturas = await _dbContext.FacturaPeriodo
+                   .Where(p => p.IdPeriodo == idPeriodo)
+                   .ToListAsync();
+
+            if (facturas != null && facturas.Any())
+            {
+                foreach (var factura in facturas)
+                {
+                    factura.IdEstado = estado;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
     }
 }

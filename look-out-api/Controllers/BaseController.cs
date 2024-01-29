@@ -34,18 +34,35 @@ namespace look_out_api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(T entity)
         {
-            await _service.AddAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = GetEntityId(entity) }, entity);
+            try
+            {
+                Log.Information("[Create] Solicitud creacion de entidad: " + entity.ToString());
+                var result = await _service.AddAsync(entity);
+                return CreatedAtAction(nameof(GetById), new { id = GetEntityId(entity) }, entity);
+            }catch(Exception e)
+            {
+                Log.Error("[Create] Error al crear entidad: " + entity.ToString() + " Error: " + e.Message);
+                return BadRequest();
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, T entity)
         {
-            if (id != GetEntityId(entity))
+            try
             {
-                return BadRequest();
+                Log.Information("[Update] Solicitud actualizacion de entidad: " + entity.ToString());
+                if (id != GetEntityId(entity))
+                {
+                    return BadRequest();
+                }
+                await _service.UpdateAsync(entity);
             }
-            await _service.UpdateAsync(entity);
+            catch (Exception e)
+            {
+                Log.Error("[Update] Error al actualizar entidad: " + entity.ToString() + " Error: " + e.Message);
+                
+            }
             return NoContent();
         }
 

@@ -15,5 +15,12 @@ namespace look.Application.interfaces.factura
         /// <param name="id">id periodo</param>
         /// <returns>retorna una lista</returns>
         Task<List<FacturaPeriodo>> GetAllEntitiesByIdPeriod(int id);
+        /// <summary>
+        /// trae la lista completa segun el estado que no sea pendiente
+        /// </summary>
+        /// <param name="id">id del estado</param>
+        /// <returns>retorna una lista</returns>
+        Task<List<FacturaPeriodo>> GetAllByPreSolicitada();
+        Task<Boolean> ChangeEstado(int idPeriodo, int estado);
     }
 }
