@@ -48,11 +48,11 @@ namespace look.Application.services.factura
             }
         }
 
-        public Task<List<FacturaPeriodo>> GetAllByPreSolicitada()
+        public async Task<List<FacturaPeriodo>> GetAllByPreSolicitada()
         {
             try
             {
-                return _repository.GetAllByPreSolicitada();
+                return await _repository.GetAllByPreSolicitada();
             }
             catch (Exception e)
             {
@@ -61,15 +61,31 @@ namespace look.Application.services.factura
             }
         }
 
-        public Task<List<FacturaPeriodo>> GetAllEntitiesByIdPeriod(int id)
+        public async Task<List<FacturaPeriodo>> GetAllEntitiesByIdPeriod(int id)
         {
             try
             {
-                return _repository.GetAllByIdPeriodo(id);
+                return await _repository.GetAllByIdPeriodo(id);
             }
             catch (Exception e) { 
                 _logger.Error(Message.ErrorServidor+" :"+e.Message);
                 return null ;
+            }
+        }
+
+        public async Task<FacturaPeriodo> UpdateFactura(FacturaPeriodo entity, int idFacturaPeriodo)
+        {
+            try
+            {
+                var factura=await _repository.GetByIdAsync(idFacturaPeriodo);
+                factura.IdEstado=entity.IdEstado;
+                await _repository.UpdateAsync(factura);
+                return factura;
+            }
+            catch (Exception)
+            {
+                _logger.Error("[UpdateFactura]",Message.ErrorServidor,"idFacturaPeriodo: "+idFacturaPeriodo );
+                return null;
             }
         }
     }

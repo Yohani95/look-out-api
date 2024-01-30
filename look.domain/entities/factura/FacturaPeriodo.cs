@@ -26,6 +26,6 @@ namespace look.domain.entities.factura
 
         public virtual PeriodoProyecto? Periodo { get; set; }
         public virtual EstadoFacturaPeriodo? Estado { get; set; }
-        public List<DocumentosFactura>? DocumentosFactura { get; set; }
+        public virtual List<DocumentosFactura>? DocumentosFactura { get; set; }
     }
 }

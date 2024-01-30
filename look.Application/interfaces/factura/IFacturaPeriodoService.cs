@@ -22,5 +22,7 @@ namespace look.Application.interfaces.factura
         /// <returns>retorna una lista</returns>
         Task<List<FacturaPeriodo>> GetAllByPreSolicitada();
         Task<Boolean> ChangeEstado(int idPeriodo, int estado);
+        Task<FacturaPeriodo> UpdateFactura(FacturaPeriodo entity, int idFacturaPeriodo);
+
     }
 }

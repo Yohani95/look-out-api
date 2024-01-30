@@ -23,6 +23,7 @@ namespace look_out_api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            Log.Information("[GetById] Solicitud obtener entidad con id: " + id);
             var entity = await _service.GetByIdAsync(id);
             if (entity == null)
             {
@@ -57,6 +58,7 @@ namespace look_out_api.Controllers
                     return BadRequest();
                 }
                 await _service.UpdateAsync(entity);
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -69,6 +71,7 @@ namespace look_out_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            Log.Information("[Delete] Solicitud eliminar entidad con id: " + id);
             var entity = await _service.GetByIdAsync(id);
             if (entity == null)
             {
