@@ -28,6 +28,14 @@ namespace look.Infrastructure.repository.proyecto
                 .Include(p=>p.Proyecto)
                 .ToListAsync();
         }
+
+        public async Task<PeriodoProyecto> GetPeriodoProyectoById(int id)
+        {
+            return await _dbContext.PeriodoProyectos
+                .Include(p=>p.Proyecto)
+                .ThenInclude(p=>p.Cliente)
+                .FirstAsync(p=>p.id==id);
+        }
     }
 }
 

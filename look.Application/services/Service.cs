@@ -34,7 +34,7 @@ namespace look.Application.services
 
         public virtual async Task UpdateAsync(T entity)
         {
-            await _repository.UpdateAsync(entity);
+                await _repository.UpdateAsync(entity);
         }
 
         public virtual async Task DeleteAsync(T entity)
