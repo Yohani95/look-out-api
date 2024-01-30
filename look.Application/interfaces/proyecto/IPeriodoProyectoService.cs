@@ -15,6 +15,7 @@ namespace look.Application.interfaces.proyecto
         /// <param name="periodo">el periodo a crear</param>
         /// <returns>retorna un resultado de servicio</returns>
         Task<ServiceResult> CreateAsync(PeriodoProyecto periodo);
+        Task<PeriodoProyecto> GetPeriodoProyectoById(int id);
     }
 }
 

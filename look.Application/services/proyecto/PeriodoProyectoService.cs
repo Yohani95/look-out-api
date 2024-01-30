@@ -491,6 +491,10 @@ namespace look.Application.services.proyecto
             }
         }
         #endregion
+        public async Task<PeriodoProyecto> GetPeriodoProyectoById(int id)
+        {
+            return await _periodoProyectoRepository.GetPeriodoProyectoById(id);
+        }
     }
 }
 
