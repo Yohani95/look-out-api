@@ -27,6 +27,7 @@ namespace look.Infrastructure.repository.admin
             return await _dbContext.Usuario
                 .Include(u => u.Persona)
                 .Include(u=>u.Perfil)
+                .Include(u=>u.Rol)
                 .FirstOrDefaultAsync(u => u.UsuNombre==user.UsuNombre  && u.UsuContraseña == user.UsuContraseña);
         }
     }
