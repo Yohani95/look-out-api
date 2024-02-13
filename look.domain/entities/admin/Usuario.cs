@@ -19,8 +19,10 @@ namespace look.domain.entities.admin
         public string? UsuContraseña { get; set; }
 
         public sbyte? UsuVigente { get; set; }
+        public int? RolId { get; set; }
         public virtual Perfil? Perfil { get; set; }
         public virtual Persona? Persona { get; set; }   
+        public virtual Rol? Rol { get; set; }
 
     }
 }

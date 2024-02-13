@@ -75,7 +75,7 @@ namespace look.Infrastructure.data
                 entity.ToTable("usuario");
 
                 entity.HasIndex(e => e.PerId, "FK_Usuario_Persona");
-
+                entity.HasIndex(e => e.RolId, "FK_Usuario_Rol");
                 entity.Property(e => e.UsuId)
                     .HasColumnType("int(11)")
                     .HasColumnName("usu_id");
@@ -85,6 +85,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PrfId)
                     .HasColumnType("int(11)")
                     .HasColumnName("prf_id");
+                entity.Property(e => e.RolId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("rol_id");
                 entity.Property(e => e.UsuContraseña)
                     .HasMaxLength(50)
                     .HasColumnName("usu_contraseña");
@@ -102,6 +105,9 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Perfil).WithMany()
                     .HasForeignKey(d => d.PerId)
                     .HasConstraintName("FK_Usuario_Persona");
+                entity.HasOne(d => d.Rol).WithMany()
+                    .HasForeignKey(d => d.PerId)
+                    .HasConstraintName("FK_Usuario_Rol");
             });
             modelBuilder.Entity<Pais>(entity =>
             {
