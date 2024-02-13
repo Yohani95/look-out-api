@@ -67,6 +67,7 @@ namespace look.Application.services.proyecto
                 if (periodoExisting != null)
                 {
                     _logger.Information("Actualizando periodo");
+                    //solucion 
                     periodo.id = periodoExisting.id;
                     periodoExisting.NumeroProfesionales = periodo.NumeroProfesionales;
                     periodoExisting.estado = periodo.estado;
@@ -244,10 +245,12 @@ namespace look.Application.services.proyecto
 
             if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
             {
+
                 var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados, participante);
-                tarifaDiario = (double)(tarifarioConvenio.TcTarifa * 9);
-                tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                diasTotalesPeriodo = CalcularDiasHabilSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
+                tarifaDiario = (double)(tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
+                tarifaTotalTrabajado = tarifaDiario * 9;
             }
             else
             {
@@ -287,6 +290,19 @@ namespace look.Application.services.proyecto
                         diasHabiles++;
                     }
                 }
+            }
+
+            return diasHabiles;
+        }
+        static int CalcularDiasHabilSinNovedad(DateTime startDate, DateTime endDate,  List<DateTime> feriados)
+        {
+            int diasHabiles = 0;
+            for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
+            {
+                if (!EsDiaFeriado(fecha, feriados) && EsDiaHabil(fecha))
+                {
+                        diasHabiles++;
+                 }
             }
 
             return diasHabiles;

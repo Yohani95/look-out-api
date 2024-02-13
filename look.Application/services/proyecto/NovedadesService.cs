@@ -5,6 +5,7 @@ using look.domain.entities.proyecto;
 using look.domain.interfaces.admin;
 using look.domain.interfaces.proyecto;
 using look.domain.interfaces.unitOfWork;
+using Microsoft.SharePoint.News.DataModel;
 using Serilog;
 
 namespace look.Application.services.proyecto
@@ -54,7 +55,7 @@ namespace look.Application.services.proyecto
                 novedades.IdPerfil =  novedad.IdPerfil;
                 novedades.IdTipoNovedad =  novedad.IdTipoNovedad;
                 await _novedadesRepository.UpdateAsync(novedades);
-                #region "Cambio de rol"
+#region "Cambio de rol y termino de servicio"
                 if (novedad.IdPerfil != null && novedad.IdPerfil > 0)
                 {
                     var personas = await _proyectoParticipanteRepository.GetAllAsync();
@@ -67,7 +68,18 @@ namespace look.Application.services.proyecto
                         await _proyectoParticipanteRepository.UpdateAsync(participante);
                     }
                 }
-                #endregion
+                else if (novedad.IdTipoNovedad == Novedades.ConstantesTipoNovedad.TerminoServicio)
+                {
+                    novedad.fechaHasta = novedad.fechaInicio;
+                    var personas = await _proyectoParticipanteRepository.GetAllAsync();
+                    var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
+                    if (participante != null)
+                    {
+                        participante.FechaTermino = novedad.fechaHasta;
+                        await _proyectoParticipanteRepository.UpdateAsync(participante);
+                    }
+                }
+#endregion
                 _logger.Information("novedades y proyecto participante actualizados correctamente");
                 await _unitOfWork.CommitAsync();
                 return new ServiceResult
@@ -104,7 +116,7 @@ namespace look.Application.services.proyecto
                     };
                 }
                 await _novedadesRepository.AddAsync(novedad);
- #region "Cambio de rol"
+ #region "Cambio de rol o termino de servicio"
                 if (novedad.IdPerfil!=null && novedad.IdPerfil>0){
                     var personas = await _proyectoParticipanteRepository.GetAllAsync();
                     var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
@@ -112,6 +124,16 @@ namespace look.Application.services.proyecto
                     if (participante != null && novedad.IdPerfil != participante.PrfId)
                     {
                         participante.PrfId = (int)novedad.IdPerfil;
+                        await _proyectoParticipanteRepository.UpdateAsync(participante);
+                    }
+                }
+                else if(novedad.IdTipoNovedad==Novedades.ConstantesTipoNovedad.TerminoServicio){
+                    novedad.fechaHasta = novedad.fechaInicio;
+                    var personas = await _proyectoParticipanteRepository.GetAllAsync();
+                    var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
+                    if (participante != null)
+                    {
+                        participante.FechaTermino = novedad.fechaHasta;
                         await _proyectoParticipanteRepository.UpdateAsync(participante);
                     }
                 }
