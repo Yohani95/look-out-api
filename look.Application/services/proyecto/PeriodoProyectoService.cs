@@ -151,7 +151,7 @@ namespace look.Application.services.proyecto
 
                         //llamar a metodo para calcular dias habiles o mensuales
                         tarifaConvertida = await calculartarifas(
-                                                    tarifarioConvenio, periodo, moneda, novedadesFiltrada, participante);
+                                                    tarifarioConvenio, periodo, moneda, novedadesFiltrada, participante,existingProyecto);
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                         if (periodo.id != null && periodo.id != 0)
                         {
@@ -229,7 +229,7 @@ namespace look.Application.services.proyecto
             return diasHabiles;
         }
 
-        async Task<double> calculartarifas(TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, List<Novedades> novedadesFiltrada, ProyectoParticipante participante)
+        async Task<double> calculartarifas(TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, List<Novedades> novedadesFiltrada, ProyectoParticipante participante,Proyecto existingProyecto)
         {
 
             double tarifaConvertida = 0;
@@ -243,7 +243,7 @@ namespace look.Application.services.proyecto
 
             int diasTotalesPeriodo = diferencia.Days;
 
-            if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
+            if (existingProyecto.FacturacionDiaHabil!=0)
             {
 
                 var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
@@ -254,7 +254,7 @@ namespace look.Application.services.proyecto
             }
             else
             {
-                //se calcula en base si es mensual
+                //se calcula en base si es mensual  
                 diasTotalesTrabajados = CalcularDiasTotales((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, participante);
                 tarifaDiario = ((Double)tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
                 tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
