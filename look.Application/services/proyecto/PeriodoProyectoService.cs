@@ -250,7 +250,7 @@ namespace look.Application.services.proyecto
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados, participante);
                 diasTotalesPeriodo = CalcularDiasHabilSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
                 tarifaDiario = (double)(tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
-                tarifaTotalTrabajado = tarifaDiario * 9;
+                tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
             }
             else
             {
