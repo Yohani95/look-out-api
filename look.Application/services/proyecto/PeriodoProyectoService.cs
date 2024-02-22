@@ -339,10 +339,26 @@ namespace look.Application.services.proyecto
         /// <returns>retorna un true si encuentra una novedad</returns>
         static bool NovedadesEnRango(DateTime fecha, IEnumerable<Novedades> novedades)
         {
-            return novedades.Any(n => fecha.Date >= n.fechaInicio.Value.Date && fecha.Date <= n.fechaHasta.Value.Date);
-            //6/11>=06/11 && 06/04 <= 08/11
-            //  true && true
+            var ultimasTerminosServicio = new Dictionary<int, Novedades>();
+
+            foreach (var novedad in novedades)
+            {
+                if (novedad.IdTipoNovedad == Novedades.ConstantesTipoNovedad.TerminoServicio)
+                {
+                    // Si ya hay una novedad de TerminoServicio con el mismo ID, la reemplazamos
+                    ultimasTerminosServicio[novedad.id] = novedad;
+                }
+                else if (!ultimasTerminosServicio.ContainsKey(novedad.id))
+                {
+                    // Si no es de tipo TerminoServicio o ya tenemos una de TerminoServicio para este ID, la agregamos
+                    ultimasTerminosServicio.Add(novedad.id, novedad);
+                }
+            }
+
+            return ultimasTerminosServicio.Values.Any(n => fecha.Date >= n.fechaInicio.Value.Date
+                                                        && fecha.Date <= n.fechaHasta.Value.Date);
         }
+
         /// <summary>
         /// calcula la fecha de inicio y de termino de un participante
         /// </summary>

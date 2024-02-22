@@ -1,4 +1,5 @@
 ﻿using look.domain.entities.cuentas;
+using look.domain.entities.factura;
 using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
@@ -28,18 +29,21 @@ namespace look.domain.entities.proyecto
         public int? kamId { get; set; }
         public int? PaisId { get; set; }
         public sbyte? FacturacionDiaHabil { get; set; }
-        public int? FechaCorte  { get; set; }
+        public int? FechaCorte { get; set; }
 
         public int? idTipoFacturacion { get; set; }
+
+        public int? IdDiaPago { get; set; }
 
         public virtual Cliente? Cliente { get; set; }
 
         public virtual EstadoProyecto? EsProy { get; set; }
 
         public virtual Moneda? Mon { get; set; }
-        
+
         public virtual TipoServicio? TipoServicio { get; set; }
-        
+
         public virtual Pais? Pais { get; set; }
+
     }
 }

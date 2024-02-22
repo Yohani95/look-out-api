@@ -65,6 +65,7 @@ namespace look.Infrastructure.data
         public DbSet<EstadoFacturaPeriodo> EstadoFacturaPeriodo { get; set; }
 
         public DbSet<DocumentosFactura> DocumentosFactura { get; set; }
+        public DbSet<DiaPagos> DiaPagos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -1060,6 +1061,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PrpId, "FK_Proyecto_Propuesta");
                 entity.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
                 entity.HasIndex(e => e.PaisId, "FK_Proyecto_Pais");
+                //entity.HasIndex(e => e.PaisId, "FK_Proyecto_Dia_Pago");
                 entity.Property(e => e.PryId)
 
                     .HasColumnType("int(11)")
@@ -1113,6 +1115,10 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.idTipoFacturacion)
                   .HasColumnType("int(11)")
                   .HasColumnName("id_tipo_factura");
+
+                entity.Property(e => e.IdDiaPago)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_dia_pago");
 
                 entity.HasOne(d => d.Cliente).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
@@ -1400,7 +1406,14 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_documentos_factura_factura_periodo");
                     
             });
-
+            modelBuilder.Entity<DiaPagos>(entity=>
+            {
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
+                entity.ToTable("dia_pago");
+                entity.Property(e => e.Dia)
+                   .HasColumnType("int(11)")
+                   .HasColumnName("dia");
+            });
         }
 
     }
