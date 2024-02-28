@@ -249,8 +249,16 @@ namespace look.Application.services.proyecto
                 var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados, participante);
                 diasTotalesPeriodo = CalcularDiasHabilSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
-                tarifaDiario = (double)(tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
-                tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora) {
+                    var horas =existingProyecto.PaisId==2? 8 : 9;
+                    tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
+                    tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                }
+                else
+                {
+                    tarifaDiario = (double)(tarifarioConvenio.TcTarifa / diasTotalesPeriodo);
+                    tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                }
             }
             else
             {
