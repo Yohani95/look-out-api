@@ -35,6 +35,7 @@ namespace look.domain.entities.proyecto
 
         public int? IdDiaPago { get; set; }
 
+        public int? idEmpresaPrestadora { get; set; }
         public virtual Cliente? Cliente { get; set; }
 
         public virtual EstadoProyecto? EsProy { get; set; }
@@ -44,6 +45,8 @@ namespace look.domain.entities.proyecto
         public virtual TipoServicio? TipoServicio { get; set; }
 
         public virtual Pais? Pais { get; set; }
+
+        public virtual EmpresaPrestadora? EmpresaPrestadora { get; set; }
 
     }
 }
