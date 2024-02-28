@@ -385,6 +385,9 @@ namespace look.Application.services.proyecto
                 existingProyecto.PryValor= proyectoDTO.Proyecto.PryValor;
                 existingProyecto.FacturacionDiaHabil= proyectoDTO.Proyecto.FacturacionDiaHabil;
                 existingProyecto.idTipoFacturacion= proyectoDTO.Proyecto.idTipoFacturacion;
+                existingProyecto.IdDiaPago= proyectoDTO.Proyecto.IdDiaPago;
+                existingProyecto.idEmpresaPrestadora = proyectoDTO.Proyecto.idEmpresaPrestadora;
+
 
                 var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();
                 foreach (var proyectoDocumento in proyectoDocumentos.Where(p => p.PryId == existingProyecto.PryId))

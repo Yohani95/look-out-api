@@ -66,6 +66,8 @@ namespace look.Infrastructure.data
 
         public DbSet<DocumentosFactura> DocumentosFactura { get; set; }
         public DbSet<DiaPagos> DiaPagos { get; set; }
+        public DbSet<EmpresaPrestadora> EmpresaPrestadoras{ get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -1062,8 +1064,9 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
                 entity.HasIndex(e => e.PaisId, "FK_Proyecto_Pais");
                 //entity.HasIndex(e => e.PaisId, "FK_Proyecto_Dia_Pago");
-                entity.Property(e => e.PryId)
 
+                entity.HasIndex(e => e.idEmpresaPrestadora, "FK_Proyecto_Empresa_Prestadora");
+                entity.Property(e => e.PryId)
                     .HasColumnType("int(11)")
                     .HasColumnName("pry_id");
                 entity.Property(e => e.PryNombre)
@@ -1120,6 +1123,10 @@ namespace look.Infrastructure.data
                 .HasColumnType("int(11)")
                 .HasColumnName("id_dia_pago");
 
+                entity.Property(e => e.idEmpresaPrestadora)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_empresa_prestadora");
+
                 entity.HasOne(d => d.Cliente).WithMany()
                     .HasForeignKey(d => d.PryIdCliente)
                     .HasConstraintName("FK_Proyecto_Cliente");
@@ -1135,6 +1142,9 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Pais).WithMany()
                     .HasForeignKey(d => d.PaisId)
                     .HasConstraintName("FK_Proyecto_Pais");
+                entity.HasOne(d => d.EmpresaPrestadora).WithMany()
+                   .HasForeignKey(d => d.idEmpresaPrestadora)
+                   .HasConstraintName("FK_Proyecto_Empresa_Prestadora");
             });
 
             modelBuilder.Entity<TarifarioConvenio>(entity =>
@@ -1400,6 +1410,12 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.IdFactura)
                     .HasColumnType("int(11)")
                     .HasColumnName("id_factura");
+                entity.Property(e => e.IdtipoMoneda)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_tipo_moneda");
+                entity.Property(e => e.Monto)
+                .HasColumnType("double")
+                .HasColumnName("monto");
                 entity.HasOne(d => d.FacturaPeriodo)
                     .WithMany(d => d.DocumentosFactura)
                     .HasForeignKey(d => d.IdFactura)
@@ -1413,6 +1429,17 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.Dia)
                    .HasColumnType("int(11)")
                    .HasColumnName("dia");
+            });
+            modelBuilder.Entity<EmpresaPrestadora>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
+                entity.ToTable("empresa_prestador");
+                entity.Property(e => e.Nombre)
+                   .HasColumnType("varchar(100)")
+                   .HasColumnName("nombre");
+                entity.Property(e => e.Decripcion)
+                   .HasColumnType("varchar(255)")
+                   .HasColumnName("descripcion");
             });
         }
 

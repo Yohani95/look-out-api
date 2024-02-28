@@ -21,7 +21,7 @@ namespace look.Infrastructure.repository.factura
         {
             return await _dbContext.FacturaPeriodo
                 .Include(p => p.Estado)
-                .Include(p=>p.Periodo).ThenInclude(p=>p.Proyecto)
+                .Include(p=>p.Periodo).ThenInclude(p=>p.Proyecto).ThenInclude(p=>p.EmpresaPrestadora)
                 .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                 .ToListAsync();
