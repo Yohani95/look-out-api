@@ -23,6 +23,7 @@ namespace look.Infrastructure.repository.proyecto
                 .Include(p=>p.Cliente)
                 .Include(p=>p.TipoServicio)
                 .Include(p=>p.Pais)
+                .Include(p=>p.EmpresaPrestadora)
                 .ToListAsync();
         }
     }

@@ -15,7 +15,7 @@ namespace look_out_api.Controllers.factura
 
         protected override int GetEntityId(DiaPagos entity)
         {
-            throw new NotImplementedException();
+            return entity.Id;
         }
     }
 }

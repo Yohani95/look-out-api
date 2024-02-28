@@ -15,6 +15,8 @@ namespace look.domain.entities.factura
         public int IdFactura { get; set; }
         public string? NombreDocumento { get; set; }
         public byte[]? ContenidoDocumento { get; set; }
+        public double? Monto { get; set; }
+        public int? IdtipoMoneda { get; set; }
         [NotMapped]
         [JsonIgnore]
         public virtual FacturaPeriodo? FacturaPeriodo { get; set; }
