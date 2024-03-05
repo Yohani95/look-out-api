@@ -254,8 +254,8 @@ namespace look.Application.services.proyecto
                     var horas =existingProyecto.PaisId==2? 8 : 9;
                     if (horas == 8 && diasTotalesTrabajados>= 20)
                     {
-                        tarifaDiario = (double)(tarifarioConvenio.TcTarifa);
-                        tarifaTotalTrabajado = tarifaDiario * 160;
+                        tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
+                        tarifaTotalTrabajado = tarifaDiario * 20;
                     }
                     else
                     {
