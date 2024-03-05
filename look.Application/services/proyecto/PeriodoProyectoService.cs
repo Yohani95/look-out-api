@@ -138,12 +138,12 @@ namespace look.Application.services.proyecto
 
                         var tarifarioConvenio = await _tarifarioConvenioRepository.GetbyIdEntities((int)participante.TarifarioId);
                         moneda = await _monedaRepository.GetByIdAsync((int)existingProyecto.MonId);
-                        var novedades = await _novedadesRepository.GetAllAsync();
+                        var novedades = await _novedadesRepository.GetComplete();
 
                         var novedadesFiltrada = novedades
                         .Where(p => p.idProyecto == participante.PryId &&
                         p.idPersona == participante.PerId &&
-                        p.IdTipoNovedad != Novedades.ConstantesTipoNovedad.cambioRol &&
+                        p.IdTipoNovedad != Novedades.ConstantesTipoNovedad.cambioRol && p.TipoNovedades.Descuento!=0&&
                         ((p.fechaInicio <= periodo.FechaPeriodoHasta && p.fechaInicio >= periodo.FechaPeriodoDesde) || // Novedad inicia dentro del período
                         (p.fechaHasta <= periodo.FechaPeriodoHasta && p.fechaHasta >= periodo.FechaPeriodoDesde) || // Novedad termina dentro del período
                         (p.fechaInicio <= periodo.FechaPeriodoDesde && p.fechaHasta >= periodo.FechaPeriodoHasta))) // Novedad cubre todo el período
@@ -250,9 +250,19 @@ namespace look.Application.services.proyecto
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados, participante);
                 diasTotalesPeriodo = CalcularDiasHabilSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
                 if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora) {
+                    //este caso es evaluado exepcionalmente para el pais peru
                     var horas =existingProyecto.PaisId==2? 8 : 9;
-                    tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
-                    tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                    if (horas == 9 && tarifaTotalTrabajado>17)
+                    {
+                        tarifaDiario = (double)(tarifarioConvenio.TcTarifa);
+                        tarifaTotalTrabajado = (tarifaDiario/9) * 160;
+                    }
+                    else
+                    {
+                        tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
+                        tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                    }
+
                 }
                 else
                 {
