@@ -17,6 +17,7 @@ namespace look.domain.entities.factura
             public static int SOLICITADA = 2;
             public static int FACTURADA = 3;
             public static int PAGADA = 4;
+            public static int Enviada= 5;
         }
     }
 }

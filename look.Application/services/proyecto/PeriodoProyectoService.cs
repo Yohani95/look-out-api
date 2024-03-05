@@ -252,10 +252,10 @@ namespace look.Application.services.proyecto
                 if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora) {
                     //este caso es evaluado exepcionalmente para el pais peru
                     var horas =existingProyecto.PaisId==2? 8 : 9;
-                    if (horas == 9 && tarifaTotalTrabajado>17)
+                    if (horas == 8 && tarifaTotalTrabajado>=20)
                     {
                         tarifaDiario = (double)(tarifarioConvenio.TcTarifa);
-                        tarifaTotalTrabajado = (tarifaDiario/9) * 160;
+                        tarifaTotalTrabajado = (tarifaDiario/8) * 160;
                     }
                     else
                     {
