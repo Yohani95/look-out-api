@@ -47,6 +47,7 @@ namespace look.domain.entities.proyecto
         public virtual Pais? Pais { get; set; }
 
         public virtual EmpresaPrestadora? EmpresaPrestadora { get; set; }
+        public virtual DiaPagos? DiaPagos { get; set;}
 
     }
 }

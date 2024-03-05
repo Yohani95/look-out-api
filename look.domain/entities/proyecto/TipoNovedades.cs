@@ -7,5 +7,6 @@ public class TipoNovedades
     public string nombre { get; set; }
 
     public string? descripcion { get; set; }
-    
+    public int? Descuento { get; set; }
+
 }

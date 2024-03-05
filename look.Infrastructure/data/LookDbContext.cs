@@ -1063,7 +1063,7 @@ namespace look.Infrastructure.data
                 entity.HasIndex(e => e.PrpId, "FK_Proyecto_Propuesta");
                 entity.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
                 entity.HasIndex(e => e.PaisId, "FK_Proyecto_Pais");
-                //entity.HasIndex(e => e.PaisId, "FK_Proyecto_Dia_Pago");
+                entity.HasIndex(e => e.PaisId, "FK_Proyecto_Dia_Pago");
 
                 entity.HasIndex(e => e.idEmpresaPrestadora, "FK_Proyecto_Empresa_Prestadora");
                 entity.Property(e => e.PryId)
@@ -1145,6 +1145,9 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.EmpresaPrestadora).WithMany()
                    .HasForeignKey(d => d.idEmpresaPrestadora)
                    .HasConstraintName("FK_Proyecto_Empresa_Prestadora");
+                entity.HasOne(d => d.DiaPagos).WithMany()
+                   .HasForeignKey(d => d.IdDiaPago)
+                   .HasConstraintName("FK_Proyecto_Dia_Pago");
             });
 
             modelBuilder.Entity<TarifarioConvenio>(entity =>
@@ -1258,6 +1261,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.descripcion)
                     .HasColumnType("text")
                     .HasColumnName("descripcion");
+                entity.Property(e => e.Descuento)
+                  .HasColumnType("tinyint(4)")
+                  .HasColumnName("descuento");
             });
 
             modelBuilder.Entity<PeriodoProfesionales>(entity =>
