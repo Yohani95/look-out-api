@@ -33,6 +33,7 @@ namespace look.Infrastructure.repository.factura
             return await _dbContext.FacturaPeriodo
                 .Include(p=>p.Periodo)
                  .Include(p => p.Estado)
+                 .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.IdPeriodo == id)
                 .ToListAsync();
         }

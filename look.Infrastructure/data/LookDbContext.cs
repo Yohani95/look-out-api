@@ -1419,6 +1419,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.IdtipoMoneda)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_tipo_moneda");
+                entity.Property(e => e.idTipoDocumento)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_tipo_documento");
                 entity.Property(e => e.Monto)
                 .HasColumnType("double")
                 .HasColumnName("monto");
