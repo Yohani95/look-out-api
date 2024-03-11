@@ -45,7 +45,7 @@ namespace look.Application.services.admin
                 var personaCliente = new ClientePersona
                 {
                     CarId = null,
-                    CliId = personaDTO.IdCliente != null ? personaDTO.IdCliente : 0 ,
+                    CliId = personaDTO.IdCliente != null && personaDTO.IdCliente!=0 ? personaDTO.IdCliente : null ,
                     CliVigente = (sbyte?) 1,
                     PerId = persona.Id // Usar el ID de la persona actual
                 };
@@ -214,10 +214,9 @@ namespace look.Application.services.admin
                 {
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "El objeto persona proporcionado es nulo." };
                 }
-               
-                if (personaDTO.IdCliente!=personaDTO.ClientePersona.CliId)
+                var clientePersona = await _clientePersonaService.GetByIdAsync((int)personaDTO.IdCliente);
+                if (personaDTO.ClientePersona!=null&&personaDTO.IdCliente!=personaDTO.ClientePersona.CliId)
                 {
-                    var clientePersona = await _clientePersonaService.GetByIdAsync((int)personaDTO.IdCliente);
                     
                     if (clientePersona != null)
                     {
@@ -228,6 +227,11 @@ namespace look.Application.services.admin
                         personaDTO.ClientePersona.CliId = personaDTO.IdCliente;
                         await _clientePersonaService.UpdateAsync(clientePersona);
                     }
+                }
+                else
+                {
+                    personaDTO.ClientePersona.CliId = personaDTO.IdCliente;
+                    await _clientePersonaService.UpdateAsync(clientePersona);
                 }
 
                 if (personaDTO.Emails != null && personaDTO.Emails.Count > 0)
