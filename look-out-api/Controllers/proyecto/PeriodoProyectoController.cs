@@ -58,6 +58,7 @@ namespace look_out_api.Controllers.proyecto
         public async Task<ActionResult<PeriodoProyecto>> GetPeriodoProyecto(int id)
         {
             var periodo = await _periodoProyectoService.GetPeriodoProyectoById(id);
+            if(periodo == null)return NotFound($"no existe el periodo ID: {id}");
             return Ok(periodo);
         }
         protected override int GetEntityId(PeriodoProyecto entity)

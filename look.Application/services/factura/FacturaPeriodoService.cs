@@ -48,6 +48,19 @@ namespace look.Application.services.factura
             }
         }
 
+        public async Task<List<FacturaPeriodo>> GetAllByIdHoras(int id)
+        {
+            try
+            {
+                return await _repository.GetAllByIdHoras(id);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
+            }
+        }
+
         public async Task<List<FacturaPeriodo>> GetAllByPreSolicitada()
         {
             try
@@ -56,7 +69,7 @@ namespace look.Application.services.factura
             }
             catch (Exception e)
             {
-                _logger.Error(Message.ErrorServidor + " :" + e.Message);
+                _logger.Error(Message.ErrorServidor + e.Message);
                 return null;
             }
         }
@@ -68,7 +81,7 @@ namespace look.Application.services.factura
                 return await _repository.GetAllByIdPeriodo(id);
             }
             catch (Exception e) { 
-                _logger.Error(Message.ErrorServidor+" :"+e.Message);
+                _logger.Error(Message.ErrorServidor+e.Message);
                 return null ;
             }
         }
