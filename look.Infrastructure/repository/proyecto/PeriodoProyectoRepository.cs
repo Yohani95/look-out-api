@@ -33,8 +33,7 @@ namespace look.Infrastructure.repository.proyecto
         {
             return await _dbContext.PeriodoProyectos
                 .Include(p=>p.Proyecto)
-                .ThenInclude(p=>p.Cliente)
-                .FirstAsync(p=>p.id==id);
+                .ThenInclude(p=>p.Cliente).FirstOrDefaultAsync(p=>p.id==id);
         }
     }
 }

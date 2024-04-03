@@ -22,6 +22,13 @@ namespace look_out_api.Controllers.factura
             var data=await _service.GetAllEntitiesByIdPeriod(id);
             return Ok(data);
         }
+        [HttpGet("GetAllEntitiesByIdHoras/{id}")]
+        public async Task<ActionResult<FacturaPeriodo>> GetAllEntitiesByIdHoras(int id)
+        {
+            Log.Information("[GetAllEntitiesByIdHoras] Solicitud getall facturas periodos IDHORAS : " + id);
+            var data = await _service.GetAllByIdHoras(id);
+            return Ok(data);
+        }
         [HttpGet("GetAllByPreSolicitada")]
         public async Task<ActionResult<FacturaPeriodo>> GetAllByPreSolicitada()
         {

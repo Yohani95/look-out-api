@@ -12,7 +12,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.10" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="data\admin\" />
+    <Folder Include="data\cuentas\" />
+    <Folder Include="data\world\" />
+    <Folder Include="data\proyecto\" />
   </ItemGroup>
 
 </Project>
