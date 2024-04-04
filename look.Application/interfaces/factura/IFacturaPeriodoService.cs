@@ -30,5 +30,7 @@ namespace look.Application.interfaces.factura
         /// <returns>retorna un lista</returns>
         Task<List<FacturaPeriodo>> GetAllByIdHoras(int id);
 
+        Task<Boolean> ChangeEstadoHoras(int idHoras, int estado);
+
     }
 }

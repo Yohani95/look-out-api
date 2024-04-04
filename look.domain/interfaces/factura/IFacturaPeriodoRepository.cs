@@ -34,5 +34,6 @@ namespace look.domain.interfaces.factura
         /// <param name="id">id horas utilizadas</param>
         /// <returns>retorna una lista</returns>
         Task<List<FacturaPeriodo>> GetAllByIdHoras(int id);
+        Task<Boolean> ChangeEstadoHoras(int idHoras, int estado);
     }
 }

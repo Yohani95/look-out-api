@@ -58,6 +58,25 @@ namespace look.Infrastructure.repository.factura
 
             return false;
         }
+        public async Task<Boolean> ChangeEstadoHoras(int idHoras, int estado)
+        {
+            var facturas = await _dbContext.FacturaPeriodo
+                   .Where(p => p.IdHorasUtilizadas == idHoras)
+                   .ToListAsync();
+
+            if (facturas != null && facturas.Any())
+            {
+                foreach (var factura in facturas)
+                {
+                    factura.IdEstado = estado;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
 
         public async Task<List<FacturaPeriodo>> GetAllByIdHoras(int id)
         {
