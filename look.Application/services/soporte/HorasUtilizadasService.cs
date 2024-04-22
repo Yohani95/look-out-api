@@ -52,8 +52,8 @@ namespace look.Application.services.soporte
                     horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
 
                     horasUtilizadas.Monto =  soporte.PryValor;
-
-                    horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada + ultimoRegistro.HorasAcumuladas : 0;
+                    var horaDescuento = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras), 0);
+                    horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? Math.Max(((int)horaAcumulada + (int)ultimoRegistro.HorasAcumuladas)-horaDescuento,0) : 0;
                 }
                 else
                 {
