@@ -100,7 +100,7 @@ namespace look.Application.services.factura
             catch (Exception e)
             {
                 _logger.Error(Message.ErrorServidor + e.Message);
-                return null;
+                throw;
             }
         }
 
@@ -129,6 +129,18 @@ namespace look.Application.services.factura
             {
                 _logger.Error("[UpdateFactura]",Message.ErrorServidor,"idFacturaPeriodo: "+idFacturaPeriodo );
                 return null;
+            }
+        }
+        public new async Task UpdateAsync(FacturaPeriodo factura)
+        {
+            try
+            {
+                await _repository.UpdateAsync(factura);
+            }
+            catch (Exception e)
+            {
+
+                _logger.Error("[UpdateFactura]", Message.ErrorServidor, e.Message);
             }
         }
     }
