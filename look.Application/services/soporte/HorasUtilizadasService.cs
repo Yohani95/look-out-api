@@ -2,8 +2,10 @@
 using look.domain.entities.Common;
 using look.domain.entities.soporte;
 using look.domain.interfaces.soporte;
+using look.domain.interfaces.unitOfWork;
+using Microsoft.Win32;
 using Serilog;
-
+using System.Reflection.Metadata;
 
 namespace look.Application.services.soporte
 {
@@ -12,10 +14,12 @@ namespace look.Application.services.soporte
         private readonly IHorasUtilizadasRepository _horasUtilizadasRepository;
         private readonly ISoporteRepository _soporteRepository;
         private readonly ILogger _logger = Logger.GetLogger();
-        public HorasUtilizadasService(IHorasUtilizadasRepository repository, ISoporteRepository soporteRepository) : base(repository)
+        private readonly IUnitOfWork _unitOfWork;
+        public HorasUtilizadasService(IHorasUtilizadasRepository repository, ISoporteRepository soporteRepository,IUnitOfWork unitOfWork) : base(repository)
         {
             _horasUtilizadasRepository = repository;
             _soporteRepository = soporteRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<HorasUtilizadas>> getAllHorasByIdSoporte(int id)
@@ -34,26 +38,32 @@ namespace look.Application.services.soporte
         {
             try
             {
+                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
                 // Obtener todas las horas utilizadas relacionadas al soporte
                 var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
-                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+                var horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas, 0);
+                if (listHorasUtilizadas.Count != 0)
+                {
+                    var ultimoRegistro = listHorasUtilizadas.Last();
 
-                // Calcular las horas acumuladas utilizadas en los registros anteriores
-                int horasAcumuladasUtilizadas = listHorasUtilizadas.Sum(r => r.HorasAcumuladas ?? 0);
+                    horasUtilizadas.HorasExtras = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras) - (int)ultimoRegistro.HorasAcumuladas, 0);
 
-                // Calcular las horas acumuladas restantes del registro anterior
-                int horasAcumuladasRestantes = Math.Max(0, horasAcumuladasUtilizadas - ((int)soporte.NumeroHoras-(int)horasUtilizadas.Horas));
 
-                // Calcular las horas extras para el nuevo registro
-                int horasExtras = Math.Max((int)horasUtilizadas.Horas - (int) soporte.NumeroHoras, 0) - horasAcumuladasRestantes;
+                    horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
 
-                // Calcular el monto de las horas extras
-                double montoHorasExtras = horasExtras * (soporte.ValorHoraAdicional ?? 0);
+                    horasUtilizadas.Monto =  soporte.PryValor;
 
-                // Asignar los valores calculados al nuevo registro
-                horasUtilizadas.HorasAcumuladas = horasAcumuladasRestantes;
-                horasUtilizadas.HorasExtras = horasExtras;
-                horasUtilizadas.MontoHorasExtras = montoHorasExtras;
+                    horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada + ultimoRegistro.HorasAcumuladas : 0;
+                }
+                else
+                {
+                    horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras, 0);
+
+                    horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
+
+                    horasUtilizadas.Monto = horasUtilizadas.MontoHorasExtras + soporte.PryValor;
+                    horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada : 0;
+                }
 
                 // Agregar el nuevo registro de horas utilizadas
                 await _horasUtilizadasRepository.AddAsync(horasUtilizadas);
@@ -65,47 +75,63 @@ namespace look.Application.services.soporte
                 throw;
             }
         }
-        public new async Task<HorasUtilizadas> UpdateAsync(HorasUtilizadas horasUtilizadas)
+        public async Task UpdateAsync(HorasUtilizadas horasUtilizadas)
         {
             try
             {
+                await _unitOfWork.BeginTransactionAsync();
+                // Obtener el soporte relacionado a las horas utilizadas
+                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
                 // Obtener todas las horas utilizadas relacionadas al soporte
                 var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
-                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+                var horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas, 0);
 
-                // Encontrar el registro existente que se va a actualizar
-                var existingRegistro = listHorasUtilizadas.FirstOrDefault(r => r.Id == horasUtilizadas.Id);
-
-                if (existingRegistro != null)
+                // Buscar el índice del registro que se está modificando
+                var index = listHorasUtilizadas.FindIndex(h => h.Id == horasUtilizadas.Id);
+                horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras, 0);
+                if (index > 0)
                 {
-                    // Calcular las horas acumuladas utilizadas en los registros anteriores
-                    int horasAcumuladasUtilizadas = listHorasUtilizadas.Sum(r => r.HorasAcumuladas ?? 0) - (existingRegistro.HorasAcumuladas ?? 0);
-
-                    // Calcular las horas acumuladas restantes del registro anterior
-                    int horasAcumuladasRestantes = Math.Max(0, horasAcumuladasUtilizadas - ((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas));
-
-                    // Calcular las horas extras para el registro actualizado
-                    int horasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras, 0) - horasAcumuladasRestantes;
-
-                    // Calcular el monto de las horas extras
-                    double montoHorasExtras = horasExtras * (soporte.ValorHoraAdicional ?? 0);
-
-                    // Asignar los valores calculados al registro existente
-                    existingRegistro.HorasAcumuladas = horasAcumuladasRestantes;
-                    existingRegistro.HorasExtras = horasExtras;
-                    existingRegistro.MontoHorasExtras = montoHorasExtras;
-
-                    // Actualizar el registro existente en la base de datos
-                    await _horasUtilizadasRepository.UpdateAsync(existingRegistro);
-                    return existingRegistro;
+                    var registroAnterior = listHorasUtilizadas[index - 1];
+                    horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras-(int)registroAnterior.HorasAcumuladas, 0);
+                    var horaDescuento = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras), 0);
+                    horaAcumulada = Math.Max((horaAcumulada + (int)registroAnterior.HorasAcumuladas)-horaDescuento, 0);
                 }
-
-                // Si no se encuentra el registro existente, lanzar una excepción o manejarlo según tu caso
-                throw new Exception("Registro no encontrado");
+                horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
+                horasUtilizadas.Monto =  soporte.PryValor;
+                horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada : 0;
+                // Actualizar el registro seleccionado
+                listHorasUtilizadas[index].Horas = horasUtilizadas.Horas;
+                listHorasUtilizadas[index].HorasExtras= horasUtilizadas.HorasExtras;
+                listHorasUtilizadas[index].HorasAcumuladas= horasUtilizadas.HorasAcumuladas;
+                listHorasUtilizadas[index].MontoHorasExtras= horasUtilizadas.MontoHorasExtras;
+                listHorasUtilizadas[index].Monto= horasUtilizadas.Monto;
+                listHorasUtilizadas[index].NombreDocumento= horasUtilizadas.NombreDocumento;
+                listHorasUtilizadas[index].ContenidoDocumento= horasUtilizadas.ContenidoDocumento;
+                await _horasUtilizadasRepository.UpdateAsync(listHorasUtilizadas[index]);
+                // Actualizar los registros siguientes en cascada
+                for (int i = index + 1; i < listHorasUtilizadas.Count; i++)
+                {
+                    var registro = listHorasUtilizadas[i];
+                    horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)registro.Horas, 0);
+                    var horaAcumuladaUtilizada = (int)listHorasUtilizadas[i - 1].HorasAcumuladas;
+                    registro.HorasExtras = Math.Max(((int)registro.Horas - (int)soporte.NumeroHoras) - (int)listHorasUtilizadas[i - 1].HorasAcumuladas, 0);
+                        registro.MontoHorasExtras = registro.HorasExtras * soporte.ValorHoraAdicional;
+                        registro.Monto =  soporte.PryValor;
+                    if (registro.Horas > soporte.NumeroHoras)
+                    {
+                        var horaDescuento = Math.Max(((int)registro.Horas - (int)soporte.NumeroHoras), 0);
+                        horaAcumuladaUtilizada = Math.Max(horaAcumuladaUtilizada - horaDescuento, 0);
+                    }
+                        registro.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada + horaAcumuladaUtilizada : 0;
+                    listHorasUtilizadas[i]=registro;
+                        // Actualizar el registro en la base de datos
+                        await _horasUtilizadasRepository.UpdateAsync(registro);
+                }
+                await _unitOfWork.CommitAsync();
             }
             catch (Exception ex)
             {
-                // Manejar la excepción
+                await _unitOfWork.RollbackAsync();
                 _logger.Error(Message.ErrorServidor + ex.Message);
                 throw;
             }

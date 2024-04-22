@@ -46,7 +46,7 @@ namespace look.Infrastructure.data.soporte
                 .HasColumnName("monto_horas_extras");
             builder.Property(e => e.HorasExtras)
                 .HasColumnType("int(11)")
-                .HasColumnName("horas_extras"); 
+                .HasColumnName("horas_extras");
             builder.Property(e => e.HorasAcumuladas)
                 .HasColumnType("int(11)")
                 .HasColumnName("horas_acumuladas");
