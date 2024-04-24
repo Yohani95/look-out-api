@@ -23,6 +23,7 @@ namespace look.Infrastructure.repository.factura
                 .Include(p => p.Estado)
                 .Include(p=>p.Periodo).ThenInclude(p=>p.Proyecto).ThenInclude(p=>p.EmpresaPrestadora)
                 .Include(p => p.Periodo).ThenInclude(p => p.Proyecto).ThenInclude(p => p.DiaPagos)
+                .Include(p => p.HorasUtilizadas).ThenInclude(p => p.Soporte).ThenInclude(p => p.DiaPagos)
                 .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                 .ToListAsync();
@@ -56,6 +57,35 @@ namespace look.Infrastructure.repository.factura
             }
 
             return false;
+        }
+        public async Task<Boolean> ChangeEstadoHoras(int idHoras, int estado)
+        {
+            var facturas = await _dbContext.FacturaPeriodo
+                   .Where(p => p.IdHorasUtilizadas == idHoras)
+                   .ToListAsync();
+
+            if (facturas != null && facturas.Any())
+            {
+                foreach (var factura in facturas)
+                {
+                    factura.IdEstado = estado;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<List<FacturaPeriodo>> GetAllByIdHoras(int id)
+        {
+            return await _dbContext.FacturaPeriodo
+                .Include(p => p.HorasUtilizadas)
+                 .Include(p => p.Estado)
+                 .Include(fp => fp.DocumentosFactura)
+                .Where(p => p.IdHorasUtilizadas == id)
+                .ToListAsync();
         }
     }
 }

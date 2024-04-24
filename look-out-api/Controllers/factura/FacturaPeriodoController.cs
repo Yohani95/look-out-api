@@ -22,6 +22,13 @@ namespace look_out_api.Controllers.factura
             var data=await _service.GetAllEntitiesByIdPeriod(id);
             return Ok(data);
         }
+        [HttpGet("GetAllEntitiesByIdHoras/{id}")]
+        public async Task<ActionResult<FacturaPeriodo>> GetAllEntitiesByIdHoras(int id)
+        {
+            Log.Information("[GetAllEntitiesByIdHoras] Solicitud getall dfacturas periodos IDHORAS : " + id);
+            var data = await _service.GetAllByIdHoras(id);
+            return Ok(data);
+        }
         [HttpGet("GetAllByPreSolicitada")]
         public async Task<ActionResult<FacturaPeriodo>> GetAllByPreSolicitada()
         {
@@ -34,6 +41,13 @@ namespace look_out_api.Controllers.factura
         {
             Log.Information("[GetAllEntitiesByIdPeriod] Cambiar estado idPeriodo: "+idPeriodo+", Estado ID:"+estado);
             var data = await _service.ChangeEstado(idPeriodo,estado);
+            return Ok(data);
+        }
+        [HttpGet("ChangeEstadoHoras/{idHoras}/{estado}")]
+        public async Task<IActionResult> ChangeEstadoHoras(int idHoras, int estado)
+        {
+            Log.Information("[GetAllEntitiesByIdPeriod] Cambiar estado idHoras: " + idHoras + ", Estado ID:" + estado);
+            var data = await _service.ChangeEstadoHoras(idHoras, estado);
             return Ok(data);
         }
         protected override int GetEntityId(FacturaPeriodo entity)

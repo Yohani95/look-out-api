@@ -1,4 +1,5 @@
 ﻿using look.domain.entities.proyecto;
+using look.domain.entities.soporte;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,9 @@ namespace look.domain.entities.factura
         public DateTime? FechaVencimiento { get; set; }
         public int? IdEstado { get; set; }
 
+        public int? IdHorasUtilizadas { get; set; }
         public virtual PeriodoProyecto? Periodo { get; set; }
+        public virtual HorasUtilizadas? HorasUtilizadas{ get; set; }
         public virtual EstadoFacturaPeriodo? Estado { get; set; }
         public virtual List<DocumentosFactura>? DocumentosFactura { get; set; }
     }

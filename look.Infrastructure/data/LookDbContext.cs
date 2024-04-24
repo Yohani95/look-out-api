@@ -2,7 +2,10 @@ using look.domain.entities.admin;
 using look.domain.entities.cuentas;
 using look.domain.entities.factura;
 using look.domain.entities.proyecto;
+using look.domain.entities.soporte;
 using look.domain.entities.world;
+using look.Infrastructure.data.factura;
+using look.Infrastructure.data.soporte;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -67,9 +70,17 @@ namespace look.Infrastructure.data
         public DbSet<DocumentosFactura> DocumentosFactura { get; set; }
         public DbSet<DiaPagos> DiaPagos { get; set; }
         public DbSet<EmpresaPrestadora> EmpresaPrestadoras{ get; set; }
-
+        public DbSet<Soporte> Soportes{ get; set; }
+        public DbSet<DocumentosSoporte> DocumentosSoporte { get; set; }
+        public DbSet<HorasUtilizadas> HorasUtilizadas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new DocumentosSoporteConfiguration());
+            modelBuilder.ApplyConfiguration(new SoporteConfiguration());
+            modelBuilder.ApplyConfiguration(new HorasUtilizadasConfiguration());
+            modelBuilder.ApplyConfiguration(new FacturaPeriodoConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -215,7 +226,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.TemId)
                     .HasConstraintName("FK_Email_Tipo_Email");
             });
-
             modelBuilder.Entity<TipoEmail>(entity =>
             {
                 entity.HasKey(e => e.temId).HasName("PRIMARY");
@@ -682,7 +692,6 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_Moneda_Pais");
 
             });
-
             modelBuilder.Entity<Documento>(entity =>
             {
                 entity.HasKey(e => e.DocId).HasName("PRIMARY");
@@ -718,7 +727,6 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_Documento_Cliente");
 
             });
-
             modelBuilder.Entity<TipoDocumento>(entity =>
             {
                 entity.HasKey(e => e.TdoId).HasName("PRIMARY");
@@ -735,7 +743,6 @@ namespace look.Infrastructure.data
                     .HasColumnName("tdo_nombre");
 
             });
-
             modelBuilder.Entity<EstadoProyecto>(entity =>
             {
                 entity.HasKey(e => e.EpyId).HasName("PRIMARY");
@@ -752,7 +759,6 @@ namespace look.Infrastructure.data
                     .HasColumnName("epy_nombre");
 
             });
-
             modelBuilder.Entity<EstadoProspecto>(entity =>
             {
                 entity.HasKey(e => e.EpsId).HasName("PRIMARY");
@@ -766,7 +772,6 @@ namespace look.Infrastructure.data
                     .HasColumnName("eps_descripcion");
 
             });
-
             modelBuilder.Entity<EstadoPropuesta>(entity =>
             {
                 entity.HasKey(e => e.EppId).HasName("PRIMARY");
@@ -780,7 +785,6 @@ namespace look.Infrastructure.data
                     .HasColumnName("epp_descripcion");
 
             });
-
             modelBuilder.Entity<Prospecto>(entity =>
             {
 
@@ -829,7 +833,6 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_Proespecto_Tipo_Servicio");
 
             });
-
             modelBuilder.Entity<TipoServicio>(entity =>
             {
                 entity.HasKey(e => e.TseId).HasName("PRIMARY");
@@ -850,7 +853,6 @@ namespace look.Infrastructure.data
                     .HasColumnType("tinyint(4)")
                     .HasColumnName("tse_vigente");
             });
-
             modelBuilder.Entity<Perfil>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -869,7 +871,6 @@ namespace look.Infrastructure.data
                     .HasColumnName("prf_descripcion");
 
             });
-
             modelBuilder.Entity<Propuesta>(entity =>
             {
 
@@ -913,7 +914,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.TseId)
                     .HasConstraintName("FK_Propuesta_Tipo_Servicio");
             });
-
             modelBuilder.Entity<ProyectoParticipante>(entity =>
             {
                 entity.HasKey(e => e.PpaId).HasName("PRIMARY");
@@ -970,7 +970,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.PrfId)
                     .HasConstraintName("FK_Proyecto_participantes_Perfil");
             });
-
             modelBuilder.Entity<Car>(entity =>
             {
                 entity.HasKey(e => e.CarId).HasName("PRIMARY");
@@ -986,7 +985,6 @@ namespace look.Infrastructure.data
                     .HasMaxLength(50)
                     .HasColumnName("car_descripcion");
             });
-
             modelBuilder.Entity<PeriodoProyecto>(entity =>
             {
                 entity.HasKey(e => e.id).HasName("PRIMARY");
@@ -1021,7 +1019,6 @@ namespace look.Infrastructure.data
                     .HasConstraintName("fk_periodos_proyecto_proyecto");
 
             });
-
             modelBuilder.Entity<ProyectoDocumento>(entity =>
             {
                 entity.HasKey(e => e.PydId).HasName("PRIMARY");
@@ -1051,7 +1048,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.TdoId)
                     .HasConstraintName("FK_Propuesta_Prospecto");
             });
-
             modelBuilder.Entity<Proyecto>(entity =>
             {
 
@@ -1149,7 +1145,6 @@ namespace look.Infrastructure.data
                    .HasForeignKey(d => d.IdDiaPago)
                    .HasConstraintName("FK_Proyecto_Dia_Pago");
             });
-
             modelBuilder.Entity<TarifarioConvenio>(entity =>
             {
 
@@ -1197,7 +1192,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.TcMoneda)
                     .HasConstraintName("FK_tarifario_convenido_moneda");
             });
-
             modelBuilder.Entity<Novedades>(entity =>
             {
                 entity.HasKey(e => e.id).HasName("PRIMARY");
@@ -1247,7 +1241,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.IdTipoNovedad)
                     .HasConstraintName("FK_proyecto_tipo_novedad");
             });
-
             modelBuilder.Entity<TipoNovedades>(entity =>
             {
                 entity.HasKey(e => e.id).HasName("PRIMARY");
@@ -1265,7 +1258,6 @@ namespace look.Infrastructure.data
                   .HasColumnType("tinyint(4)")
                   .HasColumnName("descuento");
             });
-
             modelBuilder.Entity<PeriodoProfesionales>(entity =>
             {
 
@@ -1311,7 +1303,6 @@ namespace look.Infrastructure.data
                     .HasForeignKey(d => d.IdParticipante)
                     .HasConstraintName("FK_periodo_profesionales_proyecto_partipante");
             });
-
             modelBuilder.Entity<TipoFacturacion>(entity =>
             {
 
@@ -1326,68 +1317,6 @@ namespace look.Infrastructure.data
                     .HasColumnType("varchar(50)")
                     .HasColumnName("descripcion");
             });
-
-            modelBuilder.Entity<FacturaPeriodo>(entity =>
-            {
-
-                entity.HasKey(e => e.Id).HasName("PRIMARY");
-                entity.ToTable("factura_periodo");
-                entity.HasIndex(e => e.IdPeriodo, "FK_factura_periodo_periodo");
-                entity.HasIndex(e => e.IdEstado, "FK_factura_periodo_estado");
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
-                entity.Property(e => e.Rut)
-                   .HasColumnType("varchar(50)")
-                   .HasColumnName("rut");
-                entity.Property(e => e.RazonSocial)
-                    .HasColumnType("varchar(120)")
-                    .HasColumnName("razon_social");
-                entity.Property(e => e.HesCodigo)
-                    .HasColumnType("varchar(50)")
-                    .HasColumnName("hes_codigo");
-                entity.Property(e => e.OcCodigo)
-                    .HasColumnType("varchar(50)")
-                    .HasColumnName("oc_codigo");
-                entity.Property(e => e.FechaHes)
-                  .HasColumnType("datetime")
-                  .HasColumnName("fecha_hes");
-                entity.Property(e => e.FechaOc)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fecha_oc");
-                entity.Property(e => e.OrdenPeriodo)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("orden_periodo");
-                entity.Property(e => e.Observaciones)
-                    .HasColumnType("varchar(200)")
-                    .HasColumnName("observaciones");
-                entity.Property(e => e.IdPeriodo)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id_periodo");
-                entity.Property(e => e.Monto)
-                    .HasColumnType("DOUBLE")
-                    .HasColumnName("monto");
-                entity.Property(e => e.FechaFactura)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fecha_factura");
-                entity.Property(e => e.IdEstado)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id_estado");
-                entity.Property(e => e.FechaVencimiento)
-                 .HasColumnType("datetime")
-                 .HasColumnName("fecha_vencimiento");
-                entity.HasOne(d => d.Periodo).WithMany()
-                    .HasForeignKey(d => d.IdPeriodo)
-                    .HasConstraintName("FK_factura_periodo_periodos");
-                entity.HasOne(d => d.Estado).WithMany()
-                    .HasForeignKey(d => d.IdEstado)
-                    .HasConstraintName("FK_factura_periodo_estado");
-                entity.HasMany(d => d.DocumentosFactura)
-                    .WithOne(d => d.FacturaPeriodo)
-                    .HasForeignKey(d => d.IdFactura)
-                    .HasConstraintName("FK_documentos_factura_factura_periodo");
-
-                });
             modelBuilder.Entity<EstadoFacturaPeriodo>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PRIMARY");

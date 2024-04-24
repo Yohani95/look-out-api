@@ -543,7 +543,16 @@ namespace look.Application.services.proyecto
         #endregion
         public async Task<PeriodoProyecto> GetPeriodoProyectoById(int id)
         {
-            return await _periodoProyectoRepository.GetPeriodoProyectoById(id);
+            try
+            {
+                var result = await _periodoProyectoRepository.GetPeriodoProyectoById(id);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error interno del servidor al calcular: " + ex.Message);
+                throw new Exception("Error interno del servidor al calcular: " + ex.Message);
+            }
         }
     }
 }

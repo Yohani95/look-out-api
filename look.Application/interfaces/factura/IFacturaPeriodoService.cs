@@ -23,6 +23,14 @@ namespace look.Application.interfaces.factura
         Task<List<FacturaPeriodo>> GetAllByPreSolicitada();
         Task<Boolean> ChangeEstado(int idPeriodo, int estado);
         Task<FacturaPeriodo> UpdateFactura(FacturaPeriodo entity, int idFacturaPeriodo);
+        /// <summary>
+        /// obtiene todas las facturas por horas utilizadas
+        /// </summary>
+        /// <param name="id">id de hora</param>
+        /// <returns>retorna un lista</returns>
+        Task<List<FacturaPeriodo>> GetAllByIdHoras(int id);
+
+        Task<Boolean> ChangeEstadoHoras(int idHoras, int estado);
 
     }
 }
