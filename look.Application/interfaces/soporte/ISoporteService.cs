@@ -14,5 +14,6 @@ namespace look.Application.interfaces.soporte
         Task<ServiceResult> createAsync(List<IFormFile> files, Soporte soporte);
         Task<IEnumerable<Soporte>> GetAllEntities();
         Task<Soporte> GetAllEntitiesById(int id);
+        Task<List<Soporte>> GetAllEntitiesByIdTipoSoporte(int idTipoSoporte);
     }
 }

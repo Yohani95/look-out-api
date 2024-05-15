@@ -37,5 +37,17 @@ namespace look.Infrastructure.repository.soporte
                  .Include(p => p.DocumentosSoporte)
                  .FirstOrDefaultAsync(p=>p.PryId==id);
         }
+
+        public async Task<List<Soporte>> GetAllEntitiesByIdTipoSoporte(int idTipoSoporte)
+        {
+            return await _dbContext.Soportes
+                 .Include(p => p.Cliente)
+                 .Include(p => p.TipoServicio)
+                 .Include(p => p.Pais)
+                 .Include(p => p.EmpresaPrestadora)
+                 .Include(p => p.DocumentosSoporte)
+                 .Where(s=> s.IdTipoSoporte==idTipoSoporte)
+                 .ToListAsync();
+        }
     }
 }

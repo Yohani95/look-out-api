@@ -137,5 +137,46 @@ namespace look.Application.services.soporte
             }
         }
 
+        public async Task<HorasUtilizadas> CreateBag(HorasUtilizadas horasUtilizadas)
+        {
+            try
+            {
+                // Agregar el nuevo registro de horas utilizadas
+                await _horasUtilizadasRepository.AddAsync(horasUtilizadas);
+                return horasUtilizadas;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Message.ErrorServidor + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task UpdateBag(HorasUtilizadas horasUtilizadas, int id)
+        {
+            try
+            {
+                // Obtener el soporte relacionado a las horas utilizadas
+                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+                // Obtener todas las horas utilizadas relacionadas al soporte
+                var horasUtilizadasExistente = await _horasUtilizadasRepository.GetByIdAsync(id);
+                horasUtilizadas.Monto = soporte.PryValor;
+                // Actualizar el registro seleccionado
+                horasUtilizadasExistente.Horas = horasUtilizadas.Horas;
+                horasUtilizadasExistente.HorasExtras = horasUtilizadas.HorasExtras;
+                horasUtilizadasExistente.HorasAcumuladas = horasUtilizadas.HorasAcumuladas;
+                horasUtilizadasExistente.MontoHorasExtras = horasUtilizadas.MontoHorasExtras;
+                horasUtilizadasExistente.Monto = horasUtilizadas.Monto;
+                horasUtilizadasExistente.NombreDocumento = horasUtilizadas.NombreDocumento;
+                horasUtilizadasExistente.ContenidoDocumento = horasUtilizadas.ContenidoDocumento;
+                await _horasUtilizadasRepository.UpdateAsync(horasUtilizadasExistente);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error(Message.ErrorServidor + ex.Message);
+                throw;
+            }
+        }
     }
 }
