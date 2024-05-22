@@ -11,5 +11,6 @@ namespace look.domain.interfaces.soporte
     {
         Task<IEnumerable<Soporte>> GetAllEntities();
         Task<Soporte> GetAllEntitiesById(int id);
+        Task<List<Soporte>> GetAllEntitiesByIdTipoSoporte(int idTipoSoporte);
     }
 }

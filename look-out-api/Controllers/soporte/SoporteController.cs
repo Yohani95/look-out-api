@@ -30,6 +30,16 @@ namespace look_out_api.Controllers.soporte
             }
             return Ok(soporte);
         }
+        [HttpGet("GetAllEntitiesByIdTipoSoporte/{id}")]
+        public async Task<ActionResult<List<Soporte>>> GetAllEntitiesByIdTipoSoporte(int id)
+        {
+            var soporte = await _soporteService.GetAllEntitiesByIdTipoSoporte(id);
+            if (soporte == null)
+            {
+                return NotFound();
+            }
+            return Ok(soporte);
+        }
         protected override int GetEntityId(Soporte entity)
         {
             return entity.PryId; 
