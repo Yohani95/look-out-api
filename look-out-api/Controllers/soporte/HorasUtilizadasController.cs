@@ -33,6 +33,18 @@ namespace look_out_api.Controllers.soporte
             var horas=await _horasUtilizadasService.CreateBag(horasUtilizadas);
             return Ok(horas);
         }
+        [HttpPut("updateOnDemand/{id}")]
+        public async Task<IActionResult> updateOnDemand(HorasUtilizadas horasUtilizadas, int id)
+        {
+            await _horasUtilizadasService.UpdateOnDemand(horasUtilizadas, id);
+            return Ok();
+        }
+        [HttpPost("createOnDemand")]
+        public async Task<ActionResult<HorasUtilizadas>> createOnDemand(HorasUtilizadas horasUtilizadas)
+        {
+            var horas = await _horasUtilizadasService.CreateOnDemand(horasUtilizadas);
+            return Ok(horas);
+        }
         protected override int GetEntityId(HorasUtilizadas entity)
         {
             return entity.Id;
