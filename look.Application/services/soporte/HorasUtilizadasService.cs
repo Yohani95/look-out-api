@@ -141,6 +141,20 @@ namespace look.Application.services.soporte
         {
             try
             {
+                // Obtener el soporte relacionado a las horas utilizadas
+                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+                // Obtener todas las horas utilizadas relacionadas al soporte
+                var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
+                horasUtilizadas.Monto = 0;
+                if (listHorasUtilizadas.Count != 0)
+                {
+                    var ultimoRegistro = listHorasUtilizadas.Last();
+                    horasUtilizadas.HorasAcumuladas = ultimoRegistro.HorasAcumuladas - horasUtilizadas.Horas;
+                }
+                else
+                {
+                    horasUtilizadas.HorasAcumuladas = soporte.NumeroHoras - horasUtilizadas.Horas;
+                }
                 // Agregar el nuevo registro de horas utilizadas
                 await _horasUtilizadasRepository.AddAsync(horasUtilizadas);
                 return horasUtilizadas;
@@ -157,23 +171,63 @@ namespace look.Application.services.soporte
             try
             {
                 // Obtener el soporte relacionado a las horas utilizadas
+                //var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+                //// Obtener todas las horas utilizadas relacionadas al soporte
+                //var horasUtilizadasExistente = await _horasUtilizadasRepository.GetByIdAsync(id);
+                //horasUtilizadas.Monto = soporte.PryValor;
+                //// Actualizar el registro seleccionado
+                //horasUtilizadasExistente.Horas = horasUtilizadas.Horas;
+                //horasUtilizadasExistente.HorasExtras = horasUtilizadas.HorasExtras;
+                //horasUtilizadasExistente.HorasAcumuladas = horasUtilizadas.HorasAcumuladas;
+                //horasUtilizadasExistente.MontoHorasExtras = horasUtilizadas.MontoHorasExtras;
+                //horasUtilizadasExistente.Monto = horasUtilizadas.Monto;
+                //horasUtilizadasExistente.NombreDocumento = horasUtilizadas.NombreDocumento;
+                //horasUtilizadasExistente.ContenidoDocumento = horasUtilizadas.ContenidoDocumento;
+                //await _horasUtilizadasRepository.UpdateAsync(horasUtilizadasExistente);
+
+
+
+                await _unitOfWork.BeginTransactionAsync();
+                // Obtener el soporte relacionado a las horas utilizadas
                 var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
                 // Obtener todas las horas utilizadas relacionadas al soporte
-                var horasUtilizadasExistente = await _horasUtilizadasRepository.GetByIdAsync(id);
-                horasUtilizadas.Monto = soporte.PryValor;
+                var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
+                var horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas, 0);
+
+                // Buscar el índice del registro que se está modificando
+                var index = listHorasUtilizadas.FindIndex(h => h.Id == horasUtilizadas.Id);
+                if (index > 0)
+                {
+                    var registroAnterior = listHorasUtilizadas[index - 1];
+                    horaAcumulada = (int)registroAnterior.HorasAcumuladas-(int)horasUtilizadas.Horas;
+                }
+                horasUtilizadas.Monto = 0;
+                horasUtilizadas.HorasAcumuladas = horaAcumulada;
                 // Actualizar el registro seleccionado
-                horasUtilizadasExistente.Horas = horasUtilizadas.Horas;
-                horasUtilizadasExistente.HorasExtras = horasUtilizadas.HorasExtras;
-                horasUtilizadasExistente.HorasAcumuladas = horasUtilizadas.HorasAcumuladas;
-                horasUtilizadasExistente.MontoHorasExtras = horasUtilizadas.MontoHorasExtras;
-                horasUtilizadasExistente.Monto = horasUtilizadas.Monto;
-                horasUtilizadasExistente.NombreDocumento = horasUtilizadas.NombreDocumento;
-                horasUtilizadasExistente.ContenidoDocumento = horasUtilizadas.ContenidoDocumento;
-                await _horasUtilizadasRepository.UpdateAsync(horasUtilizadasExistente);
+                listHorasUtilizadas[index].Horas = horasUtilizadas.Horas;
+                listHorasUtilizadas[index].HorasExtras = horasUtilizadas.HorasExtras;
+                listHorasUtilizadas[index].HorasAcumuladas = horasUtilizadas.HorasAcumuladas;
+                listHorasUtilizadas[index].MontoHorasExtras = horasUtilizadas.MontoHorasExtras;
+                listHorasUtilizadas[index].Monto = horasUtilizadas.Monto;
+                listHorasUtilizadas[index].NombreDocumento = horasUtilizadas.NombreDocumento;
+                listHorasUtilizadas[index].ContenidoDocumento = horasUtilizadas.ContenidoDocumento;
+                await _horasUtilizadasRepository.UpdateAsync(listHorasUtilizadas[index]);
+                // Actualizar los registros siguientes en cascada
+                for (int i = index + 1; i < listHorasUtilizadas.Count; i++)
+                {
+                    var registro = listHorasUtilizadas[i];
+                    horaAcumulada = (int)listHorasUtilizadas[i - 1].HorasAcumuladas - (int)registro.Horas;
+                    registro.HorasAcumuladas = horaAcumulada;
+                    listHorasUtilizadas[i] = registro;
+                    // Actualizar el registro en la base de datos
+                    await _horasUtilizadasRepository.UpdateAsync(registro);
+                }
+                await _unitOfWork.CommitAsync();
+
+
             }
             catch (Exception ex)
             {
-                await _unitOfWork.RollbackAsync();
                 _logger.Error(Message.ErrorServidor + ex.Message);
                 throw;
             }
