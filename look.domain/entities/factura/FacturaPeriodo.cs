@@ -26,6 +26,10 @@ namespace look.domain.entities.factura
         public int? IdEstado { get; set; }
 
         public int? IdHorasUtilizadas { get; set; }
+
+        public int? IdSoporteBolsa { get; set; }
+        public virtual Soporte? Soporte { get; set; }
+
         public virtual PeriodoProyecto? Periodo { get; set; }
         public virtual HorasUtilizadas? HorasUtilizadas{ get; set; }
         public virtual EstadoFacturaPeriodo? Estado { get; set; }

@@ -22,7 +22,7 @@ namespace look.Application.services.factura
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPeriodoProyectoRepository _periodoProyectoRepository;
         private readonly IHorasUtilizadasRepository _horasUtilizadasRepository;
-        public FacturaPeriodoService(IFacturaPeriodoRepository repository,IUnitOfWork unitOfWork, IPeriodoProyectoRepository periodoProyectoRepository, IHorasUtilizadasRepository horasUtilizadasRepository) : base(repository)
+        public FacturaPeriodoService(IFacturaPeriodoRepository repository, IUnitOfWork unitOfWork, IPeriodoProyectoRepository periodoProyectoRepository, IHorasUtilizadasRepository horasUtilizadasRepository) : base(repository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
@@ -37,7 +37,7 @@ namespace look.Application.services.factura
                 _logger.Information("Solicitando factura, id Periodo: " + idPeriodo);
                 await _unitOfWork.BeginTransactionAsync();
                 await _repository.ChangeEstado(idPeriodo, estado);
-                var periodo =await _periodoProyectoRepository.GetByIdAsync(idPeriodo);
+                var periodo = await _periodoProyectoRepository.GetByIdAsync(idPeriodo);
                 if (periodo != null)
                 {
                     periodo.estado = 1;
@@ -49,7 +49,7 @@ namespace look.Application.services.factura
             catch (Exception e)
             {
                 await _unitOfWork.RollbackAsync();
-                _logger.Error(Message.ErrorServidor  + e.Message);
+                _logger.Error(Message.ErrorServidor + e.Message);
                 return false;
             }
         }
@@ -110,9 +110,10 @@ namespace look.Application.services.factura
             {
                 return await _repository.GetAllByIdPeriodo(id);
             }
-            catch (Exception e) { 
-                _logger.Error(Message.ErrorServidor+e.Message);
-                return null ;
+            catch (Exception e)
+            {
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
             }
         }
 
@@ -120,14 +121,14 @@ namespace look.Application.services.factura
         {
             try
             {
-                var factura=await _repository.GetByIdAsync(idFacturaPeriodo);
-                factura.IdEstado=entity.IdEstado;
+                var factura = await _repository.GetByIdAsync(idFacturaPeriodo);
+                factura.IdEstado = entity.IdEstado;
                 await _repository.UpdateAsync(factura);
                 return factura;
             }
             catch (Exception)
             {
-                _logger.Error("[UpdateFactura]",Message.ErrorServidor,"idFacturaPeriodo: "+idFacturaPeriodo );
+                _logger.Error("[UpdateFactura]", Message.ErrorServidor, "idFacturaPeriodo: " + idFacturaPeriodo);
                 return null;
             }
         }
@@ -141,6 +142,37 @@ namespace look.Application.services.factura
             {
 
                 _logger.Error("[UpdateFactura]", Message.ErrorServidor, e.Message);
+            }
+        }
+
+        public async Task<List<FacturaPeriodo>> GetAllByIdSoporte(int id)
+        {
+            try
+            {
+                return await _repository.GetAllByIdSoporte(id);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
+            }
+        }
+
+        public async Task<bool> ChangeEstadoSoporte(int idSoporte, int estado)
+        {
+            try
+            {
+                _logger.Information("Solicitando factura, id Periodo: " + idSoporte);
+                await _unitOfWork.BeginTransactionAsync();
+                await _repository.ChangeEstadoSoporte(idSoporte, estado);
+                await _unitOfWork.CommitAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return false;
             }
         }
     }
