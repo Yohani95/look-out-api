@@ -42,6 +42,8 @@ namespace look.domain.entities.soporte
         public bool? AcumularHoras { get; set; }
         public int? NumeroHoras{ get; set; }
 
+        public int? IdTipoSoporte { get; set; }
+
         public virtual Cliente? Cliente { get; set; }
 
         public virtual EstadoProyecto? EsProy { get; set; }

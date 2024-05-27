@@ -89,5 +89,19 @@ namespace look.Application.services.soporte
                 return null;
             }
         }
+
+        public async Task<List<Soporte>> GetAllEntitiesByIdTipoSoporte(int idTipoSoporte)
+        {
+            try
+            {
+                _logger.Information("Obtener Tipo Soporte ID :" + idTipoSoporte);
+                return await _repository.GetAllEntitiesByIdTipoSoporte(idTipoSoporte);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
+            }
+        }
     }
 }

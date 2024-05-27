@@ -22,7 +22,8 @@ namespace look.Infrastructure.data.soporte
             builder.HasIndex(e => e.PrpId, "FK_Proyecto_Propuesta");
             builder.HasIndex(e => e.TseId, "FK_Proyecto_Tipo_Servicio");
             builder.HasIndex(e => e.PaisId, "FK_Proyecto_Pais");
-            builder.HasIndex(e => e.PaisId, "FK_Proyecto_Dia_Pago");
+            builder.HasIndex(e => e.IdDiaPago, "FK_Proyecto_Dia_Pago");
+            builder.HasIndex(e => e.IdTipoSoporte, "FK_soporte_tipo_soporte");
 
             builder.HasIndex(e => e.idEmpresaPrestadora, "FK_Proyecto_Empresa_Prestadora");
             builder.Property(e => e.PryId)
@@ -89,7 +90,7 @@ namespace look.Infrastructure.data.soporte
             builder.Property(e => e.ValorHora).HasColumnName("valor_hora");
             builder.Property(e => e.AcumularHoras).HasColumnName("acumular_horas").HasColumnType("boolean").HasDefaultValue(false);
             builder.Property(e => e.NumeroHoras).HasColumnName("numero_horas").HasColumnType("int");
-
+            builder.Property(e => e.IdTipoSoporte).HasColumnName("id_tipo_soporte").HasColumnType("int");
 
             builder.HasOne(d => d.Cliente).WithMany()
                 .HasForeignKey(d => d.PryIdCliente)
