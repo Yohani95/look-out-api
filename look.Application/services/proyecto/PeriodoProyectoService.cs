@@ -252,16 +252,17 @@ namespace look.Application.services.proyecto
                 if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora) {
                     //este caso es evaluado exepcionalmente para el pais peru
                     var horas =existingProyecto.PaisId==2? 8 : 9;
-                    if (horas == 8 && diasTotalesTrabajados>= 20)
-                    {
-                        tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
-                        tarifaTotalTrabajado = tarifaDiario * 20;
-                    }
-                    else
-                    {
+                    // se comenta y se elimina limitaciion a peru
+                    //if (horas == 8 && diasTotalesTrabajados>= 200)
+                    //{ 
+                    //    tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
+                    //    tarifaTotalTrabajado = tarifaDiario * 20;
+                    //}
+                    //else
+                    //{
                         tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
                         tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
-                    }
+                    //}
 
                 }
                 else
