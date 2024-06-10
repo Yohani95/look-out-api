@@ -1,5 +1,4 @@
 ﻿using look.Application.interfaces.oportunidad;
-using look.Application.interfaces.proyecto;
 using look.domain.entities.oportunidad;
 using look.domain.interfaces;
 using look.domain.interfaces.oportunidad;
@@ -11,23 +10,22 @@ using System.Threading.Tasks;
 
 namespace look.Application.services.oportunidad
 {
-    public class DocumentoOportunidadService : Service<DocumentoOportunidad>, IDocumentoOportunidadService
+    public class NovedadOportunidadService : Service<NovedadOportunidad>, INovedadOportunidadService
     {
-        private readonly IDocumentoOportunidadRepository _documento;
-        public DocumentoOportunidadService(IDocumentoOportunidadRepository repository) : base(repository)
+        private readonly INovedadOportunidadRepository _oportunidadRepository;
+        public NovedadOportunidadService(INovedadOportunidadRepository repository) : base(repository)
         {
-            _documento = repository;
+            _oportunidadRepository = repository;
         }
 
-        public async Task<List<DocumentoOportunidad>> GetByIdOportunidad(int id)
+        public async Task<List<NovedadOportunidad>> GetByIdOportunidad(int id)
         {
             try
             {
-                return await _documento.GetByidOportunidad(id);
+                return await _oportunidadRepository.GetByIdOportunidad(id);
             }
             catch (Exception e)
             {
-
                 throw;
             }
         }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace look.Application.interfaces.oportunidad
 {
-    public interface IDocumentoOportunidadService:IService<DocumentoOportunidad>
+    public interface INovedadOportunidadService:IService<NovedadOportunidad>
     {
-        Task<List<DocumentoOportunidad>> GetByIdOportunidad(int id);
+        Task<List<NovedadOportunidad>> GetByIdOportunidad(int id);
     }
 }

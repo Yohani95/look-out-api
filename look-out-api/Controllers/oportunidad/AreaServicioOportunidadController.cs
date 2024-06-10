@@ -7,13 +7,13 @@ namespace look_out_api.Controllers.oportunidad
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OportunidadController : BaseController<Oportunidad>
+    public class AreaServicioOportunidadController : BaseController<AreaServicioOportunidad>
     {
-        public OportunidadController(IOportunidadService service) : base(service)
+        public AreaServicioOportunidadController(IAreaServicioOportunidadService service) : base(service)
         {
         }
 
-        protected override int GetEntityId(Oportunidad entity)
+        protected override int GetEntityId(AreaServicioOportunidad entity)
         {
             return entity.Id;
         }

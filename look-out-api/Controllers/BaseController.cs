@@ -71,6 +71,7 @@ namespace look_out_api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            try { 
             Log.Information("[Delete] Solicitud eliminar entidad con id: " + id);
             var entity = await _service.GetByIdAsync(id);
             if (entity == null)
@@ -78,6 +79,12 @@ namespace look_out_api.Controllers
                 return NotFound();
             }
             await _service.DeleteAsync(entity);
+            }
+            catch (Exception e)
+            {
+                Log.Error("[Update] Error al Eliminar entidad: " + id + " Error: " + e.Message);
+
+            }
             return NoContent();
         }
 

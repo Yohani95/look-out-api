@@ -29,6 +29,8 @@ namespace look.domain.entities.oportunidad
         public bool? Licitacion { get; set; }
         public DateTime? FechaRenovacion { get; set; }
         public int? IdEmpresaPrestadora { get; set; }
+        public int? IdAreaServicio { get; set; }
+        public int? IdContacto { get; set; }
         public virtual List<DocumentoOportunidad>? DocumentosOportunidad{ get; set; }
 
         public virtual Cliente? Cliente { get; set; }

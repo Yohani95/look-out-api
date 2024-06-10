@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace look.Infrastructure.repository.oportunidad
 {
-    internal class DocumentoOportunidadRepository : Repository<DocumentoOportunidad>, IDocumentoOportunidadRepository
+    public class NovedadOportunidadRepository : Repository<NovedadOportunidad>, INovedadOportunidadRepository
     {
-        public DocumentoOportunidadRepository(LookDbContext dbContext) : base(dbContext)
+        public NovedadOportunidadRepository(LookDbContext dbContext) : base(dbContext)
         {
         }
 
-        public async Task<List<DocumentoOportunidad>> GetByidOportunidad(int id)
+        public async Task<List<NovedadOportunidad>> GetByIdOportunidad(int id)
         {
-           return await _dbContext.DocumentoOportunidades.Where(d => d.IdOportunidad == id).ToListAsync();
+            return await _dbContext.NovedadOportunidades.Where(n=>n.IdOportunidad==id).ToListAsync();
         }
     }
 }

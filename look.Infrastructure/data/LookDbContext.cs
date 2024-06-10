@@ -82,7 +82,9 @@ namespace look.Infrastructure.data
         public DbSet<TipoOportunidad> TipoOportunidades{ get; set; }
         public DbSet<DocumentoOportunidad> DocumentoOportunidades{ get; set; }
         public DbSet<LogEntry> Logs { get; set; }
+        public DbSet<NovedadOportunidad> NovedadOportunidades{ get; set; }
 
+        public DbSet<AreaServicioOportunidad> areaServicioOportunidades { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -96,6 +98,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new EstadoOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new TipoOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new LogConfiguration());
+            modelBuilder.ApplyConfiguration(new AreaServicioOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new NovedadOportunidadConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {

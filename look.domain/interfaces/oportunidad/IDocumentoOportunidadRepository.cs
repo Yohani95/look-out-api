@@ -10,6 +10,6 @@ namespace look.domain.interfaces.oportunidad
 {
     public interface IDocumentoOportunidadRepository:IRepository<DocumentoOportunidad>
     {
-       // Task<DocumentosOportunidad> AddFactura(DocumentosOportunidad documentoFactura);
+        Task<List<DocumentoOportunidad>> GetByidOportunidad(int id);
     }
 }
