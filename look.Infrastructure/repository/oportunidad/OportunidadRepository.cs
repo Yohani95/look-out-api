@@ -25,7 +25,7 @@ namespace look.Infrastructure.repository.oportunidad
                 .Include(o=>o.EmpresaPrestadora)
                 .Include(o=>o.Moneda)
                 .Include(o=>o.Pais)
-                .Include(o=>o.Pais)
+                .Include(o=>o.PersonaKam)
                 .ToListAsync();
         }
     }

@@ -387,6 +387,7 @@ namespace look.Application.services.proyecto
                 existingProyecto.idTipoFacturacion= proyectoDTO.Proyecto.idTipoFacturacion;
                 existingProyecto.IdDiaPago= proyectoDTO.Proyecto.IdDiaPago;
                 existingProyecto.idEmpresaPrestadora = proyectoDTO.Proyecto.idEmpresaPrestadora;
+                existingProyecto.kamId = proyectoDTO.Proyecto.kamId;
 
 
                 var proyectoDocumentos = await _proyectoDocumentoService.GetAllAsync();

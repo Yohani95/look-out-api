@@ -20,6 +20,8 @@ namespace look.Infrastructure.data.oportunidad
             entity.Property(e => e.IdOportunidad)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_oportunidad");
+            entity.Property(e => e.Descripcion)
+                .HasColumnType("varchar(255)");
             entity.HasOne(d => d.Oportunidad)
                 .WithMany(d => d.DocumentosOportunidad)
                 .HasForeignKey(d => d.IdOportunidad)

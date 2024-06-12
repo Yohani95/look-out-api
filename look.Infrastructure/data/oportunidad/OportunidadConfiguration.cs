@@ -24,6 +24,7 @@ namespace look.Infrastructure.data.oportunidad
             builder.HasIndex(e => e.IdTipoOportunidad, "FK_oportunidad_tipo_oportunidad");
             builder.HasIndex(e => e.IdPais, "FK_oportunidad_Pais");
             builder.HasIndex(e => e.IdAreaServicio, "FK_oportunidad_area_servicio");
+            builder.HasIndex(e => e.IdKam, "FK_oportunidad_persona_kam");
             builder.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
@@ -71,6 +72,12 @@ namespace look.Infrastructure.data.oportunidad
             builder.Property(e => e.IdContacto)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_contacto");
+            builder.Property(e => e.IdKam)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_kam");
+            builder.Property(e => e.Descripcion)
+                .HasColumnType("varchar(255)")
+                .HasColumnName("descripcion");
 
             builder.HasOne(d => d.Cliente).WithMany()
                 .HasForeignKey(d => d.IdCliente)
@@ -94,6 +101,9 @@ namespace look.Infrastructure.data.oportunidad
             builder.HasOne(d => d.EstadoOportunidad).WithMany()
                 .HasForeignKey(d => d.IdEstadoOportunidad)
                 .HasConstraintName("FK_Estado_Oportunidad");
+            builder.HasOne(d => d.PersonaKam).WithMany()
+                .HasForeignKey(d => d.IdKam)
+                .HasConstraintName("FK_oportunidad_persona_kam");
         }
     }
 }

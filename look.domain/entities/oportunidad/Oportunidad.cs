@@ -1,4 +1,5 @@
-﻿using look.domain.entities.cuentas;
+﻿using look.domain.entities.admin;
+using look.domain.entities.cuentas;
 using look.domain.entities.factura;
 using look.domain.entities.proyecto;
 using look.domain.entities.world;
@@ -31,6 +32,8 @@ namespace look.domain.entities.oportunidad
         public int? IdEmpresaPrestadora { get; set; }
         public int? IdAreaServicio { get; set; }
         public int? IdContacto { get; set; }
+        public int? IdKam { get; set; }
+        public string? Descripcion { get; set; }
         public virtual List<DocumentoOportunidad>? DocumentosOportunidad{ get; set; }
 
         public virtual Cliente? Cliente { get; set; }
@@ -39,6 +42,7 @@ namespace look.domain.entities.oportunidad
         public virtual Pais? Pais { get; set; }
         public virtual TipoOportunidad? TipoOportunidad{ get; set; }
         public virtual EstadoOportunidad? EstadoOportunidad{ get; set; }
+        public virtual Persona? PersonaKam{ get; set; }
 
     }
 }
