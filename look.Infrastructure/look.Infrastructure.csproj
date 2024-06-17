@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <Folder Include="data\admin\" />
+    <Folder Include="data\common\" />
     <Folder Include="data\cuentas\" />
-    <Folder Include="data\world\" />
     <Folder Include="data\proyecto\" />
   </ItemGroup>
 
