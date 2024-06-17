@@ -10,6 +10,7 @@ using look.Infrastructure.data.factura;
 using look.Infrastructure.data.Logger;
 using look.Infrastructure.data.oportunidad;
 using look.Infrastructure.data.soporte;
+using look.Infrastructure.data.world;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,7 @@ namespace look.Infrastructure.data
         public DbSet<NovedadOportunidad> NovedadOportunidades{ get; set; }
 
         public DbSet<AreaServicioOportunidad> areaServicioOportunidades { get; set; }
+        public DbSet<DiasFeriados> DiasFeriados{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -100,6 +102,7 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new LogConfiguration());
             modelBuilder.ApplyConfiguration(new AreaServicioOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new NovedadOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new DiasFeriadosConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -160,7 +163,7 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PaiNombre)
                     .HasMaxLength(50)
                     .HasColumnName("pai_nombre");
-
+                entity.Property(e => e.Codigo).HasColumnName("Codigo").HasMaxLength(3).HasColumnType("VARCHAR(3)");
                 entity.HasOne(d => d.Lenguaje).WithMany()
                     .HasForeignKey(d => d.LenId)
                     .HasConstraintName("FK_pais_id_Lenguaje");

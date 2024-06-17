@@ -12,6 +12,7 @@ namespace look.domain.entities.world
         public int PaiId { get; set; }
         public string PaiNombre { get; set; }
         public int LenId { get; set; }
+        public string Codigo { get; set; }
 
         [JsonIgnore]
         public Lenguaje? Lenguaje { get; set; }
