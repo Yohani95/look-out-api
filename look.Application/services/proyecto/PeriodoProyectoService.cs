@@ -409,7 +409,6 @@ namespace look.Application.services.proyecto
                 try
                 {
                 List<DateTime> feriadosfechas = new List<DateTime>();
-                 await _unitOfWork.BeginTransactionAsync();
                 var pais=await _paisRepository.GetByIdAsync(idPais);
                 // Obtener todos los feriados de la base de datos
                 var feriadosList = await _diasFeriadosService.GetAllAsync();
@@ -421,18 +420,21 @@ namespace look.Application.services.proyecto
                 if (!feariadosfilter.Any())
                 {
                     var result = await _diasFeriadosService.ConsultarYGuardarFeriados(pais.Codigo, year, idPais);
-                    feriadosfechas.AddRange((IEnumerable<DateTime>)result.Select(dia => dia.Fecha));
+                    foreach (var fecha in result)
+                    {
+                        feriadosfechas.Add((DateTime)fecha.Fecha);
+                    }
                     return feriadosfechas;
                 }
 
-                // Si hay feriados para el país especificado, agregarlos a la lista
-                feriadosfechas.AddRange((IEnumerable<DateTime>)feariadosfilter.Select(dia => dia.Fecha));
-                await _unitOfWork.CommitAsync();
+                foreach (var fecha in feariadosfilter)
+                {
+                    feriadosfechas.Add((DateTime)fecha.Fecha);
+                }
                 return feriadosfechas;
             }
                 catch (HttpRequestException e)
                 {
-                    await _unitOfWork.RollbackAsync();
                     _logger.Error("Error interno del servidor: " + e.Message);
                     return null;
                 }
