@@ -87,6 +87,10 @@ namespace look.Infrastructure.data
 
         public DbSet<AreaServicioOportunidad> areaServicioOportunidades { get; set; }
         public DbSet<DiasFeriados> DiasFeriados{ get; set; }
+        public DbSet<OrigenOportunidad> OrigenOportunidades{ get; set; }
+        public DbSet<TipoLicenciaOportunidad> TipoLicenciaOportunidades{ get; set; }
+        public DbSet<LicitacionOportunidad> LicitacionOportunidades{ get; set; }
+        public DbSet<TipoCerradaOportunidad> TipoCerradaOportunidades{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -103,6 +107,10 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new AreaServicioOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new NovedadOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new DiasFeriadosConfiguration());
+            modelBuilder.ApplyConfiguration(new OrigenOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoLicenciaOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new LicitacionOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoCerradaOportunidadConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {

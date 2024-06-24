@@ -25,6 +25,10 @@ namespace look.Infrastructure.data.oportunidad
             builder.HasIndex(e => e.IdPais, "FK_oportunidad_Pais");
             builder.HasIndex(e => e.IdAreaServicio, "FK_oportunidad_area_servicio");
             builder.HasIndex(e => e.IdKam, "FK_oportunidad_persona_kam");
+            builder.HasIndex(e => e.IdLicitacion, "FK_licitacion_oportunidad");
+            builder.HasIndex(e => e.IdTipoLicencia, "FK_tipo_licitacion_oportunidad");
+            builder.HasIndex(e => e.IdOrigen, "FK_origen_oportunidad");
+            builder.HasIndex(e => e.IdTipoCerrada, "FK_cerrada_oportunidad");
             builder.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
@@ -50,10 +54,15 @@ namespace look.Infrastructure.data.oportunidad
                 .HasColumnName("renovable")
                 .HasColumnType("boolean")
                 .HasDefaultValue(false);
-            builder.Property(e => e.Licitacion)
-                .HasColumnName("licitacion")
-                .HasColumnType("licitacion")
-                .HasDefaultValue(false);
+            builder.Property(e => e.IdLicitacion)
+                .HasColumnName("id_licitacion")
+                .HasColumnType("int");
+            builder.Property(e => e.IdTipoLicencia)
+                .HasColumnName("id_tipo_licencia")
+                .HasColumnType("int");
+            builder.Property(e => e.IdOrigen)
+                .HasColumnName("id_origen")
+                .HasColumnType("int");
             builder.Property(e => e.IdEmpresaPrestadora)
                 .HasColumnType("int(11)")
                 .HasColumnName("id_empresa_prestadora");
@@ -78,6 +87,12 @@ namespace look.Infrastructure.data.oportunidad
             builder.Property(e => e.Descripcion)
                 .HasColumnType("varchar(255)")
                 .HasColumnName("descripcion");
+            builder.Property(e => e.FechaCreacion)
+             .HasColumnType("datetime")
+             .HasColumnName("fecha_creacion");
+            builder.Property(e => e.IdTipoCerrada)
+                .HasColumnType("int")
+                .HasColumnName("id_tipo_cerrada");
 
             builder.HasOne(d => d.Cliente).WithMany()
                 .HasForeignKey(d => d.IdCliente)
