@@ -1,11 +1,16 @@
 using look.domain.entities.admin;
+using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using look.domain.entities.factura;
+using look.domain.entities.oportunidad;
 using look.domain.entities.proyecto;
 using look.domain.entities.soporte;
 using look.domain.entities.world;
 using look.Infrastructure.data.factura;
+using look.Infrastructure.data.Logger;
+using look.Infrastructure.data.oportunidad;
 using look.Infrastructure.data.soporte;
+using look.Infrastructure.data.world;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -73,6 +78,19 @@ namespace look.Infrastructure.data
         public DbSet<Soporte> Soportes{ get; set; }
         public DbSet<DocumentosSoporte> DocumentosSoporte { get; set; }
         public DbSet<HorasUtilizadas> HorasUtilizadas { get; set; }
+        public DbSet<Oportunidad> oportunidades { get; set; }
+        public DbSet<EstadoOportunidad> EstadoOportunidades { get; set; }
+        public DbSet<TipoOportunidad> TipoOportunidades{ get; set; }
+        public DbSet<DocumentoOportunidad> DocumentoOportunidades{ get; set; }
+        public DbSet<LogEntry> Logs { get; set; }
+        public DbSet<NovedadOportunidad> NovedadOportunidades{ get; set; }
+
+        public DbSet<AreaServicioOportunidad> areaServicioOportunidades { get; set; }
+        public DbSet<DiasFeriados> DiasFeriados{ get; set; }
+        public DbSet<OrigenOportunidad> OrigenOportunidades{ get; set; }
+        public DbSet<TipoLicenciaOportunidad> TipoLicenciaOportunidades{ get; set; }
+        public DbSet<LicitacionOportunidad> LicitacionOportunidades{ get; set; }
+        public DbSet<TipoCerradaOportunidad> TipoCerradaOportunidades{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -81,6 +99,18 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new SoporteConfiguration());
             modelBuilder.ApplyConfiguration(new HorasUtilizadasConfiguration());
             modelBuilder.ApplyConfiguration(new FacturaPeriodoConfiguration());
+            modelBuilder.ApplyConfiguration(new OportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentoOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new EstadoOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new LogConfiguration());
+            modelBuilder.ApplyConfiguration(new AreaServicioOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new NovedadOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new DiasFeriadosConfiguration());
+            modelBuilder.ApplyConfiguration(new OrigenOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoLicenciaOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new LicitacionOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoCerradaOportunidadConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -141,7 +171,7 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.PaiNombre)
                     .HasMaxLength(50)
                     .HasColumnName("pai_nombre");
-
+                entity.Property(e => e.Codigo).HasColumnName("Codigo").HasMaxLength(3).HasColumnType("VARCHAR(3)");
                 entity.HasOne(d => d.Lenguaje).WithMany()
                     .HasForeignKey(d => d.LenId)
                     .HasConstraintName("FK_pais_id_Lenguaje");

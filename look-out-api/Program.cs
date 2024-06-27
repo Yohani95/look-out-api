@@ -4,6 +4,7 @@ using YourNamespace.Configuration;
 using look.domain.interfaces.unitOfWork;
 using Serilog;
 using look.domain.entities.Common;
+using look.Infrastructure.middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = new ConfigurationBuilder()
@@ -36,6 +37,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseMiddleware<ErrorLoggingMiddleware>();
 var allowedOrigins = app.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 app.UseCors(builder =>
 {

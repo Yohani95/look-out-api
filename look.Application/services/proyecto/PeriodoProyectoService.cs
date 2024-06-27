@@ -34,12 +34,14 @@ namespace look.Application.services.proyecto
         private readonly INovedadesRepository _novedadesRepository;
         private PeriodoProfesionales periodoProfesionales;
         private readonly IPeriodoProfesionalesRepository _periodoProfesionalesRepository;
-
+        private readonly IDiasFeriadosService _diasFeriadosService;
+        private readonly IPaisRepository _paisRepository;
         public PeriodoProyectoService(IPeriodoProyectoRepository periodoProyectoRepository, IUnitOfWork unitOfWork,
             ITarifarioConvenioRepository tarifarioConvenioService,
             IProyectoParticipanteRepository proyectoParticipanteService,
             IProyectoRepository proyectoRepository, IMonedaRepository monedaRepository,
-            IMonedaService monedaService, INovedadesRepository novedadesRepository, IPeriodoProfesionalesRepository periodoProfesionalesRepository) : base(periodoProyectoRepository)
+            IMonedaService monedaService, INovedadesRepository novedadesRepository, IPeriodoProfesionalesRepository periodoProfesionalesRepository
+            , IDiasFeriadosService diasFeriadosService,IPaisRepository paisRepository) : base(periodoProyectoRepository)
         {
             _periodoProyectoRepository = periodoProyectoRepository;
             _unitOfWork = unitOfWork;
@@ -50,6 +52,8 @@ namespace look.Application.services.proyecto
             _monedaService = monedaService;
             _novedadesRepository = novedadesRepository;
             _periodoProfesionalesRepository = periodoProfesionalesRepository;
+            _diasFeriadosService = diasFeriadosService;
+            _paisRepository = paisRepository;
         }
 
         public async Task<List<PeriodoProyecto>> ListByProyecto(int id)
@@ -245,13 +249,16 @@ namespace look.Application.services.proyecto
 
             if (existingProyecto.FacturacionDiaHabil!=0)
             {
-
-                var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year);
+                // **********************  obtener feriados segun pais *************
+                //
+                //VERIFICAR 
+                //
+                var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year, (int)existingProyecto.PaisId);
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados, participante);
                 diasTotalesPeriodo = CalcularDiasHabilSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
                 if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora) {
                     //este caso es evaluado exepcionalmente para el pais peru
-                    var horas =existingProyecto.PaisId==2? 8 : 9;
+                    var horas = existingProyecto.PaisId == 2 ? 8 : 9;
                     // se comenta y se elimina limitaciion a peru
                     //if (horas == 8 && diasTotalesTrabajados>= 200)
                     //{ 
@@ -260,10 +267,9 @@ namespace look.Application.services.proyecto
                     //}
                     //else
                     //{
-                        tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
-                        tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
+                    tarifaDiario = (double)(tarifarioConvenio.TcTarifa * horas);
+                    tarifaTotalTrabajado = tarifaDiario * diasTotalesTrabajados;
                     //}
-
                 }
                 else
                 {
@@ -397,30 +403,42 @@ namespace look.Application.services.proyecto
         /// </summary>
         /// <param name="year">espera el año</param>
         /// <returns>retorna una lista de fechas</returns>
-        static async Task<List<DateTime>> ObtenerDiasFeriados(int year)
+        private async Task<List<DateTime>> ObtenerDiasFeriados(int year,int idPais)
         {
-            string url = "https://apis.digital.gob.cl/fl/feriados/" + year;
-            using (HttpClient httpClient = new HttpClient())
-            {
+
                 try
                 {
-                    List<DateTime> feriadosfechas = new List<DateTime>();
-                    HttpResponseMessage response = await httpClient.GetAsync(url);
-                    response.EnsureSuccessStatusCode();
-                    string contenido = await response.Content.ReadAsStringAsync();
-                    List<Feriado> feriados = JsonConvert.DeserializeObject<List<Feriado>>(contenido);
-                    foreach (var fecha in feriados)
+                List<DateTime> feriadosfechas = new List<DateTime>();
+                var pais=await _paisRepository.GetByIdAsync(idPais);
+                // Obtener todos los feriados de la base de datos
+                var feriadosList = await _diasFeriadosService.GetAllAsync();
+
+                // Filtrar los feriados por país
+                var feariadosfilter = feriadosList.Where(f => f.IdPais == idPais).ToList();
+
+                // Si no hay feriados para el país especificado, consultar y guardar nuevos feriados
+                if (!feariadosfilter.Any())
+                {
+                    var result = await _diasFeriadosService.ConsultarYGuardarFeriados(pais.Codigo, year, idPais);
+                    foreach (var fecha in result)
                     {
-                        feriadosfechas.Add(DateTime.Parse(fecha.Fecha));
+                        feriadosfechas.Add((DateTime)fecha.Fecha);
                     }
                     return feriadosfechas;
                 }
+
+                foreach (var fecha in feariadosfilter)
+                {
+                    feriadosfechas.Add((DateTime)fecha.Fecha);
+                }
+                return feriadosfechas;
+            }
                 catch (HttpRequestException e)
                 {
-                    Console.WriteLine($"Error al obtener los feriados: {e.Message}");
+                    _logger.Error("Error interno del servidor: " + e.Message);
                     return null;
                 }
-            }
+            
         }
         /// <summary>
         /// obtiene uf de api https://mindicador.cl/api/uf
