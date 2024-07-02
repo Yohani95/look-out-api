@@ -151,10 +151,10 @@ namespace look.Infrastructure.data
                     .HasConstraintName("FK_Usuario_perfil");
 
                 entity.HasOne(d => d.Perfil).WithMany()
-                    .HasForeignKey(d => d.PerId)
+                    .HasForeignKey(d => d.PrfId)
                     .HasConstraintName("FK_Usuario_Persona");
                 entity.HasOne(d => d.Rol).WithMany()
-                    .HasForeignKey(d => d.PerId)
+                    .HasForeignKey(d => d.RolId)
                     .HasConstraintName("FK_Usuario_Rol");
             });
             modelBuilder.Entity<Pais>(entity =>
