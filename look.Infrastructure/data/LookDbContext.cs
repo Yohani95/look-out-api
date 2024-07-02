@@ -2,11 +2,13 @@ using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.cuentas;
 using look.domain.entities.factura;
+using look.domain.entities.licencia;
 using look.domain.entities.oportunidad;
 using look.domain.entities.proyecto;
 using look.domain.entities.soporte;
 using look.domain.entities.world;
 using look.Infrastructure.data.factura;
+using look.Infrastructure.data.licencia;
 using look.Infrastructure.data.Logger;
 using look.Infrastructure.data.oportunidad;
 using look.Infrastructure.data.soporte;
@@ -91,6 +93,7 @@ namespace look.Infrastructure.data
         public DbSet<TipoLicenciaOportunidad> TipoLicenciaOportunidades{ get; set; }
         public DbSet<LicitacionOportunidad> LicitacionOportunidades{ get; set; }
         public DbSet<TipoCerradaOportunidad> TipoCerradaOportunidades{ get; set; }
+        public DbSet<VentaLicencia> VentaLicencias{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -111,6 +114,7 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new TipoLicenciaOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new LicitacionOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new TipoCerradaOportunidadConfiguration());
+            modelBuilder.ApplyConfiguration(new VentaLicenciaConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
