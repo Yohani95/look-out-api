@@ -7,13 +7,13 @@ namespace look_out_api.Controllers.licencia
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VentaLicenciaController : BaseController<VentaLicencia>
+    public class MayoristaLicenciaContactoController : BaseController<MayoristaLicenciaContacto>
     {
-        public VentaLicenciaController(IVentaLicenciaService service) : base(service)
+        public MayoristaLicenciaContactoController(IMayoristaLicenciaContactoService service) : base(service)
         {
         }
 
-        protected override int GetEntityId(VentaLicencia entity)
+        protected override int GetEntityId(MayoristaLicenciaContacto entity)
         {
             return entity.Id;
         }
