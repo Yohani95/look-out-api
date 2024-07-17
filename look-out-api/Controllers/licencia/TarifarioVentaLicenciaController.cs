@@ -1,19 +1,20 @@
 ﻿using look.Application.interfaces;
 using look.Application.interfaces.licencia;
 using look.domain.entities.licencia;
+using look.domain.interfaces.licencia;
 using Microsoft.AspNetCore.Mvc;
 
 namespace look_out_api.Controllers.licencia
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VentaLicenciaController : BaseController<VentaLicencia>
+    public class TarifarioVentaLicenciaController : BaseController<TarifarioVentaLicencia>
     {
-        public VentaLicenciaController(IVentaLicenciaService service) : base(service)
+        public TarifarioVentaLicenciaController(ITarifarioVentaLicenciaService service) : base(service)
         {
         }
 
-        protected override int GetEntityId(VentaLicencia entity)
+        protected override int GetEntityId(TarifarioVentaLicencia entity)
         {
             return entity.Id;
         }
