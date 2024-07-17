@@ -1,4 +1,5 @@
-﻿using System;
+﻿using look.domain.entities.oportunidad;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace look.domain.entities.licencia
         
         public virtual MarcaLicencia? MarcaLicencia { get; }
         public virtual MayoristaLicencia? MayoristaLicencia{ get; }
+        public virtual TipoLicenciaOportunidad? TipoLicencia { get; }
 
     }
 }

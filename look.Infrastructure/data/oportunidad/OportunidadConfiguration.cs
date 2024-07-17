@@ -89,7 +89,8 @@ namespace look.Infrastructure.data.oportunidad
                 .HasColumnName("descripcion");
             builder.Property(e => e.FechaCreacion)
              .HasColumnType("datetime")
-             .HasColumnName("fecha_creacion");
+             .HasColumnName("fecha_creacion")
+             .HasDefaultValueSql("CURRENT_TIMESTAMP"); ;
             builder.Property(e => e.IdTipoCerrada)
                 .HasColumnType("int")
                 .HasColumnName("id_tipo_cerrada");

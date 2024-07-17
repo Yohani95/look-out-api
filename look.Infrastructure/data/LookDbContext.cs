@@ -99,6 +99,7 @@ namespace look.Infrastructure.data
         public DbSet<MarcaLicenciaContacto> MarcaLicenciaContactos{ get; set; }
         public DbSet<MayoristaLicencia> MayoristaLicencias{ get; set; }
         public DbSet<MayoristaLicenciaContacto> MayoristaLicenciaContactos{ get; set; }
+        public DbSet<TarifarioVentaLicencia> TarifarioVentaLicencias{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -125,6 +126,7 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new MarcaLicenciaContactoConfiguration());
             modelBuilder.ApplyConfiguration(new MayoristaLicenciaConfiguration());
             modelBuilder.ApplyConfiguration(new MayoristaLicenciaContactoConfiguration());
+            modelBuilder.ApplyConfiguration(new TarifarioVentaLicenciaConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {

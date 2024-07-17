@@ -28,13 +28,10 @@ namespace look.Infrastructure.data.licencia
 
             builder.Property(e => e.Descripcion)
                 .HasColumnType("varchar(15)")
-                .HasColumnName("telefono");
+                .HasColumnName("descripcion");
 
-            builder.Property(e => e.Estado)
-                .HasColumnType("boolean")
-                .HasColumnName("estado")
-                .HasDefaultValue(true)
-                .HasComment("vigencia de mayorista");
+
         }
     }
+    
 }
