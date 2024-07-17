@@ -22,7 +22,7 @@ namespace look.Infrastructure.data.licencia
                 .HasColumnName("id");
 
             // Índices (hasIndex)
-            builder.HasIndex(e => e.IdContacto, "FK_marca_licencia_contacto");
+            builder.HasIndex(e => e.IdContacto, "FK_marca_licencia_contacto_persona");
             builder.HasIndex(e => e.IdMarca, "FK_marca_licencia_contacto_marca");
 
             //columnas

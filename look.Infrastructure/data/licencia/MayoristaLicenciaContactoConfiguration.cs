@@ -23,7 +23,7 @@ namespace look.Infrastructure.data.licencia
 
             // Índices (hasIndex)
             builder.HasIndex(e => e.IdMayorista, "FK_mayorista_licencia_contacto_mayorista");
-            builder.HasIndex(e => e.IdContacto, "FK_mayorista_licencia_contacto");
+            builder.HasIndex(e => e.IdContacto, "FK_mayorista_licencia_contacto_persona");
 
             //columnas
             builder.Property(e => e.IdContacto)
