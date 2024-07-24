@@ -16,7 +16,7 @@ namespace look.Infrastructure.data.factura
             builder.ToTable("factura_adaptacion");
 
             builder.HasKey(e => e.Id).HasName("PRIMARY");
-            builder.HasIndex(e => e.IdFactura, "FK_factura_adaptacion");
+            builder.HasIndex(e => e.IdCliente, "FK_factura_adaptacion_cliente");
             builder.Property(e => e.Id)
                 .HasColumnType("int")
                 .HasColumnName("id");
@@ -30,9 +30,9 @@ namespace look.Infrastructure.data.factura
                 .HasColumnType("double")
                 .HasColumnName("monto");
 
-            builder.Property(e => e.IdFactura)
+            builder.Property(e => e.IdCliente)
                 .HasColumnType("int")
-                .HasColumnName("id_factura");
+                .HasColumnName("id_cliente");
 
             builder.Property(e => e.Descripcion)
                 .HasColumnType("varchar(255)")
@@ -41,10 +41,10 @@ namespace look.Infrastructure.data.factura
             builder.Property(e => e.MontoDiferencia)
                 .HasColumnType("double")
                 .HasColumnName("monto_diferencia");
-            builder.HasOne(d => d.Factura)
+            builder.HasOne(d => d.Cliente)
                             .WithMany()
-                            .HasForeignKey(d => d.IdFactura)
-                            .HasConstraintName("FK_factura_adaptacion");
+                            .HasForeignKey(d => d.IdCliente)
+                            .HasConstraintName("FK_factura_adaptacion_cliente");
         }
     }
 }

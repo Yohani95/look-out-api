@@ -12,8 +12,23 @@ namespace look.Application.services.factura
 {
     public class FacturaAdaptacionService : Service<FacturaAdaptacion>, IFacturaAdaptacionService
     {
+        private readonly IFacturaAdaptacionRepository _facturaAdaptacionService;
         public FacturaAdaptacionService(IFacturaAdaptacionRepository repository) : base(repository)
         {
+            _facturaAdaptacionService = repository;
+        }
+
+        public async Task<FacturaAdaptacion> GetFacturaAdaptacionByIdFactura(int idFactura)
+        {
+            try
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
     }
 }
