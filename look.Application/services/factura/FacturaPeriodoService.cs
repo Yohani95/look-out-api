@@ -1,6 +1,7 @@
 ﻿using look.Application.interfaces.factura;
 using look.domain.entities.Common;
 using look.domain.entities.factura;
+using look.domain.entities.soporte;
 using look.domain.interfaces;
 using look.domain.interfaces.factura;
 using look.domain.interfaces.proyecto;
@@ -173,6 +174,37 @@ namespace look.Application.services.factura
                 await _unitOfWork.RollbackAsync();
                 _logger.Error(Message.ErrorServidor + e.Message);
                 return false;
+            }
+        }
+
+        public async Task<bool> ChangeEstadoByLicencia(int idlicencia, int estado)
+        {
+            try
+            {
+                _logger.Information("Solicitando factura, id Periodo: " + idlicencia);
+                await _unitOfWork.BeginTransactionAsync();
+                await _repository.ChangeEstadoByLicencia(idlicencia, estado);
+                await _unitOfWork.CommitAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return false;
+            }
+        }
+
+        public async Task<List<FacturaPeriodo>> GetAllEntitiesByIdLicense(int id)
+        {
+            try
+            {
+                return await _repository.GetAllEntitiesByIdLicense(id);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
             }
         }
     }

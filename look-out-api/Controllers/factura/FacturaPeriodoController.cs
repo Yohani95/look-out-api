@@ -66,6 +66,21 @@ namespace look_out_api.Controllers.factura
             var data = await _service.ChangeEstadoSoporte(idSoporte, estado);
             return Ok(data);
         }
+
+        [HttpGet("ChangeEstadoLicencia/{idLicencia}/{estado}")]
+        public async Task<IActionResult> GetAllEntitiesByIdLicense(int idLicencia, int estado)
+        {
+            Log.Information("[ChangeEstadoLicencia] Cambiar estado idLicencia: " + idLicencia + ", Estado ID:" + estado);
+            var data = await _service.ChangeEstadoByLicencia(idLicencia, estado);
+            return Ok(data);
+        }
+        [HttpGet("GetAllEntitiesByIdLicense/{id}")]
+        public async Task<ActionResult<FacturaPeriodo>> GetAllEntitiesByIdLicense(int id)
+        {
+            Log.Information("[GetAllEntitiesByIdLicense] Solicitud getall facturas licencia idLicencia: " + id);
+            var data = await _service.GetAllEntitiesByIdLicense(id);
+            return Ok(data);
+        }
         protected override int GetEntityId(FacturaPeriodo entity)
         {
             return entity.Id;

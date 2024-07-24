@@ -17,6 +17,7 @@ namespace look.domain.entities.licencia
         public DateTime FechaVigencia { get; set; }
         public DateTime FechaTermino { get; set; }
         
+        public int? IdVentaLicencia { get; set; }
         public virtual MarcaLicencia? MarcaLicencia { get; }
         public virtual MayoristaLicencia? MayoristaLicencia{ get; }
         public virtual TipoLicenciaOportunidad? TipoLicencia { get; }

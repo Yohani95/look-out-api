@@ -9,5 +9,6 @@ namespace look.Application.interfaces.licencia
 {
     public interface ITarifarioVentaLicenciaService:IService<TarifarioVentaLicencia>
     {
+        Task<IEnumerable<TarifarioVentaLicencia>> GetAllEntitiesByIdLicense(int idLicencia);
     }
 }

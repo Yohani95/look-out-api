@@ -50,6 +50,10 @@ namespace look.Infrastructure.data.licencia
                 .HasColumnType("int")
                 .HasColumnName("id_mayorista_licencia");
 
+            builder.Property(e => e.IdVentaLicencia)
+               .HasColumnType("int")
+               .HasColumnName("id_venta_licencia");
+
             //// Relaciones
             builder.HasOne(d => d.MarcaLicencia).WithMany()
                 .HasForeignKey(d => d.IdMarcaLicencia)

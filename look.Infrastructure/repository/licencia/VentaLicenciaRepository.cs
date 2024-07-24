@@ -29,5 +29,16 @@ namespace look.Infrastructure.repository.licencia
                 .Include(o => o.Kam)
                 .ToListAsync();
         }
+        public new async Task<VentaLicencia> GetByIdAsync(int id)
+        {
+            return await _dbContext.VentaLicencias
+                .Include(o => o.Cliente)
+                .Include(o => o.EstadoVentaLicencia)
+                .Include(o => o.EmpresaPrestadora)
+                .Include(o => o.Moneda)
+                .Include(o => o.Pais)
+                .Include(o => o.Kam)
+                .FirstAsync(v=>v.Id==id);
+        }
     }
 }

@@ -24,5 +24,15 @@ namespace look.Infrastructure.repository.licencia
                 .Include(t=>t.MayoristaLicencia)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<TarifarioVentaLicencia>> GetAllEntitiesByIdLicense(int idLicencia)
+        {
+            return await _dbContext.TarifarioVentaLicencias
+                .Include(t => t.TipoLicencia)
+                .Include(t => t.MarcaLicencia)
+                .Include(t => t.MayoristaLicencia)
+                .Where(t => t.IdVentaLicencia == idLicencia)
+                .ToListAsync();
+        }
     }
 }

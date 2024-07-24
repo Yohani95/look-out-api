@@ -9,5 +9,6 @@ namespace look.domain.interfaces.licencia
 {
     public interface ITarifarioVentaLicenciaRepository:IRepository<TarifarioVentaLicencia>
     {
+        Task<IEnumerable<TarifarioVentaLicencia>> GetAllEntitiesByIdLicense(int idLicencia);
     }
 }
