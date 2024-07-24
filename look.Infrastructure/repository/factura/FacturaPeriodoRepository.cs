@@ -1,4 +1,5 @@
 ﻿using look.domain.entities.factura;
+using look.domain.entities.soporte;
 using look.domain.interfaces.factura;
 using look.Infrastructure.data;
 using Microsoft.EntityFrameworkCore;
@@ -114,6 +115,36 @@ namespace look.Infrastructure.repository.factura
                  .Include(p => p.Estado)
                  .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.IdSoporteBolsa == id)
+                .ToListAsync();
+        }
+
+        public async Task<bool> ChangeEstadoByLicencia(int idlicencia, int estado)
+        {
+            var facturas = await _dbContext.FacturaPeriodo
+                   .Where(p => p.idLicencia== idlicencia)
+                   .ToListAsync();
+
+            if (facturas != null && facturas.Any())
+            {
+                foreach (var factura in facturas)
+                {
+                    factura.IdEstado = estado;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<List<FacturaPeriodo>> GetAllEntitiesByIdLicense(int id)
+        {
+            return await _dbContext.FacturaPeriodo
+                .Include(p => p.Soporte)
+                 .Include(p => p.Estado)
+                 .Include(fp => fp.DocumentosFactura)
+                .Where(p => p.idLicencia == id)
                 .ToListAsync();
         }
     }

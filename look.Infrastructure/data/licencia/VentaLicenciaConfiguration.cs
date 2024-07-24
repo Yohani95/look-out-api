@@ -24,7 +24,8 @@ namespace look.Infrastructure.data.licencia
             builder.HasIndex(e => e.IdPais, "FK_venta_licencia_pais");
             builder.HasIndex(e => e.IdKam, "FK_venta_licencia_kam");
             builder.HasIndex(e => e.IdTipoFacturacion, "FK_venta_licencia_tipo_facturacion");
-            builder.HasIndex(e => e.idTipoLicencia, "FK_venta_licencia_tipo_licencia");
+            builder.HasIndex(e => e.IdEmpresaPrestadora, "FK_oportunidad_Empresa_Prestadora");
+            //builder.HasIndex(e => e.idTipoLicencia, "FK_venta_licencia_tipo_licencia");
 
             // Configuración de propiedades
             builder.Property(e => e.Id)
@@ -82,35 +83,38 @@ namespace look.Infrastructure.data.licencia
             builder.Property(e => e.idTipoLicencia)
                 .HasColumnType("int")
                 .HasColumnName("id_tipo_licencia");
+            builder.Property(e => e.IdEmpresaPrestadora)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_empresa_prestadora");
+
+            builder.Property(e => e.Descuento)
+               .HasColumnType("int(11)")
+               .HasColumnName("descuento");
 
             //// Relaciones
-            //builder.HasOne(d => d.Cliente).WithMany()
-            //    .HasForeignKey(d => d.IdCliente)
-            //    .HasConstraintName("FK_venta_licencia_cliente");
+            builder.HasOne(d => d.Cliente).WithMany()
+                .HasForeignKey(d => d.IdCliente)
+                .HasConstraintName("FK_venta_licencia_cliente");
 
-            //builder.HasOne(d => d.Estado).WithMany()
-            //    .HasForeignKey(d => d.IdEstado)
-            //    .HasConstraintName("FK_venta_licencia_estado");
+            builder.HasOne(d => d.EstadoVentaLicencia).WithMany()
+                .HasForeignKey(d => d.IdEstado)
+                .HasConstraintName("FK_venta_licencia_estado");
 
-            //builder.HasOne(d => d.Moneda).WithMany()
-            //    .HasForeignKey(d => d.IdMoneda)
-            //    .HasConstraintName("FK_venta_licencia_moneda");
+            builder.HasOne(d => d.Moneda).WithMany()
+                .HasForeignKey(d => d.IdMoneda)
+                .HasConstraintName("FK_venta_licencia_moneda");
 
-            //builder.HasOne(d => d.Pais).WithMany()
-            //    .HasForeignKey(d => d.IdPais)
-            //    .HasConstraintName("FK_venta_licencia_pais");
+            builder.HasOne(d => d.Pais).WithMany()
+                .HasForeignKey(d => d.IdPais)
+                .HasConstraintName("FK_venta_licencia_pais");
 
-            //builder.HasOne(d => d.Kam).WithMany()
-            //    .HasForeignKey(d => d.IdKam)
-            //    .HasConstraintName("FK_venta_licencia_kam");
+            builder.HasOne(d => d.Kam).WithMany()
+                .HasForeignKey(d => d.IdKam)
+                .HasConstraintName("FK_venta_licencia_kam");
+            builder.HasOne(d => d.EmpresaPrestadora).WithMany()
+                .HasForeignKey(d => d.IdEmpresaPrestadora)
+                .HasConstraintName("FK_oportunidad_Empresa_Prestadora");
 
-            //builder.HasOne(d => d.TipoFacturacion).WithMany()
-            //    .HasForeignKey(d => d.IdTipoFacturacion)
-            //    .HasConstraintName("FK_venta_licencia_tipo_facturacion");
-
-            //builder.HasOne(d => d.TipoLicencia).WithMany()
-            //    .HasForeignKey(d => d.idTipoLicencia)
-            //    .HasConstraintName("FK_venta_licencia_tipo_licencia");
         }
     }
 }

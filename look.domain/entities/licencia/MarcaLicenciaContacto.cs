@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace look.domain.entities.licencia
 {
-    public class Mayorista
+    public class MarcaLicenciaContacto
     {
         public int Id { get; set; }
-        public string? Nombre { get; set; }
-        public string? Descripcion { get; set; }
+        public int IdMarca { get; set; }
+        public int IdContacto { get; set; }
     }
 }

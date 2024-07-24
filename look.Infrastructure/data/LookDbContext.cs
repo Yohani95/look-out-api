@@ -76,24 +76,32 @@ namespace look.Infrastructure.data
 
         public DbSet<DocumentosFactura> DocumentosFactura { get; set; }
         public DbSet<DiaPagos> DiaPagos { get; set; }
-        public DbSet<EmpresaPrestadora> EmpresaPrestadoras{ get; set; }
-        public DbSet<Soporte> Soportes{ get; set; }
+        public DbSet<EmpresaPrestadora> EmpresaPrestadoras { get; set; }
+        public DbSet<Soporte> Soportes { get; set; }
         public DbSet<DocumentosSoporte> DocumentosSoporte { get; set; }
         public DbSet<HorasUtilizadas> HorasUtilizadas { get; set; }
         public DbSet<Oportunidad> oportunidades { get; set; }
         public DbSet<EstadoOportunidad> EstadoOportunidades { get; set; }
-        public DbSet<TipoOportunidad> TipoOportunidades{ get; set; }
-        public DbSet<DocumentoOportunidad> DocumentoOportunidades{ get; set; }
+        public DbSet<TipoOportunidad> TipoOportunidades { get; set; }
+        public DbSet<DocumentoOportunidad> DocumentoOportunidades { get; set; }
         public DbSet<LogEntry> Logs { get; set; }
-        public DbSet<NovedadOportunidad> NovedadOportunidades{ get; set; }
+        public DbSet<NovedadOportunidad> NovedadOportunidades { get; set; }
 
         public DbSet<AreaServicioOportunidad> areaServicioOportunidades { get; set; }
-        public DbSet<DiasFeriados> DiasFeriados{ get; set; }
-        public DbSet<OrigenOportunidad> OrigenOportunidades{ get; set; }
-        public DbSet<TipoLicenciaOportunidad> TipoLicenciaOportunidades{ get; set; }
-        public DbSet<LicitacionOportunidad> LicitacionOportunidades{ get; set; }
-        public DbSet<TipoCerradaOportunidad> TipoCerradaOportunidades{ get; set; }
-        public DbSet<VentaLicencia> VentaLicencias{ get; set; }
+        public DbSet<DiasFeriados> DiasFeriados { get; set; }
+        public DbSet<OrigenOportunidad> OrigenOportunidades { get; set; }
+        public DbSet<TipoLicenciaOportunidad> TipoLicenciaOportunidades { get; set; }
+        public DbSet<LicitacionOportunidad> LicitacionOportunidades { get; set; }
+        public DbSet<TipoCerradaOportunidad> TipoCerradaOportunidades { get; set; }
+        public DbSet<VentaLicencia> VentaLicencias { get; set; }
+        public DbSet<EstadoVentaLicencia> EstadoVentaLicencias { get; set; }
+        public DbSet<MarcaLicencia> MarcaLicencias { get; set; }
+        public DbSet<MarcaLicenciaContacto> MarcaLicenciaContactos { get; set; }
+        public DbSet<MayoristaLicencia> MayoristaLicencias { get; set; }
+        public DbSet<MayoristaLicenciaContacto> MayoristaLicenciaContactos { get; set; }
+        public DbSet<TarifarioVentaLicencia> TarifarioVentaLicencias { get; set; }
+
+        public DbSet<FacturaAdaptacion> FacturaAdaptaciones { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -115,6 +123,13 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new LicitacionOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new TipoCerradaOportunidadConfiguration());
             modelBuilder.ApplyConfiguration(new VentaLicenciaConfiguration());
+            modelBuilder.ApplyConfiguration(new EstadoVentaLicenciaConfiguration());
+            modelBuilder.ApplyConfiguration(new MarcaLicenciaConfiguration());
+            modelBuilder.ApplyConfiguration(new MarcaLicenciaContactoConfiguration());
+            modelBuilder.ApplyConfiguration(new MayoristaLicenciaConfiguration());
+            modelBuilder.ApplyConfiguration(new MayoristaLicenciaContactoConfiguration());
+            modelBuilder.ApplyConfiguration(new TarifarioVentaLicenciaConfiguration());
+            modelBuilder.ApplyConfiguration(new FacturaAdaptacionConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -1371,10 +1386,10 @@ namespace look.Infrastructure.data
                 entity.ToTable("documentos_factura");
                 entity.HasIndex(e => e.IdFactura, "FK_documentos_factura_factura_periodo");
                 entity.Property(e => e.NombreDocumento)
-                    .HasColumnType("varchar(255)")  
+                    .HasColumnType("varchar(255)")
                     .HasColumnName("nombre_documento");
                 entity.Property(e => e.ContenidoDocumento)
-                    .HasColumnType("LONGBLOB") 
+                    .HasColumnType("LONGBLOB")
                     .HasColumnName("contenido_documento");
                 entity.Property(e => e.IdFactura)
                     .HasColumnType("int(11)")
@@ -1392,9 +1407,9 @@ namespace look.Infrastructure.data
                     .WithMany(d => d.DocumentosFactura)
                     .HasForeignKey(d => d.IdFactura)
                     .HasConstraintName("FK_documentos_factura_factura_periodo");
-                    
+
             });
-            modelBuilder.Entity<DiaPagos>(entity=>
+            modelBuilder.Entity<DiaPagos>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PRIMARY");
                 entity.ToTable("dia_pago");
