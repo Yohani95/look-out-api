@@ -33,7 +33,7 @@ namespace look.Infrastructure.data.licencia
             builder.Property(e => e.FechaVigencia)
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_vigencia");
-            
+
             builder.Property(e => e.Valor)
                 .HasColumnType("double")
                 .HasColumnName("valor");
@@ -62,7 +62,7 @@ namespace look.Infrastructure.data.licencia
             builder.HasOne(d => d.MayoristaLicencia).WithMany()
                 .HasForeignKey(d => d.IdMayoristaLicencia)
                 .HasConstraintName("FK_mayorista_licencia");
-            
+
             builder.HasOne(d => d.TipoLicencia).WithMany()
                 .HasForeignKey(d => d.IdLicencia)
                 .HasConstraintName("FK_licencia_tarifario");

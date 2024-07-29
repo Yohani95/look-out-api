@@ -9,6 +9,9 @@ namespace look.Application.interfaces.factura
 {
     public interface IFacturaAdaptacionService : IService<FacturaAdaptacion>
     {
-        Task<FacturaAdaptacion> GetFacturaAdaptacionByIdFactura(int idFactura);
+        Task<FacturaAdaptacion> GetAllEntitiesByIdPeriod(int id);
+        Task<FacturaAdaptacion> GetAllByIdHoras(int id);
+        Task<FacturaAdaptacion> GetAllByIdSoporte(int id);
+        Task<FacturaAdaptacion> GetAllEntitiesByIdLicense(int id);
     }
 }
