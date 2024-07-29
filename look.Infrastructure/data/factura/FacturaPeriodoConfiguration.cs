@@ -20,6 +20,7 @@ namespace look.Infrastructure.data.factura
             entity.HasIndex(e => e.IdEstado, "FK_factura_periodo_estado");
             entity.HasIndex(e => e.IdHorasUtilizadas, "FK_factura_periodo_horas_utilizadas");
             entity.HasIndex(e => e.IdSoporteBolsa, "FK_factura_soporte");
+            entity.HasIndex(e => e.idLicencia, "FK_factura_Licencia");
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
@@ -89,10 +90,10 @@ namespace look.Infrastructure.data.factura
             entity.HasMany(d => d.DocumentosFactura)
                 .WithOne(d => d.FacturaPeriodo)
                 .HasForeignKey(d => d.IdFactura)
-                .HasConstraintName("FK_documentos_factura_factura_periodo");  
+                .HasConstraintName("FK_documentos_factura_factura_periodo");
 
 
- 
+
         }
     }
 }

@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace look.domain.interfaces.factura
 {
-    public interface IFacturaAdaptacionRepository:IRepository<FacturaAdaptacion>
+    public interface IFacturaAdaptacionRepository : IRepository<FacturaAdaptacion>
     {
+        Task<FacturaAdaptacion> GetAllEntitiesByIdPeriod(int id);
+        Task<FacturaAdaptacion> GetAllByIdHoras(int id);
+        Task<FacturaAdaptacion> GetAllByIdSoporte(int id);
+        Task<FacturaAdaptacion> GetAllEntitiesByIdLicense(int id);
     }
 }
