@@ -68,7 +68,7 @@ namespace look_out_api.Controllers.factura
         }
 
         [HttpGet("ChangeEstadoLicencia/{idLicencia}/{estado}")]
-        public async Task<IActionResult> GetAllEntitiesByIdLicense(int idLicencia, int estado)
+        public async Task<IActionResult> ChangeEstadoLicencia(int idLicencia, int estado)
         {
             Log.Information("[ChangeEstadoLicencia] Cambiar estado idLicencia: " + idLicencia + ", Estado ID:" + estado);
             var data = await _service.ChangeEstadoByLicencia(idLicencia, estado);
