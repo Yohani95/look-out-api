@@ -58,6 +58,10 @@ namespace look.Infrastructure.data.factura
                 .HasColumnType("int")
                 .HasColumnName("id_periodo_proyecto");
 
+            builder.Property(e => e.Solicitada)
+              .HasColumnName("solicitada")
+              .HasColumnType("boolean")
+              .HasDefaultValue(false);
 
             builder.Property(e => e.MontoDiferencia)
                 .HasColumnType("double")
