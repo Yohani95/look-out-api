@@ -19,22 +19,22 @@ namespace look.Infrastructure.repository.factura
 
         public async Task<FacturaAdaptacion> GetAllByIdHoras(int id)
         {
-            return await _dbContext.FacturaAdaptaciones.FirstAsync(x => x.IdHorasUtilizadas == id);
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdHorasUtilizadas == id);
         }
 
         public async Task<FacturaAdaptacion> GetAllByIdSoporte(int id)
         {
-            return await _dbContext.FacturaAdaptaciones.FirstAsync(x => x.IdSoporte == id);
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdSoporte == id);
         }
 
         public async Task<FacturaAdaptacion> GetAllEntitiesByIdLicense(int id)
         {
-            return await _dbContext.FacturaAdaptaciones.FirstAsync(x => x.IdLicencia == id);
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdLicencia == id);
         }
 
         public async Task<FacturaAdaptacion> GetAllEntitiesByIdPeriod(int id)
         {
-            return await _dbContext.FacturaAdaptaciones.FirstAsync(x => x.IdPeriodoProyecto == id);
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdPeriodoProyecto == id);
         }
     }
 }

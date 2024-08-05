@@ -34,12 +34,13 @@ namespace look.Application.services.factura
         {
             try
             {
-                _logger.Information("Consultando factura adaptacion por soporte con id: {id}...");
-                return await _facturaAdaptacionService.GetAllByIdSoporte(id);
+                _logger.Information("Consultando factura adaptacion por soporte con id: ${id}...");
+                var result = await _facturaAdaptacionService.GetAllByIdSoporte(id);
+                return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                _logger.Error(Message.ErrorServidor);
+                _logger.Error(Message.ErrorServidor, e);
                 return null;
             }
         }
