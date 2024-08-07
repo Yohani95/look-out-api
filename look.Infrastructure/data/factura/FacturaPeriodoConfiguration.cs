@@ -91,6 +91,9 @@ namespace look.Infrastructure.data.factura
                 .WithOne(d => d.FacturaPeriodo)
                 .HasForeignKey(d => d.IdFactura)
                 .HasConstraintName("FK_documentos_factura_factura_periodo");
+            entity.HasOne(d => d.VentaLicencia).WithMany()
+                .HasForeignKey(d => d.idLicencia)
+                .HasConstraintName("FK_factura_Licencia");
 
 
 

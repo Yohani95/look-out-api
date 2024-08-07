@@ -22,10 +22,11 @@ namespace look.Infrastructure.repository.factura
         {
             return await _dbContext.FacturaPeriodo
                 .Include(p => p.Estado)
-                .Include(p=>p.Periodo).ThenInclude(p=>p.Proyecto).ThenInclude(p=>p.EmpresaPrestadora)
+                .Include(p => p.Periodo).ThenInclude(p => p.Proyecto).ThenInclude(p => p.EmpresaPrestadora)
                 .Include(p => p.Periodo).ThenInclude(p => p.Proyecto).ThenInclude(p => p.DiaPagos)
                 .Include(p => p.HorasUtilizadas).ThenInclude(p => p.Soporte).ThenInclude(p => p.DiaPagos)
-                .Include(p=>p.Soporte).ThenInclude(p=>p.DiaPagos)
+                .Include(p => p.Soporte).ThenInclude(p => p.DiaPagos)
+                .Include(p => p.VentaLicencia).ThenInclude(p => p.DiaPagos)
                 .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                 .ToListAsync();
@@ -34,7 +35,7 @@ namespace look.Infrastructure.repository.factura
         public async Task<List<FacturaPeriodo>> GetAllByIdPeriodo(int id)
         {
             return await _dbContext.FacturaPeriodo
-                .Include(p=>p.Periodo)
+                .Include(p => p.Periodo)
                  .Include(p => p.Estado)
                  .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.IdPeriodo == id)
@@ -121,7 +122,7 @@ namespace look.Infrastructure.repository.factura
         public async Task<bool> ChangeEstadoByLicencia(int idlicencia, int estado)
         {
             var facturas = await _dbContext.FacturaPeriodo
-                   .Where(p => p.idLicencia== idlicencia)
+                   .Where(p => p.idLicencia == idlicencia)
                    .ToListAsync();
 
             if (facturas != null && facturas.Any())

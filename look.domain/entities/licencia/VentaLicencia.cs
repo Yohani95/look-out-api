@@ -1,5 +1,6 @@
 ﻿using look.domain.entities.admin;
 using look.domain.entities.cuentas;
+using look.domain.entities.factura;
 using look.domain.entities.oportunidad;
 using look.domain.entities.proyecto;
 using look.domain.entities.world;
@@ -29,6 +30,7 @@ namespace look.domain.entities.licencia
         public int? idTipoLicencia { get; set; }
         public int? IdEmpresaPrestadora { get; set; }
         public int? Descuento { get; set; }
+        public int? IdDiaPago { get; set; }
         public virtual Cliente? Cliente { get; set; }
         public virtual Moneda? Moneda { get; set; }
         public virtual EmpresaPrestadora? EmpresaPrestadora { get; set; }
@@ -36,5 +38,7 @@ namespace look.domain.entities.licencia
         public virtual EstadoVentaLicencia? EstadoVentaLicencia { get; set; }
         //public virtual TipoLicenciaOportunidad? TipoLicencia { get; set; }
         public virtual Persona? Kam { get; set; }
+
+        public virtual DiaPagos? DiaPagos { get; set; }
     }
 }
