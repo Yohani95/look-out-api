@@ -23,12 +23,15 @@ namespace look.Application.services.factura
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPeriodoProyectoRepository _periodoProyectoRepository;
         private readonly IHorasUtilizadasRepository _horasUtilizadasRepository;
-        public FacturaPeriodoService(IFacturaPeriodoRepository repository, IUnitOfWork unitOfWork, IPeriodoProyectoRepository periodoProyectoRepository, IHorasUtilizadasRepository horasUtilizadasRepository) : base(repository)
+        private readonly IFacturaAdaptacionRepository _facturaAdaptacionRepository;
+        public FacturaPeriodoService(IFacturaPeriodoRepository repository, IUnitOfWork unitOfWork, IPeriodoProyectoRepository periodoProyectoRepository, 
+            IHorasUtilizadasRepository horasUtilizadasRepository, IFacturaAdaptacionRepository facturaAdaptacionRepository) : base(repository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _periodoProyectoRepository = periodoProyectoRepository;
             _horasUtilizadasRepository = horasUtilizadasRepository;
+            _facturaAdaptacionRepository = facturaAdaptacionRepository;
         }
 
         public async Task<bool> ChangeEstado(int idPeriodo, int estado)
@@ -38,6 +41,8 @@ namespace look.Application.services.factura
                 _logger.Information("Solicitando factura, id Periodo: " + idPeriodo);
                 await _unitOfWork.BeginTransactionAsync();
                 await _repository.ChangeEstado(idPeriodo, estado);
+                var facturaAdaptacion = await _facturaAdaptacionRepository.GetAllEntitiesByIdPeriod(idPeriodo);
+                if (facturaAdaptacion != null) facturaAdaptacion.Solicitada = true;
                 var periodo = await _periodoProyectoRepository.GetByIdAsync(idPeriodo);
                 if (periodo != null)
                 {
@@ -59,8 +64,10 @@ namespace look.Application.services.factura
         {
             try
             {
-                _logger.Information("Solicitando factura, id Periodo: " + idHoras);
+                _logger.Information("Solicitando factura, id Hora Utilizada: " + idHoras);
                 await _unitOfWork.BeginTransactionAsync();
+                var facturaAdaptacion = await _facturaAdaptacionRepository.GetAllByIdHoras(idHoras);
+                if (facturaAdaptacion != null) facturaAdaptacion.Solicitada = true;
                 await _repository.ChangeEstadoHoras(idHoras, estado);
                 var horasPeriodo = await _horasUtilizadasRepository.GetByIdAsync(idHoras);
                 if (horasPeriodo != null)
@@ -165,6 +172,8 @@ namespace look.Application.services.factura
             {
                 _logger.Information("Solicitando factura, id Periodo: " + idSoporte);
                 await _unitOfWork.BeginTransactionAsync();
+                var facturasAdaptacion = await _facturaAdaptacionRepository.GetAllByIdSoporte(idSoporte);
+                if (facturasAdaptacion != null) facturasAdaptacion.Solicitada = true;
                 await _repository.ChangeEstadoSoporte(idSoporte, estado);
                 await _unitOfWork.CommitAsync();
                 return true;
@@ -183,6 +192,8 @@ namespace look.Application.services.factura
             {
                 _logger.Information("Solicitando factura, id Periodo: " + idlicencia);
                 await _unitOfWork.BeginTransactionAsync();
+                var facturasAdaptacion = await _facturaAdaptacionRepository.GetAllEntitiesByIdLicense(idlicencia);
+                if (facturasAdaptacion != null) facturasAdaptacion.Solicitada = true;
                 await _repository.ChangeEstadoByLicencia(idlicencia, estado);
                 await _unitOfWork.CommitAsync();
                 return true;

@@ -15,7 +15,11 @@ namespace look.domain.entities.factura
         public int? IdCliente { get; set; }
         public string? Descripcion { get; set; }
         public double? MontoDiferencia { get; set; }
-
+        public int? IdPeriodoProyecto { get; set; }
+        public int? IdSoporte { get; set; }
+        public int? IdLicencia { get; set; }
+        public int? IdHorasUtilizadas { get; set; }
+        public bool? Solicitada { get; set; }
         public Cliente? Cliente { get; set; }
     }
 

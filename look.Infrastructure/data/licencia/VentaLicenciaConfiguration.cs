@@ -26,6 +26,7 @@ namespace look.Infrastructure.data.licencia
             builder.HasIndex(e => e.IdTipoFacturacion, "FK_venta_licencia_tipo_facturacion");
             builder.HasIndex(e => e.IdEmpresaPrestadora, "FK_oportunidad_Empresa_Prestadora");
             //builder.HasIndex(e => e.idTipoLicencia, "FK_venta_licencia_tipo_licencia");
+            builder.HasIndex(e => e.IdDiaPago, "FK_venta_licencia_Dia_Pago");
 
             // Configuración de propiedades
             builder.Property(e => e.Id)
@@ -42,7 +43,8 @@ namespace look.Infrastructure.data.licencia
 
             builder.Property(e => e.FechaCreacion)
                 .HasColumnType("datetime")
-                .HasColumnName("fecha_creacion");
+                .HasColumnName("fecha_creacion")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.Property(e => e.FechaRenovacion)
                 .HasColumnType("datetime")
@@ -91,6 +93,9 @@ namespace look.Infrastructure.data.licencia
                .HasColumnType("int(11)")
                .HasColumnName("descuento");
 
+            builder.Property(e => e.IdDiaPago)
+            .HasColumnType("int(11)")
+            .HasColumnName("id_dia_pago");
             //// Relaciones
             builder.HasOne(d => d.Cliente).WithMany()
                 .HasForeignKey(d => d.IdCliente)
@@ -114,6 +119,10 @@ namespace look.Infrastructure.data.licencia
             builder.HasOne(d => d.EmpresaPrestadora).WithMany()
                 .HasForeignKey(d => d.IdEmpresaPrestadora)
                 .HasConstraintName("FK_oportunidad_Empresa_Prestadora");
+
+            builder.HasOne(d => d.DiaPagos).WithMany()
+               .HasForeignKey(d => d.IdDiaPago)
+               .HasConstraintName("FK_venta_licencia_Dia_Pago");
 
         }
     }

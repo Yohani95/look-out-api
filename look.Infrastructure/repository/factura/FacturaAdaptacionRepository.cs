@@ -1,6 +1,7 @@
 ﻿using look.domain.entities.factura;
 using look.domain.interfaces.factura;
 using look.Infrastructure.data;
+using Microsoft.EntityFrameworkCore;
 using MyApp.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,26 @@ namespace look.Infrastructure.repository.factura
     {
         public FacturaAdaptacionRepository(LookDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<FacturaAdaptacion> GetAllByIdHoras(int id)
+        {
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdHorasUtilizadas == id);
+        }
+
+        public async Task<FacturaAdaptacion> GetAllByIdSoporte(int id)
+        {
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdSoporte == id);
+        }
+
+        public async Task<FacturaAdaptacion> GetAllEntitiesByIdLicense(int id)
+        {
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdLicencia == id);
+        }
+
+        public async Task<FacturaAdaptacion> GetAllEntitiesByIdPeriod(int id)
+        {
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdPeriodoProyecto == id);
         }
     }
 }
