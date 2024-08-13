@@ -5,6 +5,7 @@ using look.domain.interfaces.unitOfWork;
 using Serilog;
 using look.domain.entities.Common;
 using look.Infrastructure.middleware;
+using look.domain.entities.admin;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = new ConfigurationBuilder()
@@ -23,6 +24,10 @@ var logger = Logger.GetLogger();
 Log.Logger = logger;
 Log.Information("Iniciando Servicio de Backend .net 6 look-out");
 builder.Services.AddControllers();
+
+// Registrar EmailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 Log.Information("Cargando inyección de dependencias");
 builder.Services.AddApplicationServices();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

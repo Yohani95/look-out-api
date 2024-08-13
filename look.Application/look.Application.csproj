@@ -7,18 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="services\admin\NewFolder\**" />
+    <EmbeddedResource Remove="services\admin\NewFolder\**" />
+    <None Remove="services\admin\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\look.domain\look.domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="services\admin\NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.62.0" />
     <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24009.12000" />
+    <PackageReference Include="MimeKit" Version="4.7.1" />
   </ItemGroup>
 
 </Project>
