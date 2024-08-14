@@ -1,9 +1,8 @@
-﻿using look.Application.interfaces.proyecto;
-using look.domain.entities.proyecto;
-using look.domain.interfaces;
+﻿using look.Application.interfaces.prospecto;
+using look.domain.entities.prospecto;
 using look.domain.interfaces.proyecto;
 
-namespace look.Application.services.proyecto
+namespace look.Application.services.prospecto
 {
     public class ProspectoService : Service<Prospecto>, IProspectoService
     {

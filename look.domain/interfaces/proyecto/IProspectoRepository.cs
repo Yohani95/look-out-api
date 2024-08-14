@@ -1,4 +1,5 @@
-﻿using look.domain.entities.proyecto;
+﻿using look.domain.entities.prospecto;
+using look.domain.entities.proyecto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,9 +2,10 @@
 using look.domain.entities.Common;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Serilog;
 using look.domain.dto.admin;
+using Newtonsoft.Json;
+
 
 namespace look_out_api.Controllers.proyecto
 {
@@ -26,8 +27,8 @@ namespace look_out_api.Controllers.proyecto
         }
 
         [HttpGet("GetLastId")]
-        public async Task<IActionResult> GetLastId() 
-        {           
+        public async Task<IActionResult> GetLastId()
+        {
             var result = await _proyectoService.GetLastId();
             switch (result.serviceResult.MessageCode)
             {
@@ -40,10 +41,10 @@ namespace look_out_api.Controllers.proyecto
                 default:
                     return StatusCode(500, result);
             }
-        }     
+        }
         [HttpGet("GetByIdWithEntities/{id}")]
-        public async Task<IActionResult> GetLastId(int id) 
-        {           
+        public async Task<IActionResult> GetLastId(int id)
+        {
             var result = await _proyectoService.GetByIdAllEntities(id);
             switch (result.serviceResult.MessageCode)
             {
@@ -57,9 +58,9 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-        
+
         [HttpPost("createAsync")]
-        public async Task<IActionResult> CreateAsync([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
+        public async Task<IActionResult> CreateAsync([FromForm] string proyectoJson, [FromForm] List<IFormFile> files)
         {
             try
             {
@@ -77,9 +78,9 @@ namespace look_out_api.Controllers.proyecto
                         return StatusCode(500, result);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Error("ERROR creando servicio"+ ex.Message);
+                Log.Error("ERROR creando servicio" + ex.Message);
                 return StatusCode(500);
             }
         }
@@ -98,7 +99,7 @@ namespace look_out_api.Controllers.proyecto
                 return NotFound();
             }
         }
-        
+
         [HttpDelete("DeleteWithEntities/{id}")]
         public async Task<IActionResult> DeleteWithEntities(int id)
         {
@@ -117,9 +118,9 @@ namespace look_out_api.Controllers.proyecto
                     return StatusCode(500, result);
             }
         }
-        
+
         [HttpPut("UpdateWithEntities/{id}")]
-        public async Task<IActionResult> UpdateWithEntities([FromForm] string proyectoJson,[FromForm] List<IFormFile> files)
+        public async Task<IActionResult> UpdateWithEntities([FromForm] string proyectoJson, [FromForm] List<IFormFile> files)
         {
             var proyectoDTO = JsonConvert.DeserializeObject<ProyectoDTO>(proyectoJson);
             Log.Information("Solicitud Delete ProyectoId: " + proyectoDTO.Proyecto.PryId);

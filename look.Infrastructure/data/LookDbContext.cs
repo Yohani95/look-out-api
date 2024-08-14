@@ -4,6 +4,7 @@ using look.domain.entities.cuentas;
 using look.domain.entities.factura;
 using look.domain.entities.licencia;
 using look.domain.entities.oportunidad;
+using look.domain.entities.prospecto;
 using look.domain.entities.proyecto;
 using look.domain.entities.soporte;
 using look.domain.entities.world;
@@ -11,6 +12,7 @@ using look.Infrastructure.data.factura;
 using look.Infrastructure.data.licencia;
 using look.Infrastructure.data.Logger;
 using look.Infrastructure.data.oportunidad;
+using look.Infrastructure.data.prospecto;
 using look.Infrastructure.data.soporte;
 using look.Infrastructure.data.world;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,7 @@ namespace look.Infrastructure.data
 {
     public class LookDbContext : DbContext
     {
+
         public LookDbContext(DbContextOptions<LookDbContext> options) : base(options)
         {
 
@@ -102,6 +105,12 @@ namespace look.Infrastructure.data
         public DbSet<TarifarioVentaLicencia> TarifarioVentaLicencias { get; set; }
 
         public DbSet<FacturaAdaptacion> FacturaAdaptaciones { get; set; }
+
+        public DbSet<Prospecto> Prospectos { get; set; }
+        public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<Industria> Industrias { get; set; }
+        public DbSet<Persona> Personas { get; set; }
+        public DbSet<ContactoProspecto> ContactosProspecto { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -130,6 +139,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new MayoristaLicenciaContactoConfiguration());
             modelBuilder.ApplyConfiguration(new TarifarioVentaLicenciaConfiguration());
             modelBuilder.ApplyConfiguration(new FacturaAdaptacionConfiguration());
+            modelBuilder.ApplyConfiguration(new EmpresaConfiguration());
+            modelBuilder.ApplyConfiguration(new ProspectoConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -808,19 +819,6 @@ namespace look.Infrastructure.data
                     .HasColumnName("epy_nombre");
 
             });
-            modelBuilder.Entity<EstadoProspecto>(entity =>
-            {
-                entity.HasKey(e => e.EpsId).HasName("PRIMARY");
-                entity.ToTable("estado_prospecto");
-                entity.Property(e => e.EpsId)
-
-                    .HasColumnType("int(11)")
-                    .HasColumnName("eps_id");
-                entity.Property(e => e.EpsDescripcion)
-                    .HasMaxLength(50)
-                    .HasColumnName("eps_descripcion");
-
-            });
             modelBuilder.Entity<EstadoPropuesta>(entity =>
             {
                 entity.HasKey(e => e.EppId).HasName("PRIMARY");
@@ -832,54 +830,6 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.EppDescripcion)
                     .HasMaxLength(50)
                     .HasColumnName("epp_descripcion");
-
-            });
-            modelBuilder.Entity<Prospecto>(entity =>
-            {
-
-                entity.HasKey(e => e.PrsId).HasName("PRIMARY");
-                entity.ToTable("prospecto");
-                entity.HasIndex(e => e.CliId, "FK_Proespecto_Cliente");
-                entity.HasIndex(e => e.EpsId, "FK_Proespecto_Estado_Prospecto");
-                entity.HasIndex(e => e.MonId, "FK_Proespecto_Moneda");
-                entity.HasIndex(e => e.TseId, "FK_Proespecto_Tipo_Servicio");
-                entity.Property(e => e.PrsId)
-
-                    .HasColumnType("int(11)")
-                    .HasColumnName("prs_id");
-                entity.Property(e => e.CliId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("cli_id");
-                entity.Property(e => e.EpsId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("eps_id");
-                entity.Property(e => e.MonId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("mon_id");
-                entity.Property(e => e.PrsDescripcion)
-                    .HasColumnType("varchar(50)")
-                    .HasColumnName("prs_descripcion");
-                entity.Property(e => e.PrsFechaInicio)
-                    .HasColumnType("datetime")
-                    .HasColumnName("prs_fechainicio");
-                entity.Property(e => e.PrsPresupuesto)
-                    .HasPrecision(18, 2)
-                    .HasColumnName("prs_presupuesto");
-                entity.Property(e => e.TseId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("tse_id");
-                entity.HasOne(d => d.Cli).WithMany()
-                    .HasForeignKey(d => d.CliId)
-                    .HasConstraintName("FK_Proespecto_Cliente");
-                entity.HasOne(d => d.Esps).WithMany()
-                    .HasForeignKey(d => d.EpsId)
-                    .HasConstraintName("FK_Proespecto_Estado_Prospecto");
-                entity.HasOne(d => d.Mon).WithMany()
-                    .HasForeignKey(d => d.MonId)
-                    .HasConstraintName("FK_Proespecto_Moneda");
-                entity.HasOne(d => d.TipSer).WithMany()
-                    .HasForeignKey(d => d.TseId)
-                    .HasConstraintName("FK_Proespecto_Tipo_Servicio");
 
             });
             modelBuilder.Entity<TipoServicio>(entity =>
@@ -956,9 +906,6 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Mon).WithMany()
                     .HasForeignKey(d => d.MonId)
                     .HasConstraintName("FK_Propuesta_Moneda");
-                entity.HasOne(d => d.Prosp).WithMany()
-                    .HasForeignKey(d => d.PrsId)
-                    .HasConstraintName("FK_Propuesta_Prospecto");
                 entity.HasOne(d => d.TipSer).WithMany()
                     .HasForeignKey(d => d.TseId)
                     .HasConstraintName("FK_Propuesta_Tipo_Servicio");
