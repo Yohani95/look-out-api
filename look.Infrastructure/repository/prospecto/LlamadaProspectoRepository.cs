@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace look.Infrastructure.repository.prospecto
 {
-    public class EmpresaRepository : Repository<Empresa>, IEmpresaRepository
+    public class LlamadaProspectoRepository : Repository<LlamadaProspecto>, ILlamadaProspectoRepository
     {
-        public EmpresaRepository(LookDbContext dbContext) : base(dbContext)
+        public LlamadaProspectoRepository(LookDbContext dbContext) : base(dbContext)
         {
         }
     }

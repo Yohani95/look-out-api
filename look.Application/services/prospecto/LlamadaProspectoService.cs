@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace look.Application.services.prospecto
 {
-    internal class IndustriaService : Service<Industria>, IIndustriaService
+    public class LlamadaProspectoService : Service<LlamadaProspecto>, ILlamadaProspectoService
     {
-        public IndustriaService(IIndustriaRepository repository) : base(repository)
+        public LlamadaProspectoService(ILlamadaProspectoRepository repository) : base(repository)
         {
         }
     }

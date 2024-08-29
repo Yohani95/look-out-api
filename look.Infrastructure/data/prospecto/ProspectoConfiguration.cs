@@ -38,15 +38,10 @@ namespace look.Infrastructure.data.prospecto
                 .HasForeignKey(p => p.IdKam)
                 .HasConstraintName("FK_prospecto_kam");
 
-            builder.HasOne(p => p.Empresa)
-                .WithMany(e => e.Prospectos)
-                .HasForeignKey(p => p.IdEmpresa)
-                .HasConstraintName("FK_prospecto_empresa");
-
-            builder.HasOne(p => p.ContactoProspecto)
-                .WithMany(cp => cp.Prospectos)
-                .HasForeignKey(p => p.IdContactoProspecto)
-                .HasConstraintName("FK_prospecto_contacto_prospecto");
+            builder.HasOne(p => p.Cliente)
+                .WithMany()
+                .HasForeignKey(p => p.IdCliente)
+                .HasConstraintName("FK_prospecto_cliente");
 
             builder.HasOne(p => p.EstadoProspecto)
                 .WithMany(cp => cp.Prospectos)

@@ -7,13 +7,13 @@ namespace look_out_api.Controllers.prospecto
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IndustriaController : BaseController<Industria>
+    public class TipoContactoProspectoController : BaseController<TipoContactoProspecto>
     {
-        public IndustriaController(IIndustriaService service) : base(service)
+        public TipoContactoProspectoController(ITipoContactoProspectoService service) : base(service)
         {
         }
 
-        protected override int GetEntityId(Industria entity)
+        protected override int GetEntityId(TipoContactoProspecto entity)
         {
             return entity.Id;
         }

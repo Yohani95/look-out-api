@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace look.domain.entities.prospecto
@@ -15,6 +16,7 @@ namespace look.domain.entities.prospecto
         public string? Nombre { get; set; }
         [MaxLength(200)]
         public string? Descripcion { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Prospecto>? Prospectos { get; set; }
     }
 }

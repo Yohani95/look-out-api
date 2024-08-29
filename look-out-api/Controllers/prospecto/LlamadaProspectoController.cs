@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace look_out_api.Controllers.prospecto
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class EmpresaController : BaseController<Empresa>
+    [ApiController]
+    public class LlamadaProspectoController : BaseController<LlamadaProspecto>
     {
-        public EmpresaController(IEmpresaService service) : base(service)
+        public LlamadaProspectoController(ILlamadaProspectoService service) : base(service)
         {
         }
 
-        protected override int GetEntityId(Empresa entity)
+        protected override int GetEntityId(LlamadaProspecto entity)
         {
             return entity.Id;
         }

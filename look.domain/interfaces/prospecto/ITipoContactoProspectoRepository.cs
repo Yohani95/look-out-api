@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace look.Application.interfaces.prospecto
+namespace look.domain.interfaces.prospecto
 {
-    public interface IEmpresaService : IService<Empresa>
+    public interface ITipoContactoProspectoRepository:IRepository<TipoContactoProspecto>
     {
     }
 }

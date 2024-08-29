@@ -89,7 +89,6 @@ namespace look.Infrastructure.data
         public DbSet<DocumentoOportunidad> DocumentoOportunidades { get; set; }
         public DbSet<LogEntry> Logs { get; set; }
         public DbSet<NovedadOportunidad> NovedadOportunidades { get; set; }
-
         public DbSet<AreaServicioOportunidad> areaServicioOportunidades { get; set; }
         public DbSet<DiasFeriados> DiasFeriados { get; set; }
         public DbSet<OrigenOportunidad> OrigenOportunidades { get; set; }
@@ -103,14 +102,15 @@ namespace look.Infrastructure.data
         public DbSet<MayoristaLicencia> MayoristaLicencias { get; set; }
         public DbSet<MayoristaLicenciaContacto> MayoristaLicenciaContactos { get; set; }
         public DbSet<TarifarioVentaLicencia> TarifarioVentaLicencias { get; set; }
-
         public DbSet<FacturaAdaptacion> FacturaAdaptaciones { get; set; }
-
         public DbSet<Prospecto> Prospectos { get; set; }
-        public DbSet<Empresa> Empresas { get; set; }
-        public DbSet<Industria> Industrias { get; set; }
         public DbSet<Persona> Personas { get; set; }
-        public DbSet<ContactoProspecto> ContactosProspecto { get; set; }
+        public DbSet<LlamadaProspecto> LlamadaProspectos { get; set; }
+        public DbSet<ReunionProspecto> ReunionProspectos { get; set; }
+        public DbSet<ContactoProspecto> ContactoProspectos { get; set; }
+        public DbSet<TipoContactoProspecto> TipoContactoProspectos { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -139,8 +139,9 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new MayoristaLicenciaContactoConfiguration());
             modelBuilder.ApplyConfiguration(new TarifarioVentaLicenciaConfiguration());
             modelBuilder.ApplyConfiguration(new FacturaAdaptacionConfiguration());
-            modelBuilder.ApplyConfiguration(new EmpresaConfiguration());
             modelBuilder.ApplyConfiguration(new ProspectoConfiguration());
+            modelBuilder.ApplyConfiguration(new LlamadaProspectoConfiguration());
+            modelBuilder.ApplyConfiguration(new ReunionProspectoConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
