@@ -1,10 +1,11 @@
-﻿using look.Application.interfaces.proyecto;
+﻿using look.Application.interfaces.prospecto;
 using look.Application.services.admin;
+using look.domain.entities.prospecto;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace look_out_api.Controllers.proyecto
+namespace look_out_api.Controllers.prospecto
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,7 +21,7 @@ namespace look_out_api.Controllers.proyecto
         protected override int GetEntityId(Prospecto entity)
         {
             // Implementa la lógica para obtener el ID de la entidad Prospecto
-            return entity.PrsId;
+            return entity.Id;
         }
     }
 }

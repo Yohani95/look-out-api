@@ -1,4 +1,4 @@
-﻿using look.domain.entities.proyecto;
+﻿using look.domain.entities.prospecto;
 using look.domain.interfaces.proyecto;
 using look.Infrastructure.data;
 using MyApp.Infrastructure.Data;

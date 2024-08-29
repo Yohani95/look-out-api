@@ -1,25 +1,34 @@
 ﻿using look.Application.interfaces.admin;
 using look.Application.interfaces.cuentas;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.interfaces.admin;
 using look.domain.interfaces.cuentas;
 using look.domain.interfaces.unitOfWork;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
 using Serilog;
+using Microsoft.Extensions.Options;
 
 namespace look.Application.services.admin
 {
-    public class EmailService: Service<Email>, IEmailService
+    public class EmailService : Service<Email>, IEmailService
     {
         private readonly IEmailRepository _emailRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IClientePersonaRepository _clientePersonaRepository;
         private readonly ILogger _logger = Logger.GetLogger();
-        public EmailService(IEmailRepository repository,IUnitOfWork unitOfWork,IClientePersonaRepository clientePersonaRepository) : base(repository)
+        private readonly EmailSettings _emailSettings;
+        public EmailService(IEmailRepository repository, IUnitOfWork unitOfWork, IClientePersonaRepository clientePersonaRepository,
+           IOptions<EmailSettings> emailSettings
+            ) : base(repository)
         {
             _emailRepository = repository;
             _unitOfWork = unitOfWork;
             _clientePersonaRepository = clientePersonaRepository;
+            _emailSettings = emailSettings.Value;
         }
 
         public async Task<ServiceResult> Create(Email email)
@@ -33,7 +42,7 @@ namespace look.Application.services.admin
                 }
                 await _unitOfWork.BeginTransactionAsync();
                 var clientId = await _clientePersonaRepository.GetClientePersonaDTOById((int)email.PerId);
-                if (clientId.CliId==null)
+                if (clientId.CliId == null)
                 {
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.NotFound, Message = "No se encuentra un cliente asociado." };
                 }
@@ -58,7 +67,7 @@ namespace look.Application.services.admin
             catch (Exception ex)
             {
                 _logger.Error("Error al crear Email para la persona ID:" + email.PerId);
-                await _unitOfWork.RollbackAsync();    
+                await _unitOfWork.RollbackAsync();
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
         }
@@ -74,7 +83,7 @@ namespace look.Application.services.admin
 
                 await _unitOfWork.BeginTransactionAsync();
 
-                var existingEmail = await _emailRepository.GetByIdAsync(id); 
+                var existingEmail = await _emailRepository.GetByIdAsync(id);
 
                 if (existingEmail == null)
                 {
@@ -86,11 +95,11 @@ namespace look.Application.services.admin
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.NotFound, Message = "No se encuentra un cliente asociado." };
                 }
 
-                existingEmail.EmaEmail = email.EmaEmail; 
-                existingEmail.PerId= email.PerId;
+                existingEmail.EmaEmail = email.EmaEmail;
+                existingEmail.PerId = email.PerId;
                 existingEmail.CliId = clientId.CliId;
                 existingEmail.EmaVigente = email.EmaVigente;
-                existingEmail.TemId=email.TemId;
+                existingEmail.TemId = email.TemId;
 
                 await _emailRepository.UpdateAsync(existingEmail);
                 await _unitOfWork.CommitAsync();
@@ -124,18 +133,59 @@ namespace look.Application.services.admin
                 return null;
             }
         }
-        
+
         public async Task<List<Email>> ListCompleteById(int id)
         {
             try
             {
-                _logger.Information("Obteniendo Emails de Idpersona: "+id);
+                _logger.Information("Obteniendo Emails de Idpersona: " + id);
                 return await _emailRepository.ListCompleteByIdPersona(id);
             }
             catch (Exception ex)
             {
-                _logger.Error(Message.ErrorServidor+ex.Message);
+                _logger.Error(Message.ErrorServidor + ex.Message);
                 return null;
+            }
+        }
+
+        public async Task SendEmailAsync(string toName, string toEmail, string subject, string body)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
+            message.To.Add(new MailboxAddress(toName, toEmail));
+            message.Subject = subject;
+
+            // Crear el cuerpo del correo en HTML
+            message.Body = new TextPart("html")
+            {
+                Text = $@"
+            <html>
+            <body>
+                <p>Hola {toName},</p>
+                <p>{body}</p>
+                <p>Saludos,<br>{_emailSettings.SenderName}</p>
+                <footer style='border-top: 1px solid #cccccc; padding-top: 10px; margin-top: 10px;'>
+                   
+                </footer>
+            </body>
+            </html>"
+            };
+
+            using var client = new SmtpClient();
+            try
+            {
+                await client.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.SmtpPort, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(_emailSettings.SmtpUsername, _emailSettings.SmtpPassword);
+                await client.SendAsync(message);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw new InvalidOperationException("Error al enviar el correo electrónico", ex);
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
             }
         }
     }

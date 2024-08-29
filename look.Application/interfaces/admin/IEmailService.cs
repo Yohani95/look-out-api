@@ -3,7 +3,7 @@ using look.domain.entities.Common;
 
 namespace look.Application.interfaces.admin
 {
-    public interface IEmailService: IService<Email>
+    public interface IEmailService : IService<Email>
     {
         Task<List<Email>> ListComplete();
         /// <summary>
@@ -14,5 +14,13 @@ namespace look.Application.interfaces.admin
         Task<List<Email>> ListCompleteById(int id);
         Task<ServiceResult> Create(Email email);
         Task<ServiceResult> Edit(Email email, int id);
+        /// <summary>
+        /// envia un email 
+        /// </summary>
+        /// <param name="to">para</param>
+        /// <param name="subject">asunto</param>
+        /// <param name="body">cuerpo</param>
+        /// <returns></returns>
+        Task SendEmailAsync(string toName, string toEmail, string subject, string body);
     }
 }

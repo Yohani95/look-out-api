@@ -9,10 +9,10 @@ using Serilog;
 
 namespace look_out_api.Controllers.admin
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
-    public class EmailController :BaseController<Email>
+    public class EmailController : BaseController<Email>
     {
         private readonly IEmailService _emailService;
 
@@ -28,7 +28,7 @@ namespace look_out_api.Controllers.admin
             var email = await _emailService.ListComplete();
             return Ok(email);
         }
-        
+
         [HttpGet("getAllEmailById/{id}")]
         public async Task<IActionResult> getAllEmailById(int id)
         {
@@ -56,10 +56,10 @@ namespace look_out_api.Controllers.admin
             }
         }
         [HttpPut("Edit/{id}")]
-        public async Task<IActionResult> Edit(Email email,int id)
+        public async Task<IActionResult> Edit(Email email, int id)
         {
             Log.Information("Solicitud Create email");
-            var result = await _emailService.Edit(email,id);
+            var result = await _emailService.Edit(email, id);
             switch (result.MessageCode)
             {
                 case ServiceResultMessage.Success:
@@ -74,7 +74,27 @@ namespace look_out_api.Controllers.admin
                     return StatusCode(500, result);
             }
         }
-
+        [HttpPost("sendEmail")]
+        public async Task<IActionResult> SendEmail(EmailRequest emailRequest)
+        {
+            try
+            {
+                await _emailService.SendEmailAsync(emailRequest.ToName, emailRequest.ToEmail, emailRequest.Subject, emailRequest.Body);
+                return Ok("Email sent successfully");
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        public class EmailRequest
+        {
+            public string ToName { get; set; }
+            public string ToEmail { get; set; }
+            public string Subject { get; set; }
+            public string Body { get; set; }
+        }
         protected override int GetEntityId(Email entity)
         {
             return entity.EmaId;

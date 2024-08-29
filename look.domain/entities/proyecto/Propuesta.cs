@@ -25,15 +25,12 @@ namespace look.domain.entities.proyecto
         public int? EppId { get; set; }
         public int? TseId { get; set; }
 
-        
+
         [JsonIgnore]
         public virtual EstadoPropuesta? EsPro { get; set; }
 
         [JsonIgnore]
         public virtual Moneda? Mon { get; set; }
-
-        [JsonIgnore]
-        public virtual Prospecto? Prosp { get; set; }
 
         [JsonIgnore]
         public virtual TipoServicio? TipSer { get; set; }

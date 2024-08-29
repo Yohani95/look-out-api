@@ -1,5 +1,5 @@
 ﻿using look.Application.interfaces.proyecto;
-using look.domain.entities.proyecto;
+using look.domain.entities.prospecto;
 using look.domain.interfaces;
 using look.domain.interfaces.proyecto;
 
