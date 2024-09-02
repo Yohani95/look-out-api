@@ -42,12 +42,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 // Aplicar migraciones al iniciar la aplicación
-using (var scope = app.Services.CreateScope())
-{
-    Log.Information("Aplicando migraciones....");
-    var dbContext = scope.ServiceProvider.GetRequiredService<LookDbContext>();
-    dbContext.Database.Migrate(); // Aplica las migraciones pendientes
-}
+
 app.UseMiddleware<ErrorLoggingMiddleware>();
 var allowedOrigins = app.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 app.UseCors(builder =>
@@ -59,6 +54,12 @@ app.UseCors(builder =>
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    using (var scope = app.Services.CreateScope())
+    {
+        Log.Information("Aplicando migraciones....");
+        var dbContext = scope.ServiceProvider.GetRequiredService<LookDbContext>();
+        dbContext.Database.Migrate(); // Aplica las migraciones pendientes
+    }
     app.UseSwagger();
     app.UseSwaggerUI();
 }
