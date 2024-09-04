@@ -56,9 +56,27 @@ if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
-        Log.Information("Aplicando migraciones....");
         var dbContext = scope.ServiceProvider.GetRequiredService<LookDbContext>();
-        dbContext.Database.Migrate(); // Aplica las migraciones pendientes
+
+        using (var transaction = dbContext.Database.BeginTransaction())
+        {
+            try
+            {
+                Log.Information("Aplicando migraciones....");
+                dbContext.Database.Migrate(); // Aplica las migraciones pendientes
+
+                // Confirma la transacción si todo es exitoso
+                transaction.Commit();
+                Log.Information("Migraciones aplicadas exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                // Si ocurre un error, realiza un rollback
+                transaction.Rollback();
+                Log.Error(ex, "Error aplicando migraciones, se realizó rollback.");
+                throw; // Propaga la excepción para manejarla según sea necesario
+            }
+        }
     }
     app.UseSwagger();
     app.UseSwaggerUI();
