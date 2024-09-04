@@ -1,4 +1,5 @@
-﻿using look.domain.entities.proyecto;
+﻿using look.domain.entities.admin;
+using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,14 @@ namespace look.domain.entities.prospecto
         public string? PerfilLinkedin { get; set; }
         public int? IdTipo { get; set; }
         public int? IdPais { get; set; }
+        public int? IdPerfil { get; set; }
         //relaciones 
         [ForeignKey(nameof(IdPais))]
         public virtual Pais? Pais { get; }
         [ForeignKey(nameof(IdTipo))]
         public virtual TipoContactoProspecto? TipoContactoProspecto { get; }
+        [ForeignKey(nameof(IdPerfil))]
+        public virtual Perfil? Perfil { get; set; }
         [JsonIgnore]
         public ICollection<Prospecto>? Prospectos { get; set; }
 
