@@ -41,7 +41,7 @@ namespace look.Application.services.proyecto
             IProyectoParticipanteRepository proyectoParticipanteService,
             IProyectoRepository proyectoRepository, IMonedaRepository monedaRepository,
             IMonedaService monedaService, INovedadesRepository novedadesRepository, IPeriodoProfesionalesRepository periodoProfesionalesRepository
-            , IDiasFeriadosService diasFeriadosService,IPaisRepository paisRepository) : base(periodoProyectoRepository)
+            , IDiasFeriadosService diasFeriadosService, IPaisRepository paisRepository) : base(periodoProyectoRepository)
         {
             _periodoProyectoRepository = periodoProyectoRepository;
             _unitOfWork = unitOfWork;
@@ -147,7 +147,7 @@ namespace look.Application.services.proyecto
                         var novedadesFiltrada = novedades
                         .Where(p => p.idProyecto == participante.PryId &&
                         p.idPersona == participante.PerId &&
-                        p.IdTipoNovedad != Novedades.ConstantesTipoNovedad.cambioRol && p.TipoNovedades.Descuento!=0&&
+                        p.IdTipoNovedad != Novedades.ConstantesTipoNovedad.cambioRol && p.TipoNovedades.Descuento != 0 &&
                         ((p.fechaInicio <= periodo.FechaPeriodoHasta && p.fechaInicio >= periodo.FechaPeriodoDesde) || // Novedad inicia dentro del período
                         (p.fechaHasta <= periodo.FechaPeriodoHasta && p.fechaHasta >= periodo.FechaPeriodoDesde) || // Novedad termina dentro del período
                         (p.fechaInicio <= periodo.FechaPeriodoDesde && p.fechaHasta >= periodo.FechaPeriodoHasta))) // Novedad cubre todo el período
@@ -155,7 +155,7 @@ namespace look.Application.services.proyecto
 
                         //llamar a metodo para calcular dias habiles o mensuales
                         tarifaConvertida = await calculartarifas(
-                                                    tarifarioConvenio, periodo, moneda, novedadesFiltrada, participante,existingProyecto);
+                                                    tarifarioConvenio, periodo, moneda, novedadesFiltrada, participante, existingProyecto);
                         tarifaTotal = tarifaTotal + tarifaConvertida;
                         if (periodo.id != null && periodo.id != 0)
                         {
@@ -207,6 +207,8 @@ namespace look.Application.services.proyecto
         static int CalcularDiasTotales(DateTime startDate, DateTime endDate, List<Novedades> novedades, ProyectoParticipante participante)
         {
             int diasTotales = 0;
+            startDate = startDate.Date;
+            endDate = endDate.Date;
 
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
@@ -233,7 +235,7 @@ namespace look.Application.services.proyecto
             return diasHabiles;
         }
 
-        async Task<double> calculartarifas(TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, List<Novedades> novedadesFiltrada, ProyectoParticipante participante,Proyecto existingProyecto)
+        async Task<double> calculartarifas(TarifarioConvenio tarifarioConvenio, PeriodoProyecto periodo, Moneda moneda, List<Novedades> novedadesFiltrada, ProyectoParticipante participante, Proyecto existingProyecto)
         {
 
             double tarifaConvertida = 0;
@@ -247,7 +249,7 @@ namespace look.Application.services.proyecto
 
             int diasTotalesPeriodo = diferencia.Days;
 
-            if (existingProyecto.FacturacionDiaHabil!=0)
+            if (existingProyecto.FacturacionDiaHabil != 0)
             {
                 // **********************  obtener feriados segun pais *************
                 //
@@ -256,7 +258,8 @@ namespace look.Application.services.proyecto
                 var diasFeriados = await ObtenerDiasFeriados(periodo.FechaPeriodoDesde.Value.Year, (int)existingProyecto.PaisId);
                 diasTotalesTrabajados = CalcularDiasHabiles((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, novedadesFiltrada, diasFeriados, participante);
                 diasTotalesPeriodo = CalcularDiasHabilSinNovedad((DateTime)periodo.FechaPeriodoDesde, (DateTime)periodo.FechaPeriodoHasta, diasFeriados);
-                if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora) {
+                if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
+                {
                     //este caso es evaluado exepcionalmente para el pais peru
                     var horas = existingProyecto.PaisId == 2 ? 8 : 9;
                     // se comenta y se elimina limitaciion a peru
@@ -319,15 +322,15 @@ namespace look.Application.services.proyecto
 
             return diasHabiles;
         }
-        static int CalcularDiasHabilSinNovedad(DateTime startDate, DateTime endDate,  List<DateTime> feriados)
+        static int CalcularDiasHabilSinNovedad(DateTime startDate, DateTime endDate, List<DateTime> feriados)
         {
             int diasHabiles = 0;
             for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
             {
                 if (!EsDiaFeriado(fecha, feriados) && EsDiaHabil(fecha))
                 {
-                        diasHabiles++;
-                 }
+                    diasHabiles++;
+                }
             }
 
             return diasHabiles;
@@ -403,13 +406,13 @@ namespace look.Application.services.proyecto
         /// </summary>
         /// <param name="year">espera el año</param>
         /// <returns>retorna una lista de fechas</returns>
-        private async Task<List<DateTime>> ObtenerDiasFeriados(int year,int idPais)
+        private async Task<List<DateTime>> ObtenerDiasFeriados(int year, int idPais)
         {
 
-                try
-                {
+            try
+            {
                 List<DateTime> feriadosfechas = new List<DateTime>();
-                var pais=await _paisRepository.GetByIdAsync(idPais);
+                var pais = await _paisRepository.GetByIdAsync(idPais);
                 // Obtener todos los feriados de la base de datos
                 var feriadosList = await _diasFeriadosService.GetAllAsync();
 
@@ -433,12 +436,12 @@ namespace look.Application.services.proyecto
                 }
                 return feriadosfechas;
             }
-                catch (HttpRequestException e)
-                {
-                    _logger.Error("Error interno del servidor: " + e.Message);
-                    return null;
-                }
-            
+            catch (HttpRequestException e)
+            {
+                _logger.Error("Error interno del servidor: " + e.Message);
+                return null;
+            }
+
         }
         /// <summary>
         /// obtiene uf de api https://mindicador.cl/api/uf
