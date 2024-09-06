@@ -102,6 +102,7 @@ namespace look.Infrastructure.data
         public DbSet<TarifarioVentaLicencia> TarifarioVentaLicencias { get; set; }
 
         public DbSet<FacturaAdaptacion> FacturaAdaptaciones { get; set; }
+        public DbSet<Banco> Bancos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -130,6 +131,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new MayoristaLicenciaContactoConfiguration());
             modelBuilder.ApplyConfiguration(new TarifarioVentaLicenciaConfiguration());
             modelBuilder.ApplyConfiguration(new FacturaAdaptacionConfiguration());
+            modelBuilder.ApplyConfiguration(new BancoConfiguration());
+
 
             modelBuilder.Entity<Usuario>(entity =>
             {

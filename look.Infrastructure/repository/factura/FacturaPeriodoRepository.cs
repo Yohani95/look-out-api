@@ -28,6 +28,7 @@ namespace look.Infrastructure.repository.factura
                 .Include(p => p.Soporte).ThenInclude(p => p.DiaPagos)
                 .Include(p => p.VentaLicencia).ThenInclude(p => p.DiaPagos)
                 .Include(fp => fp.DocumentosFactura)
+                .Include(fp => fp.Banco)
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                 .ToListAsync();
         }
