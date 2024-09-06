@@ -112,6 +112,7 @@ namespace look.Infrastructure.data
         public DbSet<MedioLLamadaProspecto> MedioLLamadaProspectos { get; set; }
 
 
+        public DbSet<Banco> Bancos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -144,6 +145,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new LlamadaProspectoConfiguration());
             modelBuilder.ApplyConfiguration(new ReunionProspectoConfiguration());
             modelBuilder.ApplyConfiguration(new ContactoProspectoConfiguration());
+            modelBuilder.ApplyConfiguration(new BancoConfiguration());
+
 
             modelBuilder.Entity<Usuario>(entity =>
             {
