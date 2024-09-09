@@ -62,12 +62,12 @@ if (app.Environment.IsDevelopment())
         {
             try
             {
-                Log.Information("Aplicando migraciones....");
-                dbContext.Database.Migrate(); // Aplica las migraciones pendientes
+                //Log.Information("Aplicando migraciones....");
+                //dbContext.Database.Migrate(); // Aplica las migraciones pendientes
 
-                // Confirma la transacción si todo es exitoso
-                transaction.Commit();
-                Log.Information("Migraciones aplicadas exitosamente.");
+                //// Confirma la transacción si todo es exitoso
+                //transaction.Commit();
+                //Log.Information("Migraciones aplicadas exitosamente.");
             }
             catch (Exception ex)
             {
