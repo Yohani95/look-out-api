@@ -41,6 +41,10 @@ namespace look.Infrastructure.data.prospecto
                 .HasMaxLength(200)
                 .HasColumnName("PerfilLinkedin");
 
+            builder.Property(e => e.Cargo)
+                .HasMaxLength(200)
+                .HasColumnName("cargo");
+
             builder.Property(e => e.IdTipo)
                 .HasColumnType("int(11)")
                 .HasColumnName("IdTipo");
