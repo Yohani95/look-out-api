@@ -73,6 +73,14 @@ namespace look.Infrastructure.data.factura
             entity.Property(e => e.idLicencia)
            .HasColumnType("int")
            .HasColumnName("id_licencia");
+            entity.Property(e => e.IdBanco)
+                .HasColumnType("int")
+                .HasColumnName("id_banco");
+
+            entity.Property(e => e.FechaPago)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_pago");
+
 
             //realaciones
             entity.HasOne(d => d.Periodo).WithMany()
@@ -95,7 +103,9 @@ namespace look.Infrastructure.data.factura
                 .HasForeignKey(d => d.idLicencia)
                 .HasConstraintName("FK_factura_Licencia");
 
-
+            entity.HasOne(d => d.Banco).WithMany()
+                .HasForeignKey(d => d.IdBanco)
+                .HasConstraintName("FK_factura_banco");
 
         }
     }

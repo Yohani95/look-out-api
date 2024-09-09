@@ -31,11 +31,15 @@ namespace look.domain.entities.factura
         public int? IdSoporteBolsa { get; set; }
 
         public int? idLicencia { get; set; }
+        public int? IdBanco { get; set; }
+        public DateTime? FechaPago { get; set; }
         public virtual Soporte? Soporte { get; set; }
         public virtual PeriodoProyecto? Periodo { get; set; }
-        public virtual HorasUtilizadas? HorasUtilizadas{ get; set; }
+        public virtual HorasUtilizadas? HorasUtilizadas { get; set; }
         public virtual VentaLicencia? VentaLicencia { get; set; }
         public virtual EstadoFacturaPeriodo? Estado { get; set; }
         public virtual List<DocumentosFactura>? DocumentosFactura { get; set; }
+
+        public virtual Banco? Banco { get; set; }
     }
 }

@@ -22,7 +22,6 @@ namespace look.Infrastructure.repository.prospecto
             return await _dbContext.ContactoProspectos
                 .Include(p => p.TipoContactoProspecto)
                 .Include(p => p.Pais)
-                .Include(p => p.Perfil)
                 .ToListAsync();
         }
     }
