@@ -19,9 +19,10 @@ namespace look.Infrastructure.repository.licencia
         public new async Task<IEnumerable<TarifarioVentaLicencia>> GetAllAsync()
         {
             return await _dbContext.TarifarioVentaLicencias
-                .Include(t=>t.TipoLicencia)
-                .Include(t=>t.MarcaLicencia)
-                .Include(t=>t.MayoristaLicencia)
+                .Include(t => t.TipoLicencia)
+                .Include(t => t.MarcaLicencia)
+                .Include(t => t.MayoristaLicencia)
+                .Include(t => t.Moneda)
                 .ToListAsync();
         }
 
@@ -31,6 +32,7 @@ namespace look.Infrastructure.repository.licencia
                 .Include(t => t.TipoLicencia)
                 .Include(t => t.MarcaLicencia)
                 .Include(t => t.MayoristaLicencia)
+                .Include(t => t.Moneda)
                 .Where(t => t.IdVentaLicencia == idLicencia)
                 .ToListAsync();
         }

@@ -22,7 +22,7 @@ namespace look.Application.services.admin
         private readonly IEmailService _emailService;
         private readonly ITelefonoService _telefonoService;
         private readonly IDireccionService _direccionService;
-        public PersonaService(IPersonaRepository repository, IUnitOfWork unitOfWork,IClientePersonaService clientePersonaService,IEmailService emailService, ITelefonoService telefonoService, IDireccionService direccionService) : base(repository)
+        public PersonaService(IPersonaRepository repository, IUnitOfWork unitOfWork, IClientePersonaService clientePersonaService, IEmailService emailService, ITelefonoService telefonoService, IDireccionService direccionService) : base(repository)
         {
             _personaRepository = repository;
             _unitOfWork = unitOfWork;
@@ -37,16 +37,17 @@ namespace look.Application.services.admin
             _logger.Information("Crear Persona");
             try
             {
-                if(personaDTO == null) {
+                if (personaDTO == null)
+                {
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "persona proporcionado es nulo." };
                 }
                 await _unitOfWork.BeginTransactionAsync();
-                var persona=await _personaRepository.AddAsync(personaDTO.Persona);
+                var persona = await _personaRepository.AddAsync(personaDTO.Persona);
                 var personaCliente = new ClientePersona
                 {
                     CarId = null,
-                    CliId = personaDTO.IdCliente != null && personaDTO.IdCliente!=0 ? personaDTO.IdCliente : null ,
-                    CliVigente = (sbyte?) 1,
+                    CliId = personaDTO.IdCliente != null && personaDTO.IdCliente != 0 ? personaDTO.IdCliente : null,
+                    CliVigente = (sbyte?)1,
                     PerId = persona.Id // Usar el ID de la persona actual
                 };
                 if (personaDTO.Emails.Count > 0)
@@ -61,7 +62,7 @@ namespace look.Application.services.admin
                         email.EmaPrincipal = emailList.EmaPrincipal;
                         email.TemId = emailList.TemId;
                         email.EmaEmail = emailList.EmaEmail;
-                    
+
                         await _emailService.AddAsync(email);
                     }
                 }
@@ -77,7 +78,7 @@ namespace look.Application.services.admin
                         telefono.tteId = telefonosList.tteId;
                         telefono.telVigente = telefonosList.telVigente;
                         telefono.TelPrincipal = telefonosList.TelPrincipal;
-                    
+
                         await _telefonoService.AddAsync(telefono);
                     }
                 }
@@ -95,11 +96,11 @@ namespace look.Application.services.admin
                         direccion.DirBlock = direccionList.DirBlock;
                         direccion.TdiId = direccionList.TdiId;
                         direccion.DirPrincipal = direccionList.DirPrincipal;
-                    
+
                         await _direccionService.AddAsync(direccion);
                     }
                 }
-                
+
                 await _clientePersonaService.AddAsync(personaCliente);
                 await _unitOfWork.CommitAsync();
                 _logger.Information("El Contacto Creado con exito");
@@ -112,12 +113,12 @@ namespace look.Application.services.admin
                 };
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
                 _logger.Error("Error interno del servidor: " + ex.ToString());
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
-                
+
             }
         }
 
@@ -134,48 +135,48 @@ namespace look.Application.services.admin
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.NotFound, Message = "La persona no fue encontrada." };
                 }
                 var clientesPersona = await _clientePersonaService.GetAllAsync(); // Obtiene todos los registros
-                
+
                 //elimina las email enviadas
                 var emailListSearch = await _emailService.ListComplete();
-                var emailListSearchFiltrado =emailListSearch.Where(d=>d.PerId == id).ToList();
+                var emailListSearchFiltrado = emailListSearch.Where(d => d.PerId == id).ToList();
                 if (emailListSearchFiltrado.Count > 0)
                 {
-                    
+
                     foreach (var emailList in emailListSearchFiltrado)
                     {
                         await _emailService.DeleteAsync(emailList);
                     }
                 }
-                
+
                 //elimina las telefonos enviadas
                 var telefonoListSearch = await _telefonoService.ListComplete();
-                var telefonoListSearchFiltrado =telefonoListSearch.Where(d=>d.perId == id).ToList();
+                var telefonoListSearchFiltrado = telefonoListSearch.Where(d => d.perId == id).ToList();
                 if (telefonoListSearchFiltrado.Count > 0)
                 {
-                    
+
                     foreach (var telefonosList in telefonoListSearchFiltrado)
                     {
                         await _telefonoService.DeleteAsync(telefonosList);
                     }
                 }
-                
+
                 //elimina las direcciones enviadas
                 var direccionListSearch = await _direccionService.ListComplete();
-                var direccionListSearchFiltrado =direccionListSearch.Where(d=>d.PerId == id).ToList();
+                var direccionListSearchFiltrado = direccionListSearch.Where(d => d.PerId == id).ToList();
                 if (direccionListSearchFiltrado.Count > 0)
                 {
-                    
+
                     foreach (var direccionList in direccionListSearchFiltrado)
                     {
                         await _direccionService.DeleteAsync(direccionList);
                     }
                 }
-                
+
                 var clientePersonaFiltrado = clientesPersona
                     .Where(clientePersona =>
                           clientePersona.PerId == existingPersona.Id).FirstOrDefault();
                 await _personaRepository.DeleteAsync(existingPersona);
-                if (clientePersonaFiltrado != null )
+                if (clientePersonaFiltrado != null)
                 {
                     await _clientePersonaService.DeleteAsync(clientePersonaFiltrado);
                 }
@@ -215,9 +216,9 @@ namespace look.Application.services.admin
                     return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InvalidInput, Message = "El objeto persona proporcionado es nulo." };
                 }
                 var clientePersona = await _clientePersonaService.GetByIdAsync((int)personaDTO.IdCliente);
-                if (personaDTO.ClientePersona!=null&&personaDTO.IdCliente!=personaDTO.ClientePersona.CliId)
+                if (personaDTO.ClientePersona != null && personaDTO.IdCliente != personaDTO.ClientePersona.CliId)
                 {
-                    
+
                     if (clientePersona != null)
                     {
                         await _clientePersonaService.DeleteAsync(personaDTO.ClientePersona);
@@ -303,12 +304,12 @@ namespace look.Application.services.admin
                     }
 
                     // Agregar nuevos teléfonos
-                    foreach (var newPhone in personaDTO.Telefonos.Where(p=>p.telId<1))
+                    foreach (var newPhone in personaDTO.Telefonos.Where(p => p.telId < 1))
                     {
-                            // Nuevo teléfono, asignar IDs y agregar
-                            newPhone.cliId = personaDTO.IdCliente;
-                            newPhone.perId = id;
-                            await _telefonoService.AddAsync(newPhone);
+                        // Nuevo teléfono, asignar IDs y agregar
+                        newPhone.cliId = personaDTO.IdCliente;
+                        newPhone.perId = id;
+                        await _telefonoService.AddAsync(newPhone);
                     }
                 }
 
@@ -350,6 +351,7 @@ namespace look.Application.services.admin
                 existingPersona.PerApellidoMaterno = personaDTO.Persona.PerApellidoMaterno;
                 existingPersona.PaiId = personaDTO.Persona.PaiId;
                 existingPersona.TpeId = personaDTO.Persona.TpeId;
+                existingPersona.Cargo = personaDTO.Persona.Cargo;
 
                 // Actualizar la entidad en el servicio de Persona
                 await _personaRepository.UpdateAsync(existingPersona);
@@ -377,7 +379,8 @@ namespace look.Application.services.admin
             try
             {
                 return await _personaRepository.GetAllByType(typePersonId);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.Error("Error interno del servidor: " + ex.ToString());
                 return null;
@@ -403,7 +406,7 @@ namespace look.Application.services.admin
                     return new ResponseGeneric<List<PersonaDTO>>
                     {
                         serviceResult = invalidInputResult,
-                        Data = null 
+                        Data = null
                     };
                 }
                 var result = new ServiceResult
@@ -415,7 +418,7 @@ namespace look.Application.services.admin
                 return new ResponseGeneric<List<PersonaDTO>>
                 {
                     serviceResult = result,
-                    Data = contact 
+                    Data = contact
                 };
             }
             catch (Exception ex)
@@ -436,7 +439,7 @@ namespace look.Application.services.admin
                 };
             }
         }
-        
+
         public async Task<ResponseGeneric<List<PersonaDTO>>> GetAllContact()
         {
             _logger.Information("Listando contactos con sus entidades");
@@ -456,7 +459,7 @@ namespace look.Application.services.admin
                     return new ResponseGeneric<List<PersonaDTO>>
                     {
                         serviceResult = invalidInputResult,
-                        Data = null 
+                        Data = null
                     };
                 }
                 var result = new ServiceResult
@@ -468,7 +471,7 @@ namespace look.Application.services.admin
                 return new ResponseGeneric<List<PersonaDTO>>
                 {
                     serviceResult = result,
-                    Data = contact 
+                    Data = contact
                 };
             }
             catch (Exception ex)
@@ -489,7 +492,7 @@ namespace look.Application.services.admin
                 };
             }
         }
-        
+
         /// <summary>
         /// lista todas las persona de tipo contacto segun el id del cliente
         /// </summary>
@@ -500,10 +503,10 @@ namespace look.Application.services.admin
             _logger.Information("Listando contactos segun id del cliente");
             try
             {
-                var clientPerson=await _clientePersonaService.FindByClient(id);
+                var clientPerson = await _clientePersonaService.FindByClient(id);
                 var contact = clientPerson.Select(cp => cp.Persona).ToList();
 
-                if (contact == null || clientPerson==null)
+                if (contact == null || clientPerson == null)
                 {
                     var invalidInputResult = new ServiceResult
                     {
@@ -527,7 +530,7 @@ namespace look.Application.services.admin
                 return new ResponseGeneric<List<Persona>>
                 {
                     serviceResult = result,
-                    Data = contact.Where(p=>p.TpeId==3).ToList(),
+                    Data = contact.Where(p => p.TpeId == 3).ToList(),
                 };
             }
             catch (Exception ex)

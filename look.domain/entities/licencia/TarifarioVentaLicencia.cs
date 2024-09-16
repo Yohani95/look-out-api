@@ -1,4 +1,5 @@
 ﻿using look.domain.entities.oportunidad;
+using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,14 @@ namespace look.domain.entities.licencia
         public double Valor { get; set; }
         public DateTime FechaVigencia { get; set; }
         public DateTime FechaTermino { get; set; }
-        
+
+        public int? IdMoneda { get; set; }
         public int? IdVentaLicencia { get; set; }
         public virtual MarcaLicencia? MarcaLicencia { get; }
-        public virtual MayoristaLicencia? MayoristaLicencia{ get; }
+        public virtual MayoristaLicencia? MayoristaLicencia { get; }
         public virtual TipoLicenciaOportunidad? TipoLicencia { get; }
+
+        public virtual Moneda? Moneda { get; }
 
     }
 }
