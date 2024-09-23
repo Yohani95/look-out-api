@@ -21,6 +21,7 @@ namespace look.domain.entities.admin
         public int? PaiId { get; set; }
 
         public int? TpeId { get; set; }
+        public string? Cargo { get; set; }
 
         public DateTime? PerFechaNacimiento { get; set; }
         public TipoPersona? TipoPersona { get; set; }

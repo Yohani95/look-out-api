@@ -111,8 +111,8 @@ namespace look.Infrastructure.data
         public DbSet<TipoContactoProspecto> TipoContactoProspectos { get; set; }
         public DbSet<MedioLLamadaProspecto> MedioLLamadaProspectos { get; set; }
 
-
         public DbSet<Banco> Bancos { get; set; }
+        public DbSet<DocumentoLicencia> DocumentoLicencia { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -146,7 +146,7 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new ReunionProspectoConfiguration());
             modelBuilder.ApplyConfiguration(new ContactoProspectoConfiguration());
             modelBuilder.ApplyConfiguration(new BancoConfiguration());
-
+            modelBuilder.ApplyConfiguration(new DocumentoLicenciaConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -391,6 +391,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.TpeId)
                     .HasColumnType("int(11)")
                     .HasColumnName("tpe_id");
+                entity.Property(e => e.Cargo)
+                    .HasMaxLength(50)
+                    .HasColumnName("cargo");
 
                 entity.HasOne(d => d.TipoPersona).WithMany()
                     .HasForeignKey(d => d.TpeId)

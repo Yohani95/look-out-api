@@ -96,6 +96,10 @@ namespace look.Infrastructure.data.licencia
             builder.Property(e => e.IdDiaPago)
             .HasColumnType("int(11)")
             .HasColumnName("id_dia_pago");
+
+            builder.Property(e => e.Descripcion)
+                .HasColumnType("varchar(255)")
+                .HasColumnName("descripcion");
             //// Relaciones
             builder.HasOne(d => d.Cliente).WithMany()
                 .HasForeignKey(d => d.IdCliente)

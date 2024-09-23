@@ -1,5 +1,6 @@
 ﻿using look.Application.interfaces.prospecto;
 using look.Application.services.admin;
+using look.domain.entities.Common;
 using look.domain.entities.prospecto;
 using look.domain.entities.proyecto;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,26 @@ namespace look_out_api.Controllers.prospecto
         {
             // Implementa la lógica para obtener el ID de la entidad Prospecto
             return entity.Id;
+        }
+
+        [HttpPost("CargaMasiva")]
+        public async Task<IActionResult> CargaMasiva(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No se proporcionó un archivo o el archivo está vacío.");
+            }
+
+            var result = await _prospectoService.ProcesarCargaMasiva(file);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Message);
+            }
+            else
+            {
+                return BadRequest(result.Message);
+            }
         }
     }
 }

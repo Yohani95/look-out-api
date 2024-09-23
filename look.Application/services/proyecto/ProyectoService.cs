@@ -33,28 +33,28 @@ namespace look.Application.services.proyecto
 
 
         public ProyectoService(IProyectoRepository proyectoRepository,
-            IPropuestaRepository propuestaRepository, IDocumentoService documentoService, 
-            IProyectoDocumentoService proyectoDocumentoService,IUnitOfWork unitOfWork, 
+            IPropuestaRepository propuestaRepository, IDocumentoService documentoService,
+            IProyectoDocumentoService proyectoDocumentoService, IUnitOfWork unitOfWork,
             ITarifarioConvenioService tarifarioConvenioService,
             IProyectoParticipanteRepository proyectoParticipanteRepository,
             IPeriodoProyectoRepository periodoProyectoRepository
             ) : base(proyectoRepository)
         {
             _proyectoRepository = proyectoRepository;
-            _propuestaRepository = propuestaRepository;         
+            _propuestaRepository = propuestaRepository;
             _documentoService = documentoService;
             _proyectoDocumentoService = proyectoDocumentoService;
             _tarifarioConvenioService = tarifarioConvenioService;
-            _proyectoParticipanteRepository=proyectoParticipanteRepository;
-            _periodoProyectoRepository=periodoProyectoRepository;
-            _unitOfWork= unitOfWork;
+            _proyectoParticipanteRepository = proyectoParticipanteRepository;
+            _periodoProyectoRepository = periodoProyectoRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ServiceResult> createAsync(List<IFormFile> files, ProyectoDTO proyectoDTO)
         {
-            List<Documento> documentos=new List<Documento>();
+            List<Documento> documentos = new List<Documento>();
             try
-            {           
+            {
                 _logger.Information("Crear proyecto");
                 await _unitOfWork.BeginTransactionAsync();
                 if (proyectoDTO == null)
@@ -66,14 +66,14 @@ namespace look.Application.services.proyecto
                         MessageCode = ServiceResultMessage.InvalidInput
                     };
                 }
-                var propuestaCreated=await _propuestaRepository.AddAsync(new Propuesta{MonId = proyectoDTO.Proyecto.MonId,PrpPresupuesto = 0,EppId = 1,PrpDescripcion = "N/A",TseId = 1,PrsId = 1,});
-                proyectoDTO.Proyecto.PrpId= propuestaCreated.PrpId;
-                var proyectoCreated=await _proyectoRepository.AddAsync(proyectoDTO.Proyecto);
-#region "Guardar Archivos"
+                var propuestaCreated = await _propuestaRepository.AddAsync(new Propuesta { MonId = proyectoDTO.Proyecto.MonId, PrpPresupuesto = 0, EppId = 1, PrpDescripcion = "N/A", TseId = 1, PrsId = 1, });
+                proyectoDTO.Proyecto.PrpId = propuestaCreated.PrpId;
+                var proyectoCreated = await _proyectoRepository.AddAsync(proyectoDTO.Proyecto);
+                #region "Guardar Archivos"
                 foreach (var file in files)
                 {
-                    var url= await FileServices.UploadFileAsync(file, (int)proyectoCreated.PryIdCliente, proyectoCreated.PryId);
-                    if (url.Equals("") )
+                    var url = await FileServices.UploadFileAsync(file, (int)proyectoCreated.PryIdCliente, proyectoCreated.PryId);
+                    if (url.Equals(""))
                         return new ServiceResult { IsSuccess = false, Message = Message.SinDocumentos, MessageCode = ServiceResultMessage.InvalidInput };
                     var documento = await _documentoService.AddAsync(new Documento
                     {
@@ -106,7 +106,7 @@ namespace look.Application.services.proyecto
 
                 documentos.ForEach(documento => { FileServices.DeleteFile(documento.DocUrl); });
 
-                _logger.Information("Error al crear el proyecto: " + ex.Message);
+                _logger.Error("Error al crear el proyecto: " + ex.Message);
                 return new ServiceResult
                 {
                     IsSuccess = false,
@@ -147,7 +147,7 @@ namespace look.Application.services.proyecto
 
                 // Elimina los documentos asociados al proyecto.
                 var proyectoDocumentos = await _proyectoDocumentoService.ListComplete();
-                var proyectoDocumentoFiltrado =proyectoDocumentos.Where(d=>d.PryId == id).ToList();
+                var proyectoDocumentoFiltrado = proyectoDocumentos.Where(d => d.PryId == id).ToList();
 
                 foreach (var proDoc in proyectoDocumentoFiltrado)
                 {
@@ -161,14 +161,14 @@ namespace look.Application.services.proyecto
                 }
                 // Elimina los participantes asociados al proyecto.
                 var tarifarioConvenido = await _tarifarioConvenioService.ListComplete();
-                var tarifarioConvenidoFiltrado =tarifarioConvenido.Where(d=>d.PRpId == id).ToList();
+                var tarifarioConvenidoFiltrado = tarifarioConvenido.Where(d => d.PRpId == id).ToList();
                 foreach (var tarifariolist in tarifarioConvenidoFiltrado)
                 {
                     await _tarifarioConvenioService.DeleteAsync(tarifariolist);
                 }
                 // Elimina el proyecto después de eliminar la propuesta y los documentos.
-                var participantes=await _proyectoParticipanteRepository.GetAllAsync();
-                foreach (var item in participantes.Where(p=>p.PryId==id))
+                var participantes = await _proyectoParticipanteRepository.GetAllAsync();
+                foreach (var item in participantes.Where(p => p.PryId == id))
                 {
                     await _proyectoParticipanteRepository.DeleteAsync(item);
                 }
@@ -178,7 +178,7 @@ namespace look.Application.services.proyecto
                     await _periodoProyectoRepository.DeleteAsync(item);
                 }
                 await _proyectoRepository.DeleteAsync(existingProyecto);
-                
+
                 _logger.Information("Proyecto con propuesta y documentos eliminado exitosamente");
                 await _unitOfWork.CommitAsync();
                 return new ServiceResult
@@ -187,7 +187,7 @@ namespace look.Application.services.proyecto
                     Message = Message.PeticionOk,
                     MessageCode = ServiceResultMessage.Success
                 };
-                
+
             }
             catch (Exception ex)
             {
@@ -207,7 +207,7 @@ namespace look.Application.services.proyecto
 
             try
             {
-                _logger.Information("obteniendo proyecto ID: "+ id);
+                _logger.Information("obteniendo proyecto ID: " + id);
                 if (id <= 0)
                 {
                     var result = new ServiceResult
@@ -232,7 +232,7 @@ namespace look.Application.services.proyecto
                 return new ResponseGeneric<Proyecto>
                 {
                     serviceResult = resultSuccess,
-                    Data = proyecto.FirstOrDefault(p=>p.PryId==id)
+                    Data = proyecto.FirstOrDefault(p => p.PryId == id)
                 };
             }
             catch (Exception ex)
@@ -242,7 +242,7 @@ namespace look.Application.services.proyecto
                 {
                     IsSuccess = false,
                     MessageCode = ServiceResultMessage.InternalServerError,
-                    Message =  Message.ErrorServidor+ex.Message
+                    Message = Message.ErrorServidor + ex.Message
                 };
 
                 return new ResponseGeneric<Proyecto>
@@ -376,16 +376,16 @@ namespace look.Application.services.proyecto
                 existingProyecto.MonId = proyectoDTO.Proyecto.MonId;
                 existingProyecto.EpyId = proyectoDTO.Proyecto.EpyId;
                 existingProyecto.TseId = proyectoDTO.Proyecto.TseId;
-                existingProyecto.EsProy= proyectoDTO.Proyecto.EsProy;
-                existingProyecto.PrpId= proyectoDTO.Proyecto.PrpId;
-                existingProyecto.PryFechaCierre= proyectoDTO.Proyecto.PryFechaCierre;
-                existingProyecto.PryFechaInicioEstimada= proyectoDTO.Proyecto.PryFechaInicioEstimada;
-                existingProyecto.PryFechaCierreEstimada= proyectoDTO.Proyecto.PryFechaCierreEstimada;
+                existingProyecto.EsProy = proyectoDTO.Proyecto.EsProy;
+                existingProyecto.PrpId = proyectoDTO.Proyecto.PrpId;
+                existingProyecto.PryFechaCierre = proyectoDTO.Proyecto.PryFechaCierre;
+                existingProyecto.PryFechaInicioEstimada = proyectoDTO.Proyecto.PryFechaInicioEstimada;
+                existingProyecto.PryFechaCierreEstimada = proyectoDTO.Proyecto.PryFechaCierreEstimada;
                 existingProyecto.FechaCorte = proyectoDTO.Proyecto.FechaCorte;
-                existingProyecto.PryValor= proyectoDTO.Proyecto.PryValor;
-                existingProyecto.FacturacionDiaHabil= proyectoDTO.Proyecto.FacturacionDiaHabil;
-                existingProyecto.idTipoFacturacion= proyectoDTO.Proyecto.idTipoFacturacion;
-                existingProyecto.IdDiaPago= proyectoDTO.Proyecto.IdDiaPago;
+                existingProyecto.PryValor = proyectoDTO.Proyecto.PryValor;
+                existingProyecto.FacturacionDiaHabil = proyectoDTO.Proyecto.FacturacionDiaHabil;
+                existingProyecto.idTipoFacturacion = proyectoDTO.Proyecto.idTipoFacturacion;
+                existingProyecto.IdDiaPago = proyectoDTO.Proyecto.IdDiaPago;
                 existingProyecto.idEmpresaPrestadora = proyectoDTO.Proyecto.idEmpresaPrestadora;
                 existingProyecto.kamId = proyectoDTO.Proyecto.kamId;
 
@@ -396,33 +396,33 @@ namespace look.Application.services.proyecto
                     var documento = await _documentoService.GetByIdAsync(proyectoDocumento.DocId);
                     IFormFile archivoEncontrado = files.FirstOrDefault(file =>
                     {
-                        string nombreArchivo = file.FileName; 
+                        string nombreArchivo = file.FileName;
                         return nombreArchivo.Equals(documento.DocNombre, StringComparison.OrdinalIgnoreCase);
                     });
 
                     if (archivoEncontrado != null)
-                    { 
+                    {
                         using (var reader = new StreamReader(archivoEncontrado.OpenReadStream()))
                         {
                             var fileContent = reader.ReadToEnd();
                             if (!string.IsNullOrWhiteSpace(fileContent))
                             {
                                 string pathArchivo = Path.GetFileName(documento.DocUrl);
-                                FileServices.UploadFileAsyncEdit(archivoEncontrado,proyectoDTO.Proyecto.PryIdCliente,existingProyecto.PryId,pathArchivo);
+                                FileServices.UploadFileAsyncEdit(archivoEncontrado, proyectoDTO.Proyecto.PryIdCliente, existingProyecto.PryId, pathArchivo);
                                 files.Remove(archivoEncontrado);
                             }
                             else
                             {
-                                
+
                             }
                         }
-                        
+
                     }
                     else
                     {
                         FileServices.DeleteFile(documento.DocUrl);
                         await _documentoService.DeleteAsync(documento);
-                        
+
                     }
                 }
                 // Actualiza los documentos si se proporcionan archivos actualizados.
@@ -437,11 +437,11 @@ namespace look.Application.services.proyecto
                         DocIdCliente = proyectoDTO.Proyecto.PryIdCliente,
                         TdoId = 1
                     });
-                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento{PryId = proyectoDTO.Proyecto.PryId,DocId = documento.DocId, TdoId = 1 });
+                    await _proyectoDocumentoService.AddAsync(new ProyectoDocumento { PryId = proyectoDTO.Proyecto.PryId, DocId = documento.DocId, TdoId = 1 });
                 }
                 // Llama al repositorio para guardar los cambios en la base de datos.
                 await _proyectoRepository.UpdateAsync(existingProyecto);
-                
+
                 await _unitOfWork.CommitAsync();
 
                 _logger.Information("Proyecto con documentos actualizado exitosamente");
@@ -466,6 +466,6 @@ namespace look.Application.services.proyecto
             }
         }
 
-        
+
     }
 }
