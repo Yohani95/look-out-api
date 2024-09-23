@@ -1,6 +1,5 @@
 ﻿using look.domain.entities.prospecto;
-using look.domain.entities.proyecto;
-using look.domain.interfaces.proyecto;
+using look.domain.interfaces.prospecto;
 using look.Infrastructure.data;
 using Microsoft.EntityFrameworkCore;
 using MyApp.Infrastructure.Data;
