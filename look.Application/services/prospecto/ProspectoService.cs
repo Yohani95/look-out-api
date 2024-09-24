@@ -1,6 +1,10 @@
 ﻿using look.Application.interfaces.prospecto;
+using look.domain.entities.admin;
 using look.domain.entities.Common;
 using look.domain.entities.prospecto;
+using look.domain.interfaces.admin;
+using look.domain.interfaces.cuentas;
+using look.domain.interfaces.oportunidad;
 using look.domain.interfaces.prospecto;
 using look.domain.interfaces.unitOfWork;
 using Microsoft.AspNetCore.Http;
@@ -16,16 +20,23 @@ namespace look.Application.services.prospecto
         private readonly IContactoProspectoRepository _contactoRepository;
         private readonly IReunionProspectoRepository _reunionProspectoRepository;
         private readonly ILlamadaProspectoRepository _llamadaProspectoRepository;
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IPersonaRepository _personaRepository;
+        private readonly IAreaServicioOportunidadRepository _areaServicioOportunidadRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger = Logger.GetLogger();
 
         public ProspectoService(IProspectoRepository prospectoRepository, IContactoProspectoRepository contactoProspectoRepository,
-            ILlamadaProspectoRepository llamadaProspectoRepository, IReunionProspectoRepository reunionProspectoRepository, IUnitOfWork unitOfWork) : base(prospectoRepository)
+            ILlamadaProspectoRepository llamadaProspectoRepository, IReunionProspectoRepository reunionProspectoRepository, IUnitOfWork unitOfWork,
+            IClienteRepository clienteRepository, IAreaServicioOportunidadRepository areaServicioOportunidadRepository, IPersonaRepository personaRepository) : base(prospectoRepository)
         {
             _prospectoRepository = prospectoRepository;
             _contactoRepository = contactoProspectoRepository;
             _reunionProspectoRepository = reunionProspectoRepository;
             _llamadaProspectoRepository = llamadaProspectoRepository;
+            _clienteRepository = clienteRepository;
+            _personaRepository = personaRepository;
+            _areaServicioOportunidadRepository = areaServicioOportunidadRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -42,7 +53,9 @@ namespace look.Application.services.prospecto
                     result.MessageCode = ServiceResultMessage.InvalidInput;
                     return result;
                 }
-
+                // Establecer el contexto de la licencia de EPPlus
+                //esta licencia es para uso no comercial 
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (var stream = new MemoryStream())
                 {
                     await _unitOfWork.BeginTransactionAsync();
@@ -120,29 +133,50 @@ namespace look.Application.services.prospecto
                                 NombreCompleto = nombreCompleto,
                                 Numero = telefono,
                                 Email = correo,
-
+                                // Aquí asignamos el Id de TipoContactoProspecto, que es un int, a IdTipo que es int?
+                                IdTipo = clasificacion == "TIR1"
+                                    ? (int?)TipoContactoProspecto.TIR1.Id
+                                    : clasificacion == "TIR2"
+                                    ? (int?)TipoContactoProspecto.TIR2.Id
+                                    : clasificacion == "TIR3"
+                                    ? (int?)TipoContactoProspecto.TIR3.Id
+                                    : null, // Si no es TIR1, TIR2 o TIR3, será nulo
 
                             };
+                            //agregar contacto de prospecto
                             var contactoCreado = await _contactoRepository.AddAsync(contacto);
+                            //buscar kam o asignado
+                            var kamId = (await _personaRepository.GetAllByType(TipoPersona.Kam.Id))
+                                        .FirstOrDefault(kam => kam.PerNombres != null && kam.PerNombres.Contains(asignacion))?.Id;
+                            var clienteId = (await _clienteRepository.GetAllAsync())
+                                        .FirstOrDefault(c => c.CliNombre != null && c.CliNombre.Contains(empresa))?.CliId;
                             // Validar y crear la entidad Prospecto
                             var prospecto = new Prospecto
                             {
                                 IdContacto = contactoCreado.Id,
                                 CantidadLlamadas = numeroLlamados,
                                 Responde = respondeLlamados,
-                                IdEstadoProspecto = 1,
-                                IdKam = 1,
-                                IdCliente = 1,
+                                IdEstadoProspecto = EstadoProspecto.Pendiente.Id,
+                                IdKam = kamId,
+                                IdCliente = clienteId,
                                 FechaActividad = fechaCarga,
-
 
                             };
                             var prospectoCreado = await _prospectoRepository.AddAsync(prospecto);
+
+                            var llamadaProspecto = new LlamadaProspecto
+                            {
+                                IdProspecto = prospectoCreado.Id,
+                                FechaCreacion = fecha1erContacto,
+                                Detalle = detalleContacto,
+                                RespondeLlamada = respondeLlamados
+                            };
+                            await _llamadaProspectoRepository.AddAsync(llamadaProspecto);
                             var reunion = new ReunionProspecto
                             {
                                 IdProspecto = prospectoCreado.Id,
                                 Detalle = detalleReunion1,
-                                SolicitaPropuesta = solicitaPropuesta
+                                SolicitaPropuesta = solicitaPropuesta,
                             };
                             await _reunionProspectoRepository.AddAsync(reunion);
 
