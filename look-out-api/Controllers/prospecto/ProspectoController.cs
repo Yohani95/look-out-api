@@ -41,7 +41,7 @@ namespace look_out_api.Controllers.prospecto
             }
             else
             {
-                return BadRequest(result.Message);
+                return BadRequest(result);
             }
         }
     }
