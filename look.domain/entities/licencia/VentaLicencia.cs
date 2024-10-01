@@ -31,6 +31,7 @@ namespace look.domain.entities.licencia
         public int? IdEmpresaPrestadora { get; set; }
         public int? Descuento { get; set; }
         public int? IdDiaPago { get; set; }
+        public string? Descripcion { get; set; }
         public virtual Cliente? Cliente { get; set; }
         public virtual Moneda? Moneda { get; set; }
         public virtual EmpresaPrestadora? EmpresaPrestadora { get; set; }
@@ -40,5 +41,7 @@ namespace look.domain.entities.licencia
         public virtual Persona? Kam { get; set; }
 
         public virtual DiaPagos? DiaPagos { get; set; }
+
+        public virtual List<DocumentoLicencia>? DocumentoLicencia { get; set; }
     }
 }

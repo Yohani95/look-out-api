@@ -25,6 +25,7 @@ namespace look.Infrastructure.data.licencia
             builder.HasIndex(e => e.IdMarcaLicencia, "FK_marca_licencia");
             builder.HasIndex(e => e.IdMayoristaLicencia, "FK_mayorista_licencia");
             builder.HasIndex(e => e.IdLicencia, "FK_licencia_tarifario");
+            builder.HasIndex(e => e.IdMoneda, "FK_licencia_tarifario_moneda");
             //columnas
             builder.Property(e => e.FechaTermino)
                 .HasColumnType("datetime")
@@ -53,6 +54,9 @@ namespace look.Infrastructure.data.licencia
             builder.Property(e => e.IdVentaLicencia)
                .HasColumnType("int")
                .HasColumnName("id_venta_licencia");
+            builder.Property(e => e.IdMoneda)
+                .HasColumnType("int")
+                .HasColumnName("id_moneda");
 
             //// Relaciones
             builder.HasOne(d => d.MarcaLicencia).WithMany()
@@ -66,6 +70,10 @@ namespace look.Infrastructure.data.licencia
             builder.HasOne(d => d.TipoLicencia).WithMany()
                 .HasForeignKey(d => d.IdLicencia)
                 .HasConstraintName("FK_licencia_tarifario");
+
+            builder.HasOne(d => d.Moneda).WithMany()
+                .HasForeignKey(d => d.IdMoneda)
+                .HasConstraintName("FK_licencia_tarifario_moneda");
 
         }
     }
