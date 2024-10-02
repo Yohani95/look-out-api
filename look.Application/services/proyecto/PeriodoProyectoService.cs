@@ -309,7 +309,7 @@ namespace look.Application.services.proyecto
         static int CalcularDiasHabiles(DateTime startDate, DateTime endDate, IEnumerable<Novedades> novedades, List<DateTime> feriados, ProyectoParticipante participante)
         {
             int diasHabiles = 0;
-            for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
+            for (DateTime fecha = startDate.Date; fecha.Date <= endDate.Date; fecha = fecha.AddDays(1))
             {
                 if (!EsDiaFeriado(fecha, feriados) && EsDiaHabil(fecha))
                 {
@@ -325,7 +325,7 @@ namespace look.Application.services.proyecto
         static int CalcularDiasHabilSinNovedad(DateTime startDate, DateTime endDate, List<DateTime> feriados)
         {
             int diasHabiles = 0;
-            for (DateTime fecha = startDate; fecha <= endDate; fecha = fecha.AddDays(1))
+            for (DateTime fecha = startDate.Date; fecha <= endDate.Date; fecha = fecha.AddDays(1))
             {
                 if (!EsDiaFeriado(fecha, feriados) && EsDiaHabil(fecha))
                 {
