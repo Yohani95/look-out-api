@@ -6,6 +6,7 @@ using look.domain.entities.licencia;
 using look.domain.entities.oportunidad;
 using look.domain.entities.prospecto;
 using look.domain.entities.proyecto;
+using look.domain.entities.proyectoDesarrollo;
 using look.domain.entities.soporte;
 using look.domain.entities.world;
 using look.Infrastructure.data.factura;
@@ -13,6 +14,7 @@ using look.Infrastructure.data.licencia;
 using look.Infrastructure.data.Logger;
 using look.Infrastructure.data.oportunidad;
 using look.Infrastructure.data.prospecto;
+using look.Infrastructure.data.proyectoDesarrollo;
 using look.Infrastructure.data.soporte;
 using look.Infrastructure.data.world;
 using Microsoft.EntityFrameworkCore;
@@ -113,6 +115,12 @@ namespace look.Infrastructure.data
 
         public DbSet<Banco> Bancos { get; set; }
         public DbSet<DocumentoLicencia> DocumentoLicencia { get; set; }
+        public DbSet<ProyectoDesarrollo> ProyectoDesarrollos { get; set; }
+        public DbSet<TipoProyectoDesarrollo> TipoProyectoDesarrollos { get; set; }
+        public DbSet<EtapaProyectoDesarrollo> EtapaProyectoDesarrollos { get; set; }
+        public DbSet<EstadoProyectoDesarrollo> EstadoProyectoDesarrollos { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -147,6 +155,10 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new ContactoProspectoConfiguration());
             modelBuilder.ApplyConfiguration(new BancoConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentoLicenciaConfiguration());
+            modelBuilder.ApplyConfiguration(new ProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new TipoProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new EtapaProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new EstadoProyectoDesarrolloConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
