@@ -393,8 +393,22 @@ namespace look.Application.services.prospecto
         // Validación opcional para verificar si el número de teléfono es válido
         private bool EsNumeroDeTelefonoValido(string telefono)
         {
-            // Solo validar si el teléfono tiene contenido y son dígitos
-            return !string.IsNullOrEmpty(telefono) && telefono.Length >= 8 && telefono.All(char.IsDigit);
+            // Eliminar espacios en blanco al principio y al final
+            telefono = telefono?.Trim();
+
+            // Si el teléfono es nulo o vacío, considerarlo válido
+            if (string.IsNullOrEmpty(telefono))
+            {
+                return true;
+            }
+
+            // Definir los caracteres permitidos en un número de teléfono (incluye '+' al principio, dígitos, espacios, guiones y paréntesis)
+            return telefono.StartsWith("+")
+                ? telefono.Length > 1 && telefono.Substring(1).All(c => char.IsDigit(c) || c == ' ' || c == '-' || c == '(' || c == ')') // Si empieza con '+', el resto puede ser dígitos o caracteres permitidos
+                : telefono.All(c => char.IsDigit(c) || c == ' ' || c == '-' || c == '(' || c == ')'); // Si no empieza con '+', verificar dígitos y caracteres permitidos
         }
+
+
+
     }
 }
