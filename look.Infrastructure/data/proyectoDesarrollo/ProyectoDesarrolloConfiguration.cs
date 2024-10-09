@@ -74,6 +74,21 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasColumnName("id_etapa")
                    .IsRequired(false);
 
+            builder.Property(p => p.IdPais)
+                   .HasColumnType("int")
+                   .HasColumnName("id_pais")
+                   .IsRequired(false);
+
+            builder.Property(p => p.IdEmpresaPrestadora)
+                   .HasColumnType("int")
+                   .HasColumnName("id_empresa_prestadora")
+                   .IsRequired(false);
+
+            builder.Property(p => p.Monto)
+                   .HasColumnType("double")
+                   .HasColumnName("monto")
+                   .IsRequired(false);
+
             // Configuración de las relaciones y claves foráneas
             builder.HasOne(p => p.Kam)
                    .WithMany()
