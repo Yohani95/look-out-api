@@ -13,5 +13,6 @@ namespace look.Application.interfaces.factura
         Task<FacturaAdaptacion> GetAllByIdHoras(int id);
         Task<FacturaAdaptacion> GetAllByIdSoporte(int id);
         Task<FacturaAdaptacion> GetAllEntitiesByIdLicense(int id);
+        Task<FacturaAdaptacion> GetAllEntitiesByIdProyectoDesarrollo(int id);
     }
 }

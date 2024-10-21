@@ -218,5 +218,38 @@ namespace look.Application.services.factura
                 return null;
             }
         }
+
+        public async Task<List<FacturaPeriodo>> GetAllEntitiesByIdProyectoDesarrollo(int id)
+        {
+            try
+            {
+                return await _repository.GetAllEntitiesByIdProyectoDesarrollo(id);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
+            }
+        }
+
+        public async Task<bool> ChangeEstadoByProyectoDesarrollo(int idProyectoDesarrollo, int estado)
+        {
+            try
+            {
+                _logger.Information("Solicitando factura, id proyecto desarrollo: " + idProyectoDesarrollo);
+                await _unitOfWork.BeginTransactionAsync();
+                var facturasAdaptacion = await _facturaAdaptacionRepository.GetAllEntitiesByIdProyectoDesarrollo(idProyectoDesarrollo);
+                if (facturasAdaptacion != null) facturasAdaptacion.Solicitada = true;
+                await _repository.ChangeEstadoByProyectoDesarrollo(idProyectoDesarrollo, estado);
+                await _unitOfWork.CommitAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return false;
+            }
+        }
     }
 }

@@ -36,5 +36,8 @@ namespace look.Application.interfaces.factura
         Task<Boolean> ChangeEstadoByLicencia(int idlicencia, int estado);
         Task<List<FacturaPeriodo>> GetAllEntitiesByIdLicense(int id);
 
+        Task<List<FacturaPeriodo>> GetAllEntitiesByIdProyectoDesarrollo(int id);
+        Task<Boolean> ChangeEstadoByProyectoDesarrollo(int idProyectoDesarrollo, int estado);
+
     }
 }

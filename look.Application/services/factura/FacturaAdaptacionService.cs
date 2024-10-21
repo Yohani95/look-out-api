@@ -73,5 +73,19 @@ namespace look.Application.services.factura
                 return null;
             }
         }
+
+        public async Task<FacturaAdaptacion> GetAllEntitiesByIdProyectoDesarrollo(int id)
+        {
+            try
+            {
+                _logger.Information("Consultando factura adaptacion por proyecto desarrollo con id: {id}...");
+                return await _facturaAdaptacionService.GetAllEntitiesByIdProyectoDesarrollo(id);
+            }
+            catch (Exception)
+            {
+                _logger.Error(Message.ErrorServidor);
+                return null;
+            }
+        }
     }
 }

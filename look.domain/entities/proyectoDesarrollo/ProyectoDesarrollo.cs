@@ -1,5 +1,6 @@
 ﻿using look.domain.entities.admin;
 using look.domain.entities.cuentas;
+using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,13 @@ namespace look.domain.entities.proyectoDesarrollo
         public int? IdPais { get; set; }
         public int? IdEmpresaPrestadora { get; set; }
         public double? Monto { get; set; }
+        public DateTime? FechaCreacion { get; set; }
         public virtual EstadoProyectoDesarrollo? Estado { get; set; }
         public virtual Moneda? Moneda { get; set; }
         public virtual EtapaProyectoDesarrollo? Etapa { get; set; }
         public virtual Cliente? Cliente { get; set; }
         public virtual TipoProyectoDesarrollo? TipoProyectoDesarrollo { get; set; }
+        public virtual EmpresaPrestadora? EmpresaPrestadora{ get; set; }
 
         public virtual Persona? Kam { get; set; }
 

@@ -21,6 +21,7 @@ namespace look.Infrastructure.data.factura
             builder.HasIndex(e => e.IdLicencia, "FK_factura_adaptacion_licencia");
             builder.HasIndex(e => e.IdPeriodoProyecto, "FK_factura_adaptacion_periodo_proyecto");
             builder.HasIndex(e => e.IdSoporte, "FK_factura_adaptacion_soporte");
+            builder.HasIndex(e => e.IdSoporte, "FK_factura_adaptacion_hito_proyecto_desarrollo");
             builder.Property(e => e.Id)
                 .HasColumnType("int")
                 .HasColumnName("id");
@@ -57,6 +58,10 @@ namespace look.Infrastructure.data.factura
             builder.Property(e => e.IdPeriodoProyecto)
                 .HasColumnType("int")
                 .HasColumnName("id_periodo_proyecto");
+
+            builder.Property(e => e.IdHitoProyectoDesarrollo)
+                .HasColumnType("int")
+                .HasColumnName("id_hito_proyecto_desarrollo");
 
             builder.Property(e => e.Solicitada)
               .HasColumnName("solicitada")
