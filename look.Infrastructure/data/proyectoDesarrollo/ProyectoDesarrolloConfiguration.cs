@@ -89,6 +89,11 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasColumnName("monto")
                    .IsRequired(false);
 
+            builder.Property(e => e.FechaCreacion)
+                   .HasColumnType("datetime")
+                   .HasColumnName("fecha_creacion")
+                   .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
             // Configuración de las relaciones y claves foráneas
             builder.HasOne(p => p.Kam)
                    .WithMany()
@@ -118,7 +123,12 @@ namespace look.Infrastructure.data.proyectoDesarrollo
             builder.HasOne(p => p.TipoProyectoDesarrollo)
                    .WithMany()
                    .HasForeignKey(p => p.IdTipoProyecto)
-                   .HasConstraintName("FK_proyecto_desarrollo_tipo_proyecto");
+                   .HasConstraintName("FK_proyecto_desarrollo_tipo_proyecto");   
+            
+            builder.HasOne(p => p.EmpresaPrestadora)
+                   .WithMany()
+                   .HasForeignKey(p => p.IdEmpresaPrestadora)
+                   .HasConstraintName("FK_proyecto_desarrollo_empresa");
         }
     }
 }

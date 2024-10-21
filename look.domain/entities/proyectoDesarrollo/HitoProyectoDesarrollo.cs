@@ -18,5 +18,6 @@ namespace look.domain.entities.proyectoDesarrollo
         public string? Descripcion { get; set; }
 
         public virtual TipoHitoProyectoDesarrollo? TipoHitoProyectoDesarrollo { get; set; }
+        public virtual ProyectoDesarrollo? ProyectoDesarrollo { get; set; }
     }
 }

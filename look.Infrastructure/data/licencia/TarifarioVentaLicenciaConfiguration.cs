@@ -1,4 +1,5 @@
-﻿using look.domain.entities.licencia;
+﻿
+using look.domain.entities.licencia;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -57,7 +58,9 @@ namespace look.Infrastructure.data.licencia
             builder.Property(e => e.IdMoneda)
                 .HasColumnType("int")
                 .HasColumnName("id_moneda");
-
+            builder.Property(e => e.Cantidad)
+                .HasColumnType("int")
+                .HasColumnName("cantidad");
             //// Relaciones
             builder.HasOne(d => d.MarcaLicencia).WithMany()
                 .HasForeignKey(d => d.IdMarcaLicencia)

@@ -21,6 +21,7 @@ namespace look.Infrastructure.data.factura
             entity.HasIndex(e => e.IdHorasUtilizadas, "FK_factura_periodo_horas_utilizadas");
             entity.HasIndex(e => e.IdSoporteBolsa, "FK_factura_soporte");
             entity.HasIndex(e => e.idLicencia, "FK_factura_Licencia");
+            entity.HasIndex(e => e.idLicencia, "FK_factura_hito_proyecto_desarrollo");
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
@@ -80,7 +81,9 @@ namespace look.Infrastructure.data.factura
             entity.Property(e => e.FechaPago)
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_pago");
-
+            entity.Property(e => e.IdHitoProyectoDesarrollo)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_hito_proyecto_desarrollo");
 
             //realaciones
             entity.HasOne(d => d.Periodo).WithMany()
@@ -102,6 +105,9 @@ namespace look.Infrastructure.data.factura
             entity.HasOne(d => d.VentaLicencia).WithMany()
                 .HasForeignKey(d => d.idLicencia)
                 .HasConstraintName("FK_factura_Licencia");
+            entity.HasOne(d => d.HitoProyectoDesarrollo).WithMany()
+                .HasForeignKey(d => d.IdHitoProyectoDesarrollo)
+                .HasConstraintName("FK_factura_proyecto_desarrollo");
 
             entity.HasOne(d => d.Banco).WithMany()
                 .HasForeignKey(d => d.IdBanco)

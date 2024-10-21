@@ -27,6 +27,7 @@ namespace look.Infrastructure.repository.factura
                 .Include(p => p.HorasUtilizadas).ThenInclude(p => p.Soporte).ThenInclude(p => p.DiaPagos)
                 .Include(p => p.Soporte).ThenInclude(p => p.DiaPagos)
                 .Include(p => p.VentaLicencia).ThenInclude(p => p.DiaPagos)
+                .Include(p => p.HitoProyectoDesarrollo).ThenInclude(h=>h.ProyectoDesarrollo).ThenInclude(p =>p.EmpresaPrestadora)
                 .Include(fp => fp.DocumentosFactura)
                 .Include(fp => fp.Banco)
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
@@ -46,7 +47,7 @@ namespace look.Infrastructure.repository.factura
         public async Task<Boolean> ChangeEstado(int idPeriodo, int estado)
         {
             var facturas = await _dbContext.FacturaPeriodo
-                   .Where(p => p.IdPeriodo == idPeriodo)
+                   .Where(p => p.IdPeriodo == idPeriodo && p.IdEstado == EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                    .ToListAsync();
 
             if (facturas != null && facturas.Any())
@@ -65,7 +66,7 @@ namespace look.Infrastructure.repository.factura
         public async Task<Boolean> ChangeEstadoHoras(int idHoras, int estado)
         {
             var facturas = await _dbContext.FacturaPeriodo
-                   .Where(p => p.IdHorasUtilizadas == idHoras)
+                   .Where(p => p.IdHorasUtilizadas == idHoras && p.IdEstado == EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                    .ToListAsync();
 
             if (facturas != null && facturas.Any())
@@ -84,7 +85,7 @@ namespace look.Infrastructure.repository.factura
         public async Task<Boolean> ChangeEstadoSoporte(int idSoporte, int estado)
         {
             var facturas = await _dbContext.FacturaPeriodo
-                   .Where(p => p.IdSoporteBolsa == idSoporte)
+                   .Where(p => p.IdSoporteBolsa == idSoporte && p.IdEstado == EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                    .ToListAsync();
 
             if (facturas != null && facturas.Any())
@@ -123,7 +124,7 @@ namespace look.Infrastructure.repository.factura
         public async Task<bool> ChangeEstadoByLicencia(int idlicencia, int estado)
         {
             var facturas = await _dbContext.FacturaPeriodo
-                   .Where(p => p.idLicencia == idlicencia)
+                   .Where(p => p.idLicencia == idlicencia && p.IdEstado == EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                    .ToListAsync();
 
             if (facturas != null && facturas.Any())
@@ -148,6 +149,36 @@ namespace look.Infrastructure.repository.factura
                  .Include(fp => fp.DocumentosFactura)
                 .Where(p => p.idLicencia == id)
                 .ToListAsync();
+        }
+
+        public async Task<List<FacturaPeriodo>> GetAllEntitiesByIdProyectoDesarrollo(int id)
+        {
+            return await _dbContext.FacturaPeriodo
+            .Include(p => p.HitoProyectoDesarrollo)
+             .Include(p => p.Estado)
+             .Include(fp => fp.DocumentosFactura)
+            .Where(p => p.IdHitoProyectoDesarrollo == id)
+            .ToListAsync();
+        }
+
+        public async Task<bool> ChangeEstadoByProyectoDesarrollo(int idProyectoDesarrollo, int estado)
+        {
+            var facturas = await _dbContext.FacturaPeriodo
+                  .Where(p => p.IdHitoProyectoDesarrollo == idProyectoDesarrollo && p.IdEstado == EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
+                  .ToListAsync();
+
+            if (facturas != null && facturas.Any())
+            {
+                foreach (var factura in facturas)
+                {
+                    factura.IdEstado = estado;
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -20,6 +20,8 @@ namespace look.Infrastructure.repository.proyectoDesarrollo
         {
             return await _dbContext.HitoProyectoDesarrollos
                           .Include(p => p.TipoHitoProyectoDesarrollo)
+                          .Include(p => p.ProyectoDesarrollo).ThenInclude(p => p.EmpresaPrestadora)
+                          .Include(p => p.ProyectoDesarrollo).ThenInclude(p => p.Cliente)
                           .ToListAsync();
         }
 
@@ -27,8 +29,18 @@ namespace look.Infrastructure.repository.proyectoDesarrollo
         {
             return await _dbContext.HitoProyectoDesarrollos
                     .Include(p => p.TipoHitoProyectoDesarrollo)
+                    .Include(p => p.ProyectoDesarrollo).ThenInclude(p => p.EmpresaPrestadora)
+                    .Include(p => p.ProyectoDesarrollo).ThenInclude(p => p.Cliente)
                     .Where(p => p.IdProyectoDesarrollo == id)
                     .ToListAsync();
+        }   //Task<T> GetByIdAsync(int id);
+        public async Task<HitoProyectoDesarrollo> GetByIdAsync(int id)
+        {
+            return await _dbContext.HitoProyectoDesarrollos
+                .Include(p => p.TipoHitoProyectoDesarrollo)
+                .Include(p => p.ProyectoDesarrollo).ThenInclude(p => p.EmpresaPrestadora)
+                .Include(p => p.ProyectoDesarrollo).ThenInclude(p => p.Cliente)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

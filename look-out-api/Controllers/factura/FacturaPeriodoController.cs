@@ -18,8 +18,8 @@ namespace look_out_api.Controllers.factura
         [HttpGet("GetAllEntitiesByIdPeriod/{id}")]
         public async Task<ActionResult<FacturaPeriodo>> GetAllEntitiesByIdPeriod(int id)
         {
-            Log.Information("[GetAllEntitiesByIdPeriod] Solicitud getall facturas periodos IDPERIODO : " +id);
-            var data=await _service.GetAllEntitiesByIdPeriod(id);
+            Log.Information("[GetAllEntitiesByIdPeriod] Solicitud getall facturas periodos IDPERIODO : " + id);
+            var data = await _service.GetAllEntitiesByIdPeriod(id);
             return Ok(data);
         }
         [HttpGet("GetAllEntitiesByIdHoras/{id}")]
@@ -48,8 +48,8 @@ namespace look_out_api.Controllers.factura
         [HttpGet("ChangeEstado/{idPeriodo}/{estado}")]
         public async Task<IActionResult> ChangeEstado(int idPeriodo, int estado)
         {
-            Log.Information("[ChangeEstado] Cambiar estado idPeriodo: " + idPeriodo+", Estado ID:"+estado);
-            var data = await _service.ChangeEstado(idPeriodo,estado);
+            Log.Information("[ChangeEstado] Cambiar estado idPeriodo: " + idPeriodo + ", Estado ID:" + estado);
+            var data = await _service.ChangeEstado(idPeriodo, estado);
             return Ok(data);
         }
         [HttpGet("ChangeEstadoHoras/{idHoras}/{estado}")]
@@ -79,6 +79,21 @@ namespace look_out_api.Controllers.factura
         {
             Log.Information("[GetAllEntitiesByIdLicense] Solicitud getall facturas licencia idLicencia: " + id);
             var data = await _service.GetAllEntitiesByIdLicense(id);
+            return Ok(data);
+        }
+
+        [HttpGet("ChangeEstadoProyectoDesarrollo/{idProyectoDesarrollo}/{estado}")]
+        public async Task<IActionResult> ChangeEstadoProyectoDesarrollo(int idProyectoDesarrollo, int estado)
+        {
+            Log.Information("[ChangeEstadoProyectoDesarrollo] Cambiar estado idProyectoDesarrollo: " + idProyectoDesarrollo + ", Estado ID:" + estado);
+            var data = await _service.ChangeEstadoByProyectoDesarrollo(idProyectoDesarrollo, estado);
+            return Ok(data);
+        }
+        [HttpGet("GetAllEntitiesByIdHitoProyectoDesarrollo/{id}")]
+        public async Task<ActionResult<List<FacturaPeriodo>>> GetAllEntitiesByIdHitoProyectoDesarrollo(int id)
+        {
+            Log.Information("[GetAllEntitiesByIdProyectoDesarrollo] Solicitud getall facturas proyectoDesarrollo idProyectoDesarrollo: " + id);
+            var data = await _service.GetAllEntitiesByIdProyectoDesarrollo(id);
             return Ok(data);
         }
         protected override int GetEntityId(FacturaPeriodo entity)

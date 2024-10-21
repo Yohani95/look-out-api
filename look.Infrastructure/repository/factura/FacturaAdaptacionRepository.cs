@@ -36,5 +36,10 @@ namespace look.Infrastructure.repository.factura
         {
             return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdPeriodoProyecto == id);
         }
+
+        public async Task<FacturaAdaptacion> GetAllEntitiesByIdProyectoDesarrollo(int id)
+        {
+            return await _dbContext.FacturaAdaptaciones.FirstOrDefaultAsync(x => x.IdHitoProyectoDesarrollo == id);
+        }
     }
 }

@@ -65,7 +65,7 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasForeignKey(h => h.idTipoPagoHito)
                    .HasConstraintName("FK_hito_proyecto_desarrollo_tipo_hito");
 
-            builder.HasOne<ProyectoDesarrollo>()
+            builder.HasOne(h=>h.ProyectoDesarrollo)
                    .WithMany()
                    .HasForeignKey(h => h.IdProyectoDesarrollo)
                    .HasConstraintName("FK_hito_proyecto_desarrollo_proyecto_desarrollo");
