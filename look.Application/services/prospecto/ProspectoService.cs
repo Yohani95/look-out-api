@@ -329,9 +329,22 @@ namespace look.Application.services.prospecto
             // Reemplazar guiones por barras para unificar el formato
             fechaTexto = fechaTexto.Replace("-", "/");
 
-            // Especifica los formatos de fecha que esperas en Chile
-            string[] formatosPermitidos = { "dd/MM/yyyy", "d/M/yyyy", "d/M/yy", "dd/MM/yy", "MMM./yy", "MM/dd/yyyy", "MM/dd/yyyy", "M/d/yyyy" };
+            // Eliminar el punto al final del mes abreviado si existe
+            fechaTexto = fechaTexto.Replace(".", "").Trim();
 
+            // Especifica una lista extensa de formatos de fecha que esperas en Chile y formatos comunes
+            string[] formatosPermitidos = {
+        "dd/MM/yyyy", "d/M/yyyy", "dd/MM/yy", "d/M/yy", // Formatos estándar con barras
+        "MM/dd/yyyy", "M/d/yyyy", "M/d/yy", "MM/dd/yy", // Formatos estándar de EE.UU.
+        "yyyy/MM/dd", "yy/MM/dd", // Formatos con año al inicio
+        "MMM/yyyy", "MMM/yy", // Mes abreviado y año
+        "d-M-yyyy", "dd-MM-yyyy", "d-M-yy", "dd-MM-yy", // Formatos con guiones
+        "M-d-yyyy", "MM-dd-yyyy", "M-d-yy", "MM-dd-yy", // Formatos de EE.UU. con guiones
+        "yyyy-MM-dd", "yy-MM-dd", // Formatos con año al inicio y guiones
+        "MMM-yyyy", "MMM-yy" // Mes abreviado con guiones
+    };
+
+            // Intentar convertir la fecha en base a los formatos permitidos
             if (DateTime.TryParseExact(fechaTexto, formatosPermitidos, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime fechaResult))
             {
                 return (fechaResult, null); // Fecha válida
@@ -345,7 +358,6 @@ namespace look.Application.services.prospecto
                 return (null, $"Error en la fila {row}, columna {ConvertirNumeroColumnaALetra(columna)} : La fecha '{fechaTexto}' no es válida."); // Error de formato
             }
         }
-
 
         private int? ObtenerIdTipoContacto(string clasificacion)
         {
@@ -393,8 +405,22 @@ namespace look.Application.services.prospecto
         // Validación opcional para verificar si el número de teléfono es válido
         private bool EsNumeroDeTelefonoValido(string telefono)
         {
-            // Solo validar si el teléfono tiene contenido y son dígitos
-            return !string.IsNullOrEmpty(telefono) && telefono.Length >= 8 && telefono.All(char.IsDigit);
+            // Eliminar espacios en blanco al principio y al final
+            telefono = telefono?.Trim();
+
+            // Si el teléfono es nulo o vacío, considerarlo válido
+            if (string.IsNullOrEmpty(telefono))
+            {
+                return true;
+            }
+
+            // Definir los caracteres permitidos en un número de teléfono (incluye '+' al principio, dígitos, espacios, guiones y paréntesis)
+            return telefono.StartsWith("+")
+                ? telefono.Length > 1 && telefono.Substring(1).All(c => char.IsDigit(c) || c == ' ' || c == '-' || c == '(' || c == ')') // Si empieza con '+', el resto puede ser dígitos o caracteres permitidos
+                : telefono.All(c => char.IsDigit(c) || c == ' ' || c == '-' || c == '(' || c == ')'); // Si no empieza con '+', verificar dígitos y caracteres permitidos
         }
+
+
+
     }
 }

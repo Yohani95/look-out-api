@@ -57,6 +57,16 @@ namespace look_out_api.Controllers.factura
             }
             return Ok(result);
         }
+        [HttpGet("GetAllEntitiesByIdProyectoDesarrollo/{id}")]
+        public async Task<ActionResult<FacturaAdaptacion>> GetAllEntitiesByIdProyectoDesarrollo(int id)
+        {
+            var result = await _service.GetAllEntitiesByIdProyectoDesarrollo(id);
+            if (result == null)
+            {
+                return NoContent(); // Devuelve un 204 si no hay contenido
+            }
+            return Ok(result);
+        }
         protected override int GetEntityId(FacturaAdaptacion entity)
         {
             return entity.Id;
