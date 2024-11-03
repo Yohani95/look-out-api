@@ -123,6 +123,7 @@ namespace look.Infrastructure.data
         public DbSet<TipoHitoProyectoDesarrollo> TipoHitoProyectoDesarrollos { get; set; }
         public DbSet<NovedadesProyectoDesarrollo> NovedadesProyectoDesarrollos { get; set; }
         public DbSet<TipoNovedadProyectoDesarrollo> TipoNovedadProyectoDesarrollos { get; set; }
+        public DbSet<PlanificacionProyectoDesarrollo> PlanificacionProyectoDesarrollos { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -167,6 +168,7 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new TipoHitoProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new TipoNovedadesProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new NovedadesProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new PlanificacionProyectoDesarrolloConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
