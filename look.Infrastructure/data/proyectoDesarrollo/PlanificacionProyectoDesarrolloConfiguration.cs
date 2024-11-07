@@ -47,13 +47,37 @@ namespace look.Infrastructure.data.proyectoDesarrollo
             builder.Property(p => p.IdProyectoDesarrollo)
                    .HasColumnType("int")
                    .HasColumnName("id_proyecto_desarrollo");
+
             builder.Property(n => n.FechaCreacion)
-           .HasColumnType("datetime")
-           .HasColumnName("fecha_creacion")
-           .HasDefaultValueSql("CURRENT_TIMESTAMP")
-           .IsRequired();
+                   .HasColumnType("datetime")
+                   .HasColumnName("fecha_creacion")
+                   .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                   .IsRequired(false);
 
+            builder.Property(n => n.FechaActividad)
+                   .HasColumnType("datetime")
+                   .HasColumnName("fecha_actividad")
+                   .IsRequired(false);
 
+            builder.Property(n => n.FechaInicio)
+                   .HasColumnType("datetime")
+                   .HasColumnName("fecha_inicio")
+                   .IsRequired(false);
+
+            builder.Property(n => n.FechaTermino)
+                   .HasColumnType("datetime")
+                   .HasColumnName("fecha_termino")
+                   .IsRequired(false);
+
+            builder.Property(n => n.FechaTerminoReal)
+                   .HasColumnType("datetime")
+                   .HasColumnName("fecha_termino_real")
+                   .IsRequired(false);
+
+            builder.Property(p => p.Terminado)
+                   .HasColumnType("tinyint(1)")
+                   .HasColumnName("Terminado")
+                   .IsRequired(false);
             // Configuración de la relación y clave foránea
             builder.HasOne(p => p.Etapa)
                    .WithMany()
