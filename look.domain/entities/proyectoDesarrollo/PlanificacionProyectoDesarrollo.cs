@@ -1,4 +1,5 @@
-﻿using System;
+﻿using look.Infrastructure.data.proyectoDesarrollo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,12 @@ namespace look.domain.entities.proyectoDesarrollo
         public bool? LineaBase { get; set; }
         public int? IdProyectoDesarrollo { get; set; }
         public DateTime? FechaCreacion { get; set; }
-        public virtual EtapaProyectoDesarrollo? Etapa { get; set; }
+        public DateTime? FechaInicio { get; set; }
+        public DateTime? FechaTermino { get; set; }
+        public DateTime? FechaActividad { get; set; }
+        public DateTime? FechaTerminoReal { get; set; }
+        public bool? Terminado { get; set; }
+
+        public virtual EtapaPlanificacionProyectoDesarrollo? Etapa { get; set; }
     }
 }

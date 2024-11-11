@@ -19,6 +19,7 @@ namespace look.domain.entities.proyecto
         public int? IdPerfil { get; set; }
 
         public int? IdTipoNovedad { get; set; }
+        public int? idProfesionalProyecto { get; set; }
 
         public virtual Persona? Persona { get; set; }
 
