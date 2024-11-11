@@ -118,23 +118,20 @@ namespace look.Application.services.proyecto
                 await _novedadesRepository.AddAsync(novedad);
  #region "Cambio de rol o termino de servicio"
                 if (novedad.IdPerfil!=null && novedad.IdPerfil>0){
-                    var personas = await _proyectoParticipanteRepository.GetAllAsync();
-                    var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
-
-                    if (participante != null && novedad.IdPerfil != participante.PrfId)
+                    var persona = await _proyectoParticipanteRepository.GetByIdAsync((int)novedad.idProfesionalProyecto);
+                    if (persona != null && novedad.IdPerfil != persona.PrfId)
                     {
-                        participante.PrfId = (int)novedad.IdPerfil;
-                        await _proyectoParticipanteRepository.UpdateAsync(participante);
+                        persona.PrfId = (int)novedad.IdPerfil;
+                        await _proyectoParticipanteRepository.UpdateAsync(persona);
                     }
                 }
                 else if(novedad.IdTipoNovedad==Novedades.ConstantesTipoNovedad.TerminoServicio){
                     novedad.fechaHasta = novedad.fechaInicio;
-                    var personas = await _proyectoParticipanteRepository.GetAllAsync();
-                    var participante = personas.FirstOrDefault(p => p.PryId == novedad.idProyecto && p.PerId == novedad.idPersona);
-                    if (participante != null)
+                    var persona = await _proyectoParticipanteRepository.GetByIdAsync((int)novedad.idProfesionalProyecto);
+                    if (persona != null)
                     {
-                        participante.FechaTermino = novedad.fechaHasta;
-                        await _proyectoParticipanteRepository.UpdateAsync(participante);
+                        persona.FechaTermino = novedad.fechaHasta;
+                        await _proyectoParticipanteRepository.UpdateAsync(persona);
                     }
                 }
 #endregion
