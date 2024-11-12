@@ -15,7 +15,7 @@ namespace look.Application.services.soporte
         private readonly ISoporteRepository _soporteRepository;
         private readonly ILogger _logger = Logger.GetLogger();
         private readonly IUnitOfWork _unitOfWork;
-        public HorasUtilizadasService(IHorasUtilizadasRepository repository, ISoporteRepository soporteRepository,IUnitOfWork unitOfWork) : base(repository)
+        public HorasUtilizadasService(IHorasUtilizadasRepository repository, ISoporteRepository soporteRepository, IUnitOfWork unitOfWork) : base(repository)
         {
             _horasUtilizadasRepository = repository;
             _soporteRepository = soporteRepository;
@@ -30,7 +30,7 @@ namespace look.Application.services.soporte
             }
             catch (Exception ex)
             {
-                _logger.Error(Message.ErrorServidor+ex.Message);
+                _logger.Error(Message.ErrorServidor + ex.Message);
                 throw;
             }
         }
@@ -51,9 +51,9 @@ namespace look.Application.services.soporte
 
                     horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
 
-                    horasUtilizadas.Monto =  soporte.PryValor;
+                    horasUtilizadas.Monto = soporte.PryValor;
                     var horaDescuento = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras), 0);
-                    horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? Math.Max(((int)horaAcumulada + (int)ultimoRegistro.HorasAcumuladas)-horaDescuento,0) : 0;
+                    horasUtilizadas.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? Math.Max(((int)horaAcumulada + (int)ultimoRegistro.HorasAcumuladas) - horaDescuento, 0) : 0;
                 }
                 else
                 {
@@ -62,7 +62,7 @@ namespace look.Application.services.soporte
                     horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
 
                     horasUtilizadas.Monto = horasUtilizadas.MontoHorasExtras + soporte.PryValor;
-                    horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada : 0;
+                    horasUtilizadas.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? horaAcumulada : 0;
                 }
 
                 // Agregar el nuevo registro de horas utilizadas
@@ -92,21 +92,21 @@ namespace look.Application.services.soporte
                 if (index > 0)
                 {
                     var registroAnterior = listHorasUtilizadas[index - 1];
-                    horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras-(int)registroAnterior.HorasAcumuladas, 0);
+                    horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras - (int)registroAnterior.HorasAcumuladas, 0);
                     var horaDescuento = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras), 0);
-                    horaAcumulada = Math.Max((horaAcumulada + (int)registroAnterior.HorasAcumuladas)-horaDescuento, 0);
+                    horaAcumulada = Math.Max((horaAcumulada + (int)registroAnterior.HorasAcumuladas) - horaDescuento, 0);
                 }
                 horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
-                horasUtilizadas.Monto =  soporte.PryValor;
-                horasUtilizadas.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada : 0;
+                horasUtilizadas.Monto = soporte.PryValor;
+                horasUtilizadas.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? horaAcumulada : 0;
                 // Actualizar el registro seleccionado
                 listHorasUtilizadas[index].Horas = horasUtilizadas.Horas;
-                listHorasUtilizadas[index].HorasExtras= horasUtilizadas.HorasExtras;
-                listHorasUtilizadas[index].HorasAcumuladas= horasUtilizadas.HorasAcumuladas;
-                listHorasUtilizadas[index].MontoHorasExtras= horasUtilizadas.MontoHorasExtras;
-                listHorasUtilizadas[index].Monto= horasUtilizadas.Monto;
-                listHorasUtilizadas[index].NombreDocumento= horasUtilizadas.NombreDocumento;
-                listHorasUtilizadas[index].ContenidoDocumento= horasUtilizadas.ContenidoDocumento;
+                listHorasUtilizadas[index].HorasExtras = horasUtilizadas.HorasExtras;
+                listHorasUtilizadas[index].HorasAcumuladas = horasUtilizadas.HorasAcumuladas;
+                listHorasUtilizadas[index].MontoHorasExtras = horasUtilizadas.MontoHorasExtras;
+                listHorasUtilizadas[index].Monto = horasUtilizadas.Monto;
+                listHorasUtilizadas[index].NombreDocumento = horasUtilizadas.NombreDocumento;
+                listHorasUtilizadas[index].ContenidoDocumento = horasUtilizadas.ContenidoDocumento;
                 await _horasUtilizadasRepository.UpdateAsync(listHorasUtilizadas[index]);
                 // Actualizar los registros siguientes en cascada
                 for (int i = index + 1; i < listHorasUtilizadas.Count; i++)
@@ -115,17 +115,17 @@ namespace look.Application.services.soporte
                     horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)registro.Horas, 0);
                     var horaAcumuladaUtilizada = (int)listHorasUtilizadas[i - 1].HorasAcumuladas;
                     registro.HorasExtras = Math.Max(((int)registro.Horas - (int)soporte.NumeroHoras) - (int)listHorasUtilizadas[i - 1].HorasAcumuladas, 0);
-                        registro.MontoHorasExtras = registro.HorasExtras * soporte.ValorHoraAdicional;
-                        registro.Monto =  soporte.PryValor;
+                    registro.MontoHorasExtras = registro.HorasExtras * soporte.ValorHoraAdicional;
+                    registro.Monto = soporte.PryValor;
                     if (registro.Horas > soporte.NumeroHoras)
                     {
                         var horaDescuento = Math.Max(((int)registro.Horas - (int)soporte.NumeroHoras), 0);
                         horaAcumuladaUtilizada = Math.Max(horaAcumuladaUtilizada - horaDescuento, 0);
                     }
-                        registro.HorasAcumuladas = (bool)soporte.AcumularHoras ? horaAcumulada + horaAcumuladaUtilizada : 0;
-                    listHorasUtilizadas[i]=registro;
-                        // Actualizar el registro en la base de datos
-                        await _horasUtilizadasRepository.UpdateAsync(registro);
+                    registro.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? horaAcumulada + horaAcumuladaUtilizada : 0;
+                    listHorasUtilizadas[i] = registro;
+                    // Actualizar el registro en la base de datos
+                    await _horasUtilizadasRepository.UpdateAsync(registro);
                 }
                 await _unitOfWork.CommitAsync();
             }
@@ -199,7 +199,7 @@ namespace look.Application.services.soporte
                 if (index > 0)
                 {
                     var registroAnterior = listHorasUtilizadas[index - 1];
-                    horaAcumulada = (int)registroAnterior.HorasAcumuladas-(int)horasUtilizadas.Horas;
+                    horaAcumulada = (int)registroAnterior.HorasAcumuladas - (int)horasUtilizadas.Horas;
                 }
                 horasUtilizadas.Monto = 0;
                 horasUtilizadas.HorasAcumuladas = horaAcumulada;
@@ -237,12 +237,12 @@ namespace look.Application.services.soporte
         {
             try
             {
-            // Obtener el soporte relacionado a las horas utilizadas
-            var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
-            // Obtener todas las horas utilizadas relacionadas al soporte
-            horasUtilizadas.Monto=horasUtilizadas.Horas*soporte.PryValor;
-            await _horasUtilizadasRepository.AddAsync(horasUtilizadas);
-            return horasUtilizadas;
+                // Obtener el soporte relacionado a las horas utilizadas
+                var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+                // Obtener todas las horas utilizadas relacionadas al soporte
+                horasUtilizadas.Monto = horasUtilizadas.Horas * soporte.PryValor;
+                await _horasUtilizadasRepository.AddAsync(horasUtilizadas);
+                return horasUtilizadas;
             }
             catch (Exception ex)
             {
@@ -259,7 +259,7 @@ namespace look.Application.services.soporte
                 var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
                 // Obtener todas las horas utilizadas relacionadas al soporte
                 var horasUtilizadasExistente = await _horasUtilizadasRepository.GetByIdAsync(id);
-                horasUtilizadas.Monto = soporte.PryValor*horasUtilizadas.Horas;
+                horasUtilizadas.Monto = soporte.PryValor * horasUtilizadas.Horas;
                 // Actualizar el registro seleccionado
                 horasUtilizadasExistente.Horas = horasUtilizadas.Horas;
                 horasUtilizadasExistente.HorasExtras = horasUtilizadas.HorasExtras;
