@@ -261,7 +261,9 @@ namespace look.Application.services.proyecto
                 if (tarifarioConvenio.TcBase == TarifarioConvenio.ConstantesTcBase.Hora)
                 {
                     //este caso es evaluado exepcionalmente para el pais peru
-                    var horas = existingProyecto.PaisId == 2 ? 8 : 9;
+                    //12-11-2024 se elimina por peticion que chile tenga 9 horas y ahora tiene 8 igual que peru 
+                    //var horas = existingProyecto.PaisId == 2 ? 8 : 9;
+                    var horas = 8;
                     // se comenta y se elimina limitaciion a peru
                     //if (horas == 8 && diasTotalesTrabajados>= 200)
                     //{ 
