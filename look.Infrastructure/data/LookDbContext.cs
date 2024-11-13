@@ -14,6 +14,7 @@ using look.Infrastructure.data.licencia;
 using look.Infrastructure.data.Logger;
 using look.Infrastructure.data.oportunidad;
 using look.Infrastructure.data.prospecto;
+using look.Infrastructure.data.proyecto;
 using look.Infrastructure.data.proyectoDesarrollo;
 using look.Infrastructure.data.soporte;
 using look.Infrastructure.data.world;
@@ -123,6 +124,9 @@ namespace look.Infrastructure.data
         public DbSet<TipoHitoProyectoDesarrollo> TipoHitoProyectoDesarrollos { get; set; }
         public DbSet<NovedadesProyectoDesarrollo> NovedadesProyectoDesarrollos { get; set; }
         public DbSet<TipoNovedadProyectoDesarrollo> TipoNovedadProyectoDesarrollos { get; set; }
+        public DbSet<PlanificacionProyectoDesarrollo> PlanificacionProyectoDesarrollos { get; set; }
+        public DbSet<EtapaPlanificacionProyectoDesarrollo> EtapaPlanificacionProyectoDesarrollos { get; set; }
+        public DbSet<DocumentoProyectoDesarrollo> DocumentoProyectoDesarrollos { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -167,6 +171,10 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new TipoHitoProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new TipoNovedadesProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new NovedadesProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new PlanificacionProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new EtapaPlanificacionProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new NovedadesConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentoProyectoDesarrolloConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -1216,55 +1224,6 @@ namespace look.Infrastructure.data
                 entity.HasOne(d => d.Moneda).WithMany()
                     .HasForeignKey(d => d.TcMoneda)
                     .HasConstraintName("FK_tarifario_convenido_moneda");
-            });
-            modelBuilder.Entity<Novedades>(entity =>
-            {
-                entity.HasKey(e => e.id).HasName("PRIMARY");
-                entity.ToTable("novedades");
-                entity.HasIndex(e => e.idProyecto, "FK_proyecto_proyecto");
-                entity.HasIndex(e => e.idPersona, "FK_proyecto_persona");
-                entity.HasIndex(e => e.IdPerfil, "FK_proyecto_perfil");
-                entity.HasIndex(e => e.IdTipoNovedad, "FK_proyecto_tipo_novedad");
-
-                entity.Property(e => e.id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
-                entity.Property(e => e.idPersona)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("idPersona");
-                entity.Property(e => e.idProyecto)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("idProyecto");
-                entity.Property(e => e.fechaInicio)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fechaInicio");
-                entity.Property(e => e.fechaHasta)
-                    .HasColumnType("datetime")
-                    .HasColumnName("fechaHasta");
-                entity.Property(e => e.observaciones)
-                    .HasColumnType("text")
-                    .HasColumnName("observaciones");
-                entity.Property(e => e.IdPerfil)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("idperfil");
-                entity.Property(e => e.IdTipoNovedad)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("idTipoNovedad");
-                entity.HasOne(d => d.Persona).WithMany()
-                    .HasForeignKey(d => d.idPersona)
-                    .HasConstraintName("FK_proyecto_persona");
-
-                entity.HasOne(d => d.Perfil).WithMany()
-                    .HasForeignKey(d => d.IdPerfil)
-                    .HasConstraintName("FK_proyecto_perfil");
-
-                entity.HasOne(d => d.Proyecto).WithMany()
-                    .HasForeignKey(d => d.idProyecto)
-                    .HasConstraintName("FK_proyecto_proyecto");
-
-                entity.HasOne(d => d.TipoNovedades).WithMany()
-                    .HasForeignKey(d => d.IdTipoNovedad)
-                    .HasConstraintName("FK_proyecto_tipo_novedad");
             });
             modelBuilder.Entity<TipoNovedades>(entity =>
             {
