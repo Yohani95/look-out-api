@@ -117,7 +117,7 @@ namespace look.Application.services.prospecto
             string cargo = worksheet.Cells[row, 5].Text;
             string perfilLinkedin = worksheet.Cells[row, 8].Text;
             string nombreCompleto = worksheet.Cells[row, 3].Text;
-            string correo = worksheet.Cells[row, 6].Text;
+            string correo = worksheet.Cells[row, 6].Text.Trim();
 
             // Leer el teléfono como texto (para evitar notación científica)
             string telefonoTexto = worksheet.Cells[row, 7].Text.Trim();
