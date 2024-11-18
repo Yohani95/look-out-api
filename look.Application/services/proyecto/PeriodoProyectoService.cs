@@ -36,6 +36,11 @@ namespace look.Application.services.proyecto
         private readonly IPeriodoProfesionalesRepository _periodoProfesionalesRepository;
         private readonly IDiasFeriadosService _diasFeriadosService;
         private readonly IPaisRepository _paisRepository;
+        /// <summary>
+        /// horas para chile
+        /// </summary>
+        private const int horasChile = 8;
+        private const int horasPeru = 8;
         public PeriodoProyectoService(IPeriodoProyectoRepository periodoProyectoRepository, IUnitOfWork unitOfWork,
             ITarifarioConvenioRepository tarifarioConvenioService,
             IProyectoParticipanteRepository proyectoParticipanteService,

@@ -27,10 +27,46 @@ namespace look.Infrastructure.repository.factura
                 .Include(p => p.HorasUtilizadas).ThenInclude(p => p.Soporte).ThenInclude(p => p.DiaPagos)
                 .Include(p => p.Soporte).ThenInclude(p => p.DiaPagos)
                 .Include(p => p.VentaLicencia).ThenInclude(p => p.DiaPagos)
-                .Include(p => p.HitoProyectoDesarrollo).ThenInclude(h=>h.ProyectoDesarrollo).ThenInclude(p =>p.EmpresaPrestadora)
-                .Include(fp => fp.DocumentosFactura)
-                .Include(fp => fp.Banco)
+                .Include(p => p.HitoProyectoDesarrollo).ThenInclude(h => h.ProyectoDesarrollo).ThenInclude(p => p.EmpresaPrestadora)
+                .Include(p => p.Banco)
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
+                .Select(p => new FacturaPeriodo
+                {
+                    // Todos los campos de FacturaPeriodo se incluyen como están
+                    Id = p.Id,
+                    Rut = p.Rut,
+                    RazonSocial = p.RazonSocial,
+                    HesCodigo = p.HesCodigo,
+                    OcCodigo = p.OcCodigo,
+                    FechaHes = p.FechaHes,
+                    FechaOc = p.FechaOc,
+                    OrdenPeriodo = p.OrdenPeriodo,
+                    Observaciones = p.Observaciones,
+                    IdPeriodo = p.IdPeriodo,
+                    Monto = p.Monto,
+                    FechaFactura = p.FechaFactura,
+                    FechaVencimiento = p.FechaVencimiento,
+                    IdEstado = p.IdEstado,
+                    IdHorasUtilizadas = p.IdHorasUtilizadas,
+                    IdSoporteBolsa = p.IdSoporteBolsa,
+                    idLicencia = p.idLicencia,
+                    IdBanco = p.IdBanco,
+                    IdHitoProyectoDesarrollo = p.IdHitoProyectoDesarrollo,
+                    FechaPago = p.FechaPago,
+                    Soporte = p.Soporte,
+                    Periodo = p.Periodo,
+                    HorasUtilizadas = p.HorasUtilizadas,
+                    VentaLicencia = p.VentaLicencia,
+                    Estado = p.Estado,
+                    HitoProyectoDesarrollo = p.HitoProyectoDesarrollo,
+                    Banco = p.Banco,
+                    // Proyección específica para DocumentosFactura
+                    DocumentosFactura = p.DocumentosFactura.Select(df => new DocumentosFactura
+                    {
+                        Id = df.Id,
+                        idTipoDocumento = df.idTipoDocumento
+                    }).ToList()
+                })
                 .ToListAsync();
         }
 
