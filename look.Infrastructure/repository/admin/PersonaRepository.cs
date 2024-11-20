@@ -21,7 +21,7 @@ namespace look.Infrastructure.repository.admin
 
         public async Task<List<Persona>> GetAllByType(int typePersonId)
         {
-            return await _dbContext.Persona.Include(p=>p.TipoPersona)
+            return await _dbContext.Persona.Include(p=>p.TipoPersona).Include(p=>p.Perfil)
                 .Where(p => p.TpeId == typePersonId).ToListAsync();
         }
 

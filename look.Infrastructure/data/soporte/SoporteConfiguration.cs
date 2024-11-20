@@ -89,7 +89,7 @@ namespace look.Infrastructure.data.soporte
             builder.Property(e => e.ValorHoraAdicional).HasColumnName("valor_hora_adicional").HasColumnType("double");
             builder.Property(e => e.ValorHora).HasColumnName("valor_hora");
             builder.Property(e => e.AcumularHoras).HasColumnName("acumular_horas").HasColumnType("boolean").HasDefaultValue(false);
-            builder.Property(e => e.NumeroHoras).HasColumnName("numero_horas").HasColumnType("int");
+            builder.Property(e => e.NumeroHoras).HasColumnName("numero_horas").HasColumnType("double");
             builder.Property(e => e.IdTipoSoporte).HasColumnName("id_tipo_soporte").HasColumnType("int");
 
             builder.HasOne(d => d.Cliente).WithMany()

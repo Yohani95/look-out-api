@@ -84,6 +84,11 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasColumnName("id_empresa_prestadora")
                    .IsRequired(false);
 
+            builder.Property(p => p.IdJefeProyecto)
+                   .HasColumnType("int")
+                   .HasColumnName("id_jefe_proyecto")
+                   .IsRequired(false);
+
             builder.Property(p => p.Monto)
                    .HasColumnType("double")
                    .HasColumnName("monto")
@@ -123,8 +128,8 @@ namespace look.Infrastructure.data.proyectoDesarrollo
             builder.HasOne(p => p.TipoProyectoDesarrollo)
                    .WithMany()
                    .HasForeignKey(p => p.IdTipoProyecto)
-                   .HasConstraintName("FK_proyecto_desarrollo_tipo_proyecto");   
-            
+                   .HasConstraintName("FK_proyecto_desarrollo_tipo_proyecto");
+
             builder.HasOne(p => p.EmpresaPrestadora)
                    .WithMany()
                    .HasForeignKey(p => p.IdEmpresaPrestadora)

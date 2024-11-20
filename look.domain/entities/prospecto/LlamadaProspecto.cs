@@ -14,6 +14,7 @@ namespace look.domain.entities.prospecto
         public DateTime? FechaCreacion { get; set; }
         public bool? RespondeLlamada { get; set; }
         public int? IdMedioLlamadaProspecto { get; set; }
+        public DateTime? FechaProximaLlamada { get; set; }
 
         [ForeignKey(nameof(Prospecto))]
         public int IdProspecto { get; set; }
