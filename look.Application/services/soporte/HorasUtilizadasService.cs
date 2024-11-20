@@ -153,7 +153,7 @@ namespace look.Application.services.soporte
                 }
                 else
                 {
-                    horasUtilizadas.HorasAcumuladas = soporte.NumeroHoras - horasUtilizadas.Horas;
+                    horasUtilizadas.HorasAcumuladas = (int)soporte.NumeroHoras - horasUtilizadas.Horas;
                 }
                 // Agregar el nuevo registro de horas utilizadas
                 await _horasUtilizadasRepository.AddAsync(horasUtilizadas);

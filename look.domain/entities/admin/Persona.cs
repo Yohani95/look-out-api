@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +23,10 @@ namespace look.domain.entities.admin
 
         public int? TpeId { get; set; }
         public string? Cargo { get; set; }
-
+        public int? PerfilId { get; set; }
         public DateTime? PerFechaNacimiento { get; set; }
         public TipoPersona? TipoPersona { get; set; }
+        [ForeignKey(nameof(PerfilId))]
+        public Perfil? Perfil { get; set; }
     }
 }

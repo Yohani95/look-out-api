@@ -35,6 +35,7 @@ namespace look.Infrastructure.repository.soporte
                  .Include(p => p.Pais)
                  .Include(p => p.EmpresaPrestadora)
                  .Include(p => p.DocumentosSoporte)
+                 .Include(p => p.personaKam)
                  .FirstOrDefaultAsync(p=>p.PryId==id);
         }
 

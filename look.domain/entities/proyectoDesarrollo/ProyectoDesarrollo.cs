@@ -29,6 +29,7 @@ namespace look.domain.entities.proyectoDesarrollo
         public int? IdEmpresaPrestadora { get; set; }
         public double? Monto { get; set; }
         public DateTime? FechaCreacion { get; set; }
+        public int? IdJefeProyecto { get; set; }
         public virtual EstadoProyectoDesarrollo? Estado { get; set; }
         public virtual Moneda? Moneda { get; set; }
         public virtual EtapaProyectoDesarrollo? Etapa { get; set; }
