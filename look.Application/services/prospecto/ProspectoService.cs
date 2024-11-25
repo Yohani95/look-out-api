@@ -420,7 +420,5 @@ namespace look.Application.services.prospecto
                 : telefono.All(c => char.IsDigit(c) || c == ' ' || c == '-' || c == '(' || c == ')'); // Si no empieza con '+', verificar dígitos y caracteres permitidos
         }
 
-
-
     }
 }

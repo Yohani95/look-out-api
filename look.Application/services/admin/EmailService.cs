@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using MimeKit;
 using Serilog;
 using Microsoft.Extensions.Options;
+using look.domain.entities.oportunidad;
 
 namespace look.Application.services.admin
 {
@@ -153,6 +154,7 @@ namespace look.Application.services.admin
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
             message.To.Add(new MailboxAddress(toName, toEmail));
+            message.Cc.Add(new MailboxAddress("Copia Responsable de Delivery", _emailSettings.CopiaFija));
             message.Subject = subject;
 
             // Crear el cuerpo del correo en HTML
@@ -188,5 +190,31 @@ namespace look.Application.services.admin
                 await client.DisconnectAsync(true);
             }
         }
+
+        public async Task EnviarEmailDelevery(Oportunidad oportunidad)
+        {
+            // Crear el cuerpo del mensaje basado en los datos de la oportunidad
+            var body = $@"
+            <p><strong>Cliente:</strong> {oportunidad.Cliente.CliNombre}</p>
+            <p><strong>Nombre Propuesta:</strong> {oportunidad.Nombre}</p>
+            <p><strong>Tipo Negocio:</strong> {oportunidad.TipoOportunidad.Nombre}</p>
+            <p><strong>Moneda:</strong> {oportunidad.Moneda.MonNombre}</p>
+            <p><strong>Monto:</strong> {oportunidad.Monto}</p>";
+
+            await SendEmailAsync("Responsable de Delivery", _emailSettings.ResponsableDelevery,"Cambio de Estado Oportunidad",body);
+        }
+
+        //public async Task EnviarEmailKam(Oportunidad oportunidad)
+        //{
+        //    // Crear el cuerpo del mensaje basado en los datos de la oportunidad
+        //    var body = $@"
+        //    <p><strong>Cliente:</strong> {oportunidad.Cliente.CliNombre}</p>
+        //    <p><strong>Nombre Propuesta:</strong> {oportunidad.Nombre}</p>
+        //    <p><strong>Tipo Negocio:</strong> {oportunidad.TipoOportunidad.Nombre}</p>
+        //    <p><strong>Moneda:</strong> {oportunidad.Moneda.MonNombre}</p>
+        //    <p><strong>Monto:</strong> {oportunidad.Monto}</p>";
+
+        //    await SendEmailAsync("Responsable de Delivery", oportunidad.PersonaKam, "Cambio de Estado Oportunidad", body);
+        //}
     }
 }

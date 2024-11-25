@@ -1,5 +1,6 @@
 ﻿using look.domain.entities.admin;
 using look.domain.entities.Common;
+using look.domain.entities.oportunidad;
 
 namespace look.Application.interfaces.admin
 {
@@ -22,5 +23,11 @@ namespace look.Application.interfaces.admin
         /// <param name="body">cuerpo</param>
         /// <returns></returns>
         Task SendEmailAsync(string toName, string toEmail, string subject, string body);
+        /// <summary>
+        /// envia un email  a responsable delevery
+        /// </summary>
+        /// <param name="oportunidad">entidad oportunidad</param>
+        /// <returns></returns>
+        Task EnviarEmailDelevery(Oportunidad oportunidad);
     }
 }

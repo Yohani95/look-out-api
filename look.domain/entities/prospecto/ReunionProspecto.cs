@@ -19,5 +19,8 @@ namespace look.domain.entities.prospecto
         public int IdProspecto { get; set; }
         [MaxLength(255)]
         public string? Detalle { get; set; }
+        public int? IdEstadoReunionProspecto { get; set; }
+        [ForeignKey(nameof(IdEstadoReunionProspecto))]
+        public virtual EstadoReunionProspecto? EstadoReunionProspecto { get; set; }
     }
 }
