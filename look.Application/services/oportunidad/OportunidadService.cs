@@ -22,13 +22,13 @@ namespace look.Application.services.oportunidad
         private readonly ILogger _logger = Logger.GetLogger();
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailService _emailService;
-        public OportunidadService(IOportunidadRepository repository,IUnitOfWork unitOfWork,IEmailService emailService) : base(repository)
-        {  
+        public OportunidadService(IOportunidadRepository repository, IUnitOfWork unitOfWork, IEmailService emailService) : base(repository)
+        {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _emailService = emailService;
         }
-        public async new Task<Oportunidad> UpdateAsync(Oportunidad oportunidad)
+        public async new Task UpdateAsync(Oportunidad oportunidad)
         {
             try
             {
@@ -36,6 +36,7 @@ namespace look.Application.services.oportunidad
 
                 if (result == null)
                 {
+                    _logger.Warning($"No se encontró una oportunidad con el ID {oportunidad.Id}");
                     throw new KeyNotFoundException($"No se encontró una oportunidad con el ID {oportunidad.Id}");
                 }
 
@@ -63,18 +64,24 @@ namespace look.Application.services.oportunidad
                 // Guardar cambios en el repositorio
                 await _repository.UpdateAsync(result);
                 //enviar emails seegun corresponda
-                if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEntregadaComercial.Id) { 
-                   await  _emailService.EnviarEmailDelevery(oportunidad);
-                }else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEnPreparacion.Id)
+                _logger.Information("Enviando el Email");
+                if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEnPreparacion.Id)
                 {
+                    await _emailService.EnviarEmailDelevery(result);
+                    _logger.Information("Email enviado a Encargado Delevery");
+                }
+                else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEntregadaComercial.Id)
+                {
+                    await _emailService.EnviarEmailKam((int)result.IdKam, result);
+                    _logger.Information("Email enviado a Encargado Kam");
 
-                } 
-                return result;
+                }
+                //return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return null;
-                throw;
+                _logger.Error(Message.ErrorServidor, e.Message);
+                //return null;
             }
         }
     }

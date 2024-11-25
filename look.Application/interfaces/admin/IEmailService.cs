@@ -29,5 +29,7 @@ namespace look.Application.interfaces.admin
         /// <param name="oportunidad">entidad oportunidad</param>
         /// <returns></returns>
         Task EnviarEmailDelevery(Oportunidad oportunidad);
+
+        Task EnviarEmailKam(int id, Oportunidad oportunidad);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace look.domain.interfaces.admin
 {
-    public interface IEmailRepository:IRepository<Email>
+    public interface IEmailRepository : IRepository<Email>
     {
         Task<List<Email>> GetComplete();
         /// <summary>
@@ -12,5 +12,7 @@ namespace look.domain.interfaces.admin
         /// <returns>retonar una lista de email </returns>
         Task<List<Email>> ListCompleteByIdPersona(int id);
         //Task<bool> UpdatePrincipal(int idPersona,int idEmail);
+
+        Task<Email> GetyEmailByPersona(int id);
     }
 }
