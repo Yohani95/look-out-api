@@ -218,6 +218,8 @@ namespace look.Application.services.admin
             var body = "<p>Tienes una propuesta en estado " +
                        "<strong>Propuesta Entregada a Comercial</strong> " +
                        "para ser gestionada(ID:" + oportunidad.Id + ").</p>" +
+                       "<p><strong>Propuesta ID: </strong>" + oportunidad.Id + "</p>" +
+                       "<p><strong>Nombre: </strong>" + oportunidad.Nombre + ").</p>" +
                        "<p>La propuesta está lista para ser enviada a cliente.</p>";
 
             await SendEmailAsync(
