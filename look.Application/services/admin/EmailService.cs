@@ -220,8 +220,8 @@ namespace look.Application.services.admin
                        "para ser gestionada.</p>" +
                        "<p><strong>Propuesta ID: </strong>" + oportunidad.Id + "</p>" +
                        "<p><strong>Nombre: </strong>" + oportunidad.Nombre + ".</p>" +
-                       "< p >< strong > Cliente:</ strong > "+oportunidad.Cliente?.CliNombre+"</ p >"+
-                       "< p >< strong > Cliente:</ strong > " + oportunidad.TipoOportunidad?.Nombre + "</ p >" +
+                       "< p >< strong >Cliente: </ strong > " + oportunidad.Cliente?.CliNombre + "</ p >" +
+                       "< p >< strong >Tipo Negocio :</ strong > " + oportunidad.TipoOportunidad?.Nombre + "</ p >" +
                        "<p>La propuesta está lista para ser enviada a cliente.</p>";
 
             await SendEmailAsync(
