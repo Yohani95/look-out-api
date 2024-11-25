@@ -26,5 +26,15 @@ namespace look.Infrastructure.repository.prospecto
                 .Include(p => p.EstadoProspecto)
                 .ToListAsync();
         }
+        public async new Task<Prospecto> GetByIdAsync(int id)
+        {
+            return await _dbContext.Prospecto
+                .Include(p => p.Cliente).ThenInclude(c => c.SectorComercial)
+                .Include(p => p.Kam)
+                .Include(p => p.Contacto).ThenInclude(c => c.TipoContactoProspecto)
+                .Include(p => p.Contacto).ThenInclude(c => c.Pais)
+                .Include(p => p.EstadoProspecto)
+                .FirstAsync(p => p.Id == id);
+        }
     }
 }

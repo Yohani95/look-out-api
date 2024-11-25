@@ -128,6 +128,7 @@ namespace look.Infrastructure.data
         public DbSet<PlanificacionProyectoDesarrollo> PlanificacionProyectoDesarrollos { get; set; }
         public DbSet<EtapaPlanificacionProyectoDesarrollo> EtapaPlanificacionProyectoDesarrollos { get; set; }
         public DbSet<DocumentoProyectoDesarrollo> DocumentoProyectoDesarrollos { get; set; }
+        public DbSet<EstadoReunionProspecto> EstadoReunionProspecto { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -177,6 +178,7 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new NovedadesConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentoProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new PersonaConfiguration());
+            modelBuilder.ApplyConfiguration(new EstadoReunionProspectoConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {

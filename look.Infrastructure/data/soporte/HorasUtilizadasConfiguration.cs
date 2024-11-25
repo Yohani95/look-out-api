@@ -24,7 +24,7 @@ namespace look.Infrastructure.data.soporte
                 .HasColumnType("longblob")
                 .HasColumnName("contenido_documento");
             builder.Property(e => e.Horas)
-                .HasColumnType("int")
+                .HasColumnType("double")
                 .HasColumnName("horas");
             builder.Property(e => e.IdSoporte)
                 .HasColumnType("int")
@@ -45,17 +45,17 @@ namespace look.Infrastructure.data.soporte
                 .HasColumnType("DOUBLE")
                 .HasColumnName("monto_horas_extras");
             builder.Property(e => e.HorasExtras)
-                .HasColumnType("int(11)")
+                .HasColumnType("double")
                 .HasColumnName("horas_extras");
             builder.Property(e => e.HorasAcumuladas)
-                .HasColumnType("int(11)")
+                .HasColumnType("double")
                 .HasColumnName("horas_acumuladas");
             //objetos
             builder.HasOne(h => h.Soporte)
            .WithMany() // Si no hay navegación inversa en Soporte
            .HasForeignKey(h => h.IdSoporte)
            .IsRequired(false) // Si IdSoporte puede ser nulo
-           .OnDelete(DeleteBehavior.Restrict); 
+           .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
