@@ -19,7 +19,7 @@ namespace look.Infrastructure.repository.proyectoDesarrollo
 
         public async Task<List<DocumentoProyectoDesarrollo>> GetByidProyectoDesarrollo(int id)
         {
-            return await _dbContext.DocumentoProyectoDesarrollos.Where(d => d.Id == id).ToListAsync();
+            return await _dbContext.DocumentoProyectoDesarrollos.Where(d => d.IdProyectoDesarrollo == id).ToListAsync();
         }
     }
 }
