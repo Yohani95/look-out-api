@@ -21,6 +21,10 @@ namespace look.Infrastructure.data.prospecto
                 .HasColumnType("timestamp")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnName("fecha_creacion");
+
+            builder.Property(e => e.IdEstadoReunionProspecto)
+               .HasColumnType("int)")
+               .HasColumnName("IdEstadoReunionProspecto");
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using look.domain.entities.cuentas;
+﻿using look.domain.entities.admin;
+using look.domain.entities.cuentas;
 using look.domain.entities.factura;
 using look.domain.entities.proyecto;
 using look.domain.entities.world;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -40,7 +42,7 @@ namespace look.domain.entities.soporte
         public double? ValorHoraAdicional { get; set; }
         public double? ValorHora { get; set; }
         public bool? AcumularHoras { get; set; }
-        public int? NumeroHoras{ get; set; }
+        public double? NumeroHoras{ get; set; }
 
         public int? IdTipoSoporte { get; set; }
 
@@ -57,6 +59,8 @@ namespace look.domain.entities.soporte
         public virtual EmpresaPrestadora? EmpresaPrestadora { get; set; }
         public virtual DiaPagos? DiaPagos { get; set;}
         public List<DocumentosSoporte>? DocumentosSoporte { get; set; }
+        [ForeignKey(nameof(kamId))]
+        public Persona? personaKam { get; set; }
 
     }
 }

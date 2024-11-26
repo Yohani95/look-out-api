@@ -9,6 +9,7 @@ using look.domain.entities.proyecto;
 using look.domain.entities.proyectoDesarrollo;
 using look.domain.entities.soporte;
 using look.domain.entities.world;
+using look.Infrastructure.data.admin;
 using look.Infrastructure.data.factura;
 using look.Infrastructure.data.licencia;
 using look.Infrastructure.data.Logger;
@@ -127,6 +128,7 @@ namespace look.Infrastructure.data
         public DbSet<PlanificacionProyectoDesarrollo> PlanificacionProyectoDesarrollos { get; set; }
         public DbSet<EtapaPlanificacionProyectoDesarrollo> EtapaPlanificacionProyectoDesarrollos { get; set; }
         public DbSet<DocumentoProyectoDesarrollo> DocumentoProyectoDesarrollos { get; set; }
+        public DbSet<EstadoReunionProspecto> EstadoReunionProspecto { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -175,6 +177,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new EtapaPlanificacionProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new NovedadesConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentoProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new PersonaConfiguration());
+            modelBuilder.ApplyConfiguration(new EstadoReunionProspectoConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -388,45 +392,6 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.tteVigente)
                     .HasColumnType("tinyint(4)")
                     .HasColumnName("tte_vigente");
-            });
-            modelBuilder.Entity<Persona>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-                entity.ToTable("persona");
-
-                entity.HasIndex(e => e.TpeId, "FK_Persona_Tipo_Persona");
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
-                entity.Property(e => e.PaiId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("pai_id");
-                entity.Property(e => e.PerApellidoMaterno)
-                    .HasMaxLength(50)
-                    .HasColumnName("per_apellido_materno");
-                entity.Property(e => e.PerApellidoPaterno)
-                    .HasMaxLength(50)
-                    .HasColumnName("per_apellido_paterno");
-                entity.Property(e => e.PerFechaNacimiento).HasColumnName("per_fecha_nacimiento");
-                entity.Property(e => e.PerIdNacional)
-                    .HasMaxLength(50)
-                    .HasColumnName("per_id_nacional");
-                entity.Property(e => e.PerNombres)
-                    .HasMaxLength(50)
-                    .HasColumnName("per_nombres");
-                entity.Property(e => e.TpeId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("tpe_id");
-                entity.Property(e => e.Cargo)
-                    .HasMaxLength(50)
-                    .HasColumnName("cargo");
-
-                entity.HasOne(d => d.TipoPersona).WithMany()
-                    .HasForeignKey(d => d.TpeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Persona_Tipo_Persona");
             });
             modelBuilder.Entity<Cliente>(entity =>
             {

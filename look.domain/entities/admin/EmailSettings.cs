@@ -14,5 +14,8 @@ namespace look.domain.entities.admin
         public string SmtpPassword { get; set; }
         public string SenderEmail { get; set; }
         public string SenderName { get; set; }
+        public string ResponsableDelevery { get; set; }
+        public string CopiaFija { get; set; }
+
     }
 }

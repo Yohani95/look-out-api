@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using MimeKit;
 using Serilog;
 using Microsoft.Extensions.Options;
+using look.domain.entities.oportunidad;
+using System.Reflection.Metadata.Ecma335;
 
 namespace look.Application.services.admin
 {
@@ -153,6 +155,7 @@ namespace look.Application.services.admin
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
             message.To.Add(new MailboxAddress(toName, toEmail));
+            message.Cc.Add(new MailboxAddress("Copia Responsable de Delivery", _emailSettings.CopiaFija));
             message.Subject = subject;
 
             // Crear el cuerpo del correo en HTML
@@ -163,11 +166,12 @@ namespace look.Application.services.admin
             <body>
                 <p>Hola {toName},</p>
                 <p>{body}</p>
-                <p>Saludos,<br>{_emailSettings.SenderName}</p>
+                <p>Saludos,<br>{_emailSettings.SenderName}.</p>
                 <footer style='border-top: 1px solid #cccccc; padding-top: 10px; margin-top: 10px;'>
-                   
-                </footer>
-            </body>
+                    <p>Este es un mensaje automático, por favor no responder a este correo.</p>
+                    <p>Si tiene alguna consulta, por favor contacte con Soporte.</p>
+                    <p>Gracias!</p>
+                </body>
             </html>"
             };
 
@@ -187,6 +191,51 @@ namespace look.Application.services.admin
             {
                 await client.DisconnectAsync(true);
             }
+        }
+
+        public async Task EnviarEmailDelevery(Oportunidad oportunidad)
+        {
+            // Crear el cuerpo del mensaje basado en los datos de la oportunidad
+            var body = $@"
+            <p><strong>Cliente:</strong> {oportunidad.Cliente.CliNombre}</p>
+            <p><strong>Nombre Propuesta:</strong> {oportunidad.Nombre}</p>
+            <p><strong>Tipo Negocio:</strong> {oportunidad.TipoOportunidad.Nombre}</p>
+            <p><strong>Moneda:</strong> {oportunidad.Moneda.MonNombre}</p>
+            <p><strong>Monto:</strong> {oportunidad.Monto}</p>";
+
+            await SendEmailAsync("Responsable de Delivery", _emailSettings.ResponsableDelevery, "Cambio de Estado Oportunidad", body);
+        }
+
+        public async Task EnviarEmailKam(int id, Oportunidad oportunidad)
+        {
+            // Crear el cuerpo del mensaje basado en los datos de la oportunidad
+            var email = await GetEmailByPersona(id);
+            if (email == null)
+            {
+                _logger.Warning("No se encontró un email para el ID de la persona: {Id}", id);
+                return;
+            }
+            var body = "<p>Tienes una propuesta en estado " +
+                       "<strong>Propuesta Entregada a Comercial</strong> " +
+                       "para ser gestionada.</p>" +
+                       "<p><strong>Propuesta ID: </strong>" + oportunidad.Id + "</p>" +
+                       "<p><strong>Nombre: </strong>" + oportunidad.Nombre + ".</p>" +
+                       "<p><strong>Cliente: </strong> " + oportunidad.Cliente?.CliNombre + "</p>" +
+                       "<p><strong>Tipo Negocio :</strong> " + oportunidad.TipoOportunidad?.Nombre + "</p>" +
+                       "<p>La propuesta está lista para ser enviada a cliente.</p>";
+
+            await SendEmailAsync(
+                oportunidad.PersonaKam.PerNombres ?? "KAM",
+                email.EmaEmail,
+                "Cambio de Estado Oportunidad",
+                body
+            );
+            _logger.Information("Correo enviado exitosamente a {Email}", email.EmaEmail);
+        }
+
+        public async Task<Email> GetEmailByPersona(int id)
+        {
+            return await _emailRepository.GetyEmailByPersona(id);
         }
     }
 }
