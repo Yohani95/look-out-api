@@ -39,29 +39,39 @@ namespace look.Application.services.soporte
             try
             {
                 var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
+
                 // Obtener todas las horas utilizadas relacionadas al soporte
                 var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
-                var horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas, 0);
+
+                // Asegurar valores predeterminados en caso de valores nulos
+                double horasUtilizadasHoras = horasUtilizadas.Horas ?? 0;
+                double soporteNumeroHoras = soporte.NumeroHoras ?? 0;
+                double ultimoRegistroHorasAcumuladas = listHorasUtilizadas.LastOrDefault()?.HorasAcumuladas ?? 0;
+
+                double horaAcumulada = Math.Max(soporteNumeroHoras - horasUtilizadasHoras, 0);
+
                 if (listHorasUtilizadas.Count != 0)
                 {
-                    var ultimoRegistro = listHorasUtilizadas.Last();
+                    horasUtilizadas.HorasExtras = Math.Max(horasUtilizadasHoras - soporteNumeroHoras - ultimoRegistroHorasAcumuladas, 0);
 
-                    horasUtilizadas.HorasExtras = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras) - (int)ultimoRegistro.HorasAcumuladas, 0);
+                    horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * (soporte.ValorHoraAdicional ?? 0);
 
+                    horasUtilizadas.Monto = soporte.PryValor ?? 0;
 
-                    horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
+                    double horaDescuento = Math.Max(horasUtilizadasHoras - soporteNumeroHoras, 0);
 
-                    horasUtilizadas.Monto = soporte.PryValor;
-                    var horaDescuento = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras), 0);
-                    horasUtilizadas.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? Math.Max(((int)horaAcumulada + (int)ultimoRegistro.HorasAcumuladas) - horaDescuento, 0) : 0;
+                    horasUtilizadas.HorasAcumuladas = (soporte.AcumularHoras ?? false)
+                        ? Math.Max(horaAcumulada + ultimoRegistroHorasAcumuladas - horaDescuento, 0)
+                        : 0;
                 }
                 else
                 {
-                    horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras, 0);
+                    horasUtilizadas.HorasExtras = Math.Max(horasUtilizadasHoras - soporteNumeroHoras, 0);
 
-                    horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
+                    horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * (soporte.ValorHoraAdicional ?? 0);
 
-                    horasUtilizadas.Monto = horasUtilizadas.MontoHorasExtras + soporte.PryValor;
+                    horasUtilizadas.Monto = horasUtilizadas.MontoHorasExtras + (soporte.PryValor ?? 0);
+
                     horasUtilizadas.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? horaAcumulada : 0;
                 }
 
@@ -75,6 +85,7 @@ namespace look.Application.services.soporte
                 throw;
             }
         }
+
         public async Task UpdateAsync(HorasUtilizadas horasUtilizadas)
         {
             try
@@ -84,17 +95,17 @@ namespace look.Application.services.soporte
                 var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
                 // Obtener todas las horas utilizadas relacionadas al soporte
                 var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
-                var horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas, 0);
+                var horaAcumulada = Math.Max((double)soporte.NumeroHoras - (double)horasUtilizadas.Horas, 0);
 
                 // Buscar el índice del registro que se está modificando
                 var index = listHorasUtilizadas.FindIndex(h => h.Id == horasUtilizadas.Id);
-                horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras, 0);
+                horasUtilizadas.HorasExtras = Math.Max((double)horasUtilizadas.Horas - (double)soporte.NumeroHoras, 0);
                 if (index > 0)
                 {
                     var registroAnterior = listHorasUtilizadas[index - 1];
-                    horasUtilizadas.HorasExtras = Math.Max((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras - (int)registroAnterior.HorasAcumuladas, 0);
-                    var horaDescuento = Math.Max(((int)horasUtilizadas.Horas - (int)soporte.NumeroHoras), 0);
-                    horaAcumulada = Math.Max((horaAcumulada + (int)registroAnterior.HorasAcumuladas) - horaDescuento, 0);
+                    horasUtilizadas.HorasExtras = Math.Max((double)horasUtilizadas.Horas - (double)soporte.NumeroHoras - (double)registroAnterior.HorasAcumuladas, 0);
+                    var horaDescuento = Math.Max(((double)horasUtilizadas.Horas - (double)soporte.NumeroHoras), 0);
+                    horaAcumulada = Math.Max((horaAcumulada + (double)registroAnterior.HorasAcumuladas) - horaDescuento, 0);
                 }
                 horasUtilizadas.MontoHorasExtras = horasUtilizadas.HorasExtras * soporte.ValorHoraAdicional;
                 horasUtilizadas.Monto = soporte.PryValor;
@@ -112,14 +123,14 @@ namespace look.Application.services.soporte
                 for (int i = index + 1; i < listHorasUtilizadas.Count; i++)
                 {
                     var registro = listHorasUtilizadas[i];
-                    horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)registro.Horas, 0);
-                    var horaAcumuladaUtilizada = (int)listHorasUtilizadas[i - 1].HorasAcumuladas;
-                    registro.HorasExtras = Math.Max(((int)registro.Horas - (int)soporte.NumeroHoras) - (int)listHorasUtilizadas[i - 1].HorasAcumuladas, 0);
+                    horaAcumulada = Math.Max((double)soporte.NumeroHoras - (double)registro.Horas, 0);
+                    var horaAcumuladaUtilizada = (double)listHorasUtilizadas[i - 1].HorasAcumuladas;
+                    registro.HorasExtras = Math.Max(((double)registro.Horas - (double)soporte.NumeroHoras) - (double)listHorasUtilizadas[i - 1].HorasAcumuladas, 0);
                     registro.MontoHorasExtras = registro.HorasExtras * soporte.ValorHoraAdicional;
                     registro.Monto = soporte.PryValor;
                     if (registro.Horas > soporte.NumeroHoras)
                     {
-                        var horaDescuento = Math.Max(((int)registro.Horas - (int)soporte.NumeroHoras), 0);
+                        var horaDescuento = Math.Max(((double)registro.Horas - (double)soporte.NumeroHoras), 0);
                         horaAcumuladaUtilizada = Math.Max(horaAcumuladaUtilizada - horaDescuento, 0);
                     }
                     registro.HorasAcumuladas = (soporte.AcumularHoras ?? false) ? horaAcumulada + horaAcumuladaUtilizada : 0;
@@ -153,7 +164,7 @@ namespace look.Application.services.soporte
                 }
                 else
                 {
-                    horasUtilizadas.HorasAcumuladas = (int)soporte.NumeroHoras - horasUtilizadas.Horas;
+                    horasUtilizadas.HorasAcumuladas = (double)soporte.NumeroHoras - horasUtilizadas.Horas;
                 }
                 // Agregar el nuevo registro de horas utilizadas
                 await _horasUtilizadasRepository.AddAsync(horasUtilizadas);
@@ -192,14 +203,14 @@ namespace look.Application.services.soporte
                 var soporte = await _soporteRepository.GetByIdAsync((int)horasUtilizadas.IdSoporte);
                 // Obtener todas las horas utilizadas relacionadas al soporte
                 var listHorasUtilizadas = await _horasUtilizadasRepository.getAllHorasByIdSoporte((int)horasUtilizadas.IdSoporte);
-                var horaAcumulada = Math.Max((int)soporte.NumeroHoras - (int)horasUtilizadas.Horas, 0);
+                var horaAcumulada = Math.Max((double)soporte.NumeroHoras - (double)horasUtilizadas.Horas, 0);
 
                 // Buscar el índice del registro que se está modificando
                 var index = listHorasUtilizadas.FindIndex(h => h.Id == horasUtilizadas.Id);
                 if (index > 0)
                 {
                     var registroAnterior = listHorasUtilizadas[index - 1];
-                    horaAcumulada = (int)registroAnterior.HorasAcumuladas - (int)horasUtilizadas.Horas;
+                    horaAcumulada = (double)registroAnterior.HorasAcumuladas - (double)horasUtilizadas.Horas;
                 }
                 horasUtilizadas.Monto = 0;
                 horasUtilizadas.HorasAcumuladas = horaAcumulada;
@@ -216,7 +227,7 @@ namespace look.Application.services.soporte
                 for (int i = index + 1; i < listHorasUtilizadas.Count; i++)
                 {
                     var registro = listHorasUtilizadas[i];
-                    horaAcumulada = (int)listHorasUtilizadas[i - 1].HorasAcumuladas - (int)registro.Horas;
+                    horaAcumulada = (double)listHorasUtilizadas[i - 1].HorasAcumuladas - (double)registro.Horas;
                     registro.HorasAcumuladas = horaAcumulada;
                     listHorasUtilizadas[i] = registro;
                     // Actualizar el registro en la base de datos
