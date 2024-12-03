@@ -20,14 +20,34 @@ namespace look.Infrastructure.repository.licencia
 
         public new async Task<IEnumerable<VentaLicencia>> GetAllAsync()
         {
-            return await _dbContext.VentaLicencias
+            // Calcular los montos por VentaLicencia
+            var montos = await _dbContext.TarifarioVentaLicencias
+                .GroupBy(t => t.IdVentaLicencia)
+                .Select(g => new
+                {
+                    IdVentaLicencia = g.Key,
+                    TotalMonto = g.Sum(t => (t.Cantidad ?? 1) * t.Valor) // Usa 1 si Cantidad es null
+                })
+                .ToListAsync();
+
+            // Recuperar las VentaLicencia
+            var ventas = await _dbContext.VentaLicencias
                 .Include(o => o.Cliente)
                 .Include(o => o.EstadoVentaLicencia)
                 .Include(o => o.EmpresaPrestadora)
                 .Include(o => o.Moneda)
                 .Include(o => o.Pais)
                 .Include(o => o.Kam)
-                .ToListAsync();
+                .ToListAsync(); // Ejecutamos la consulta aquí para evitar la traducción de LINQ compleja
+
+            // Asignar los montos en memoria
+            foreach (var venta in ventas)
+            {
+                var monto = montos.FirstOrDefault(m => m.IdVentaLicencia == venta.Id)?.TotalMonto ?? 0;
+                venta.Monto = monto; // Asigna el monto calculado
+            }
+
+            return ventas;
         }
         public new async Task<VentaLicencia> GetByIdAsync(int id)
         {
@@ -38,7 +58,7 @@ namespace look.Infrastructure.repository.licencia
                 .Include(o => o.Moneda)
                 .Include(o => o.Pais)
                 .Include(o => o.Kam)
-                .FirstAsync(v=>v.Id==id);
+                .FirstAsync(v => v.Id == id);
         }
     }
 }
