@@ -16,6 +16,7 @@ namespace look.domain.entities.proyectoDesarrollo
         public double? Monto { get; set; }
         public double? PorcentajePagado { get; set; }
         public string? Descripcion { get; set; }
+        public bool? HitoCumplido { get; set; }
 
         public virtual TipoHitoProyectoDesarrollo? TipoHitoProyectoDesarrollo { get; set; }
         public virtual ProyectoDesarrollo? ProyectoDesarrollo { get; set; }
