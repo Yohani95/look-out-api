@@ -59,13 +59,18 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasColumnName("descripcion")
                    .IsRequired(false);
 
+            builder.Property(h => h.HitoCumplido)
+                   .HasColumnType("boolean")
+                   .HasColumnName("hito_cumplido")
+                   .HasDefaultValue(false);
+
             // Configuración de las relaciones y claves foráneas
             builder.HasOne(h => h.TipoHitoProyectoDesarrollo)
                    .WithMany()
                    .HasForeignKey(h => h.idTipoPagoHito)
                    .HasConstraintName("FK_hito_proyecto_desarrollo_tipo_hito");
 
-            builder.HasOne(h=>h.ProyectoDesarrollo)
+            builder.HasOne(h => h.ProyectoDesarrollo)
                    .WithMany()
                    .HasForeignKey(h => h.IdProyectoDesarrollo)
                    .HasConstraintName("FK_hito_proyecto_desarrollo_proyecto_desarrollo");
