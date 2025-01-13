@@ -28,6 +28,7 @@ namespace look.Infrastructure.repository.admin
                 .Include(u => u.Persona)
                 .Include(u=>u.Perfil)
                 .Include(u=>u.Rol)
+                   .ThenInclude(r => r.Funcionalidades) // Incluye las funcionalidades del Rol
                 .FirstOrDefaultAsync(u => u.UsuNombre==user.UsuNombre  && u.UsuContraseña == user.UsuContraseña);
         }
     }
