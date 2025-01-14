@@ -129,7 +129,8 @@ namespace look.Infrastructure.data
         public DbSet<EtapaPlanificacionProyectoDesarrollo> EtapaPlanificacionProyectoDesarrollos { get; set; }
         public DbSet<DocumentoProyectoDesarrollo> DocumentoProyectoDesarrollos { get; set; }
         public DbSet<EstadoReunionProspecto> EstadoReunionProspecto { get; set; }
-
+        public DbSet<Funcionalidad> Funcionalidad { get; set; }
+        public DbSet<RolFuncionalidad> RolFuncionalidad { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -179,6 +180,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new DocumentoProyectoDesarrolloConfiguration());
             modelBuilder.ApplyConfiguration(new PersonaConfiguration());
             modelBuilder.ApplyConfiguration(new EstadoReunionProspectoConfiguration());
+            modelBuilder.ApplyConfiguration(new FuncionalidadConfiguration());
+            modelBuilder.ApplyConfiguration(new RolFuncionalidadConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -636,6 +639,10 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.RolNombre)
                     .HasMaxLength(50)
                     .HasColumnName("rol_nombre");
+                // Configuración de la relación con RolFuncionalidad
+                entity.HasMany(r => r.Funcionalidades)
+                    .WithOne(rf => rf.Rol) // Propiedad de navegación inversa en RolFuncionalidad
+                    .HasForeignKey(rf => rf.RolId); // Clave foránea en RolFuncionalidad
             });
             modelBuilder.Entity<Direccion>(entity =>
             {
