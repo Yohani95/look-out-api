@@ -14,5 +14,7 @@ namespace look.domain.entities.admin
         public string? RolNombre { get; set; }
 
         public string? RolDescripcion { get; set; }
+
+        public virtual List<RolFuncionalidad>? Funcionalidades { get; set; }
     }
 }
