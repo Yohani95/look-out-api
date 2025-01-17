@@ -216,5 +216,41 @@ namespace look.Infrastructure.repository.factura
 
             return false;
         }
+
+        public async Task<Dictionary<string, int>> GetFacturasResumenAsync()
+        {
+            var now = DateTime.Now;
+
+            // Consulta para obtener los conteos agrupados
+            var resumen = await _dbContext.FacturaPeriodo
+                .GroupBy(fp => fp.IdEstado)
+                .Select(g => new
+                {
+                    Estado = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            // Conteos adicionales con condiciones específicas
+            var enviadas = await _dbContext.FacturaPeriodo
+                .Where(fp => fp.IdEstado == 5 && fp.FechaVencimiento < now)
+                .CountAsync();
+
+            var vencidas = await _dbContext.FacturaPeriodo
+                .Where(fp => fp.IdEstado == 5 && fp.FechaVencimiento >= now)
+                .CountAsync();
+
+            // Mapeo a un diccionario para simplificar el acceso
+            var resultado = new Dictionary<string, int>
+    {
+        { "Solicitadas", resumen.FirstOrDefault(r => r.Estado == 2)?.Count ?? 0 },
+        { "Facturadas", resumen.FirstOrDefault(r => r.Estado == 3)?.Count ?? 0 },
+        { "Enviadas", enviadas },
+        { "Vencidas", vencidas },
+        { "Pagadas", resumen.FirstOrDefault(r => r.Estado == 4)?.Count ?? 0 }
+    };
+
+            return resultado;
+        }
     }
 }

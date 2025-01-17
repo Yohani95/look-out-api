@@ -38,6 +38,7 @@ namespace look.domain.entities.proyectoDesarrollo
         public virtual EmpresaPrestadora? EmpresaPrestadora{ get; set; }
 
         public virtual Persona? Kam { get; set; }
+        public virtual Persona? JefeProyecto { get; set; }
 
     }
 }

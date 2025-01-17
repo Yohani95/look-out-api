@@ -134,6 +134,11 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .WithMany()
                    .HasForeignKey(p => p.IdEmpresaPrestadora)
                    .HasConstraintName("FK_proyecto_desarrollo_empresa");
+
+            builder.HasOne(p => p.JefeProyecto)
+               .WithMany()
+               .HasForeignKey(p => p.IdJefeProyecto)
+               .HasConstraintName("FK_proyecto_jefe_proyecto");
         }
     }
 }
