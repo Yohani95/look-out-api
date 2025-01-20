@@ -1,5 +1,6 @@
 ﻿using look.Application.interfaces;
 using look.Application.interfaces.factura;
+using look.Application.services.factura;
 using look.domain.entities.factura;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -95,6 +96,12 @@ namespace look_out_api.Controllers.factura
             Log.Information("[GetAllEntitiesByIdProyectoDesarrollo] Solicitud getall facturas proyectoDesarrollo idProyectoDesarrollo: " + id);
             var data = await _service.GetAllEntitiesByIdProyectoDesarrollo(id);
             return Ok(data);
+        }
+        [HttpGet("resumen")]
+        public async Task<IActionResult> GetFacturasResumen()
+        {
+            var resumen = await _service.GetFacturasResumenAsync();
+            return Ok(resumen);
         }
         protected override int GetEntityId(FacturaPeriodo entity)
         {

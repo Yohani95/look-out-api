@@ -78,6 +78,11 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasColumnType("tinyint(1)")
                    .HasColumnName("Terminado")
                    .IsRequired(false);
+
+            builder.Property(p => p.AvanceEsperado)
+                  .HasColumnType("double")
+                  .HasColumnName("avance_esperado")
+                  .IsRequired(false);
             // Configuración de la relación y clave foránea
             builder.HasOne(p => p.Etapa)
                    .WithMany()
