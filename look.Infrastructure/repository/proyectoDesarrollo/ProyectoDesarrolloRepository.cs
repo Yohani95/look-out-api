@@ -23,6 +23,7 @@ namespace look.Infrastructure.repository.proyectoDesarrollo
                             .Include(p => p.TipoProyectoDesarrollo)
                             .Include(p => p.Etapa)
                             .Include(p => p.EmpresaPrestadora)
+                            .Include(p => p.JefeProyecto)
                             .ToListAsync();
         }
     }

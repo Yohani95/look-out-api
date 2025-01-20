@@ -26,6 +26,7 @@ namespace look.Infrastructure.repository.proyecto
         {
             return await _dbContext.PeriodoProyectos
                 .Include(p=>p.Proyecto)
+                .OrderByDescending(p=> p.id)
                 .ToListAsync();
         }
 

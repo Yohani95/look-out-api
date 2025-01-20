@@ -1,6 +1,7 @@
 ﻿using look.Application.interfaces.factura;
 using look.domain.entities.Common;
 using look.domain.entities.factura;
+using look.domain.entities.proyectoDesarrollo;
 using look.domain.entities.soporte;
 using look.domain.interfaces;
 using look.domain.interfaces.factura;
@@ -249,6 +250,21 @@ namespace look.Application.services.factura
                 await _unitOfWork.RollbackAsync();
                 _logger.Error(Message.ErrorServidor + e.Message);
                 return false;
+            }
+        }
+
+        public async Task<Dictionary<string, int>> GetFacturasResumenAsync()
+        {
+            try
+            {
+                _logger.Information("Solicitando facturas resumen: ");
+                return await _repository.GetFacturasResumenAsync();
+            }
+            catch (Exception e)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error(Message.ErrorServidor + e.Message);
+                return null;
             }
         }
     }

@@ -33,7 +33,7 @@ namespace look.Application.services.oportunidad
             try
             {
                 var result = await _repository.GetByIdAsync(oportunidad.Id);
-
+                var idEstado = result.IdEstadoOportunidad;
                 if (result == null)
                 {
                     _logger.Warning($"No se encontró una oportunidad con el ID {oportunidad.Id}");
@@ -64,17 +64,25 @@ namespace look.Application.services.oportunidad
                 // Guardar cambios en el repositorio
                 await _repository.UpdateAsync(result);
                 //enviar emails seegun corresponda
-                _logger.Information("Enviando el Email");
-                if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEnPreparacion.Id)
+                if (idEstado != oportunidad.IdEstadoOportunidad)
                 {
-                    await _emailService.EnviarEmailDelevery(result);
-                    _logger.Information("Email enviado a Encargado Delevery");
-                }
-                else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEntregadaComercial.Id)
-                {
-                    await _emailService.EnviarEmailKam((int)result.IdKam, result);
-                    _logger.Information("Email enviado a Encargado Kam");
+                    _logger.Information("Enviando el Email");
+                    if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEnPreparacion.Id)
+                    {
+                        await _emailService.EnviarEmailDelevery(oportunidad);
+                        _logger.Information("Email enviado a Encargado Delevery");
+                    }
+                    else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEntregadaComercial.Id)
+                    {
+                        await _emailService.EnviarEmailKam((int)result.IdKam, oportunidad);
+                        _logger.Information("Email enviado a Encargado Kam");
 
+                    }
+                    else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.CerradaPerdida.Id || oportunidad.IdEstadoOportunidad == EstadoOportunidad.CerradaGanada.Id)
+                    {
+                        await _emailService.EnviarEmailDelevery(oportunidad);
+                        _logger.Information("Email enviado a Encargado Delevery");
+                    }
                 }
                 //return result;
             }

@@ -21,8 +21,8 @@ namespace look.Infrastructure.repository.admin
 
         public async Task<List<Persona>> GetAllByType(int typePersonId)
         {
-            return await _dbContext.Persona.Include(p=>p.TipoPersona).Include(p=>p.Perfil)
-                .Where(p => p.TpeId == typePersonId).ToListAsync();
+            return await _dbContext.Persona.Include(p => p.TipoPersona).Include(p => p.Perfil)
+                .Where(p => p.TpeId == typePersonId).OrderBy(p => p.PerNombres).ToListAsync();
         }
 
         public async Task<List<PersonaDTO>> GetAllContactEnteties()
@@ -41,37 +41,37 @@ namespace look.Infrastructure.repository.admin
                         on clientePersona.CliId equals c.CliId into clienteGroup
                         from cliente in clienteGroup.DefaultIfEmpty()
                         where p.TpeId == 3
-                        orderby p.Id
+                        orderby p.PerNombres
                         select new PersonaDTO
                         {
                             Email = email != null ? email.EmaEmail : null,
                             Telefono = telefono != null ? telefono.telNumero : null,
                             Persona = p,
                             Cuenta = cliente != null ? cliente.CliNombre : null,
-                            IdCliente= cliente != null ? cliente.CliId : null,
+                            IdCliente = cliente != null ? cliente.CliId : null,
                         };
 
             return await query.ToListAsync();
         }
-        
+
         public async Task<List<PersonaDTO>> GetAllContact()
         {
             var query = from p in _dbContext.Persona
-                
-                join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
-                    on p.Id equals e.PerId into emailGroup
-                from email in emailGroup.DefaultIfEmpty()
-                join t in _dbContext.Telefono.Where(tel => tel.TelPrincipal == 1)
-                    on p.Id equals t.perId into telGroup
-                from telefono in telGroup.DefaultIfEmpty()
-                where p.TpeId == 3
-                orderby p.Id
-                select new PersonaDTO
-                {
-                    Email = email.EmaEmail,
-                    Telefono = telefono.telNumero,
-                    Persona = p
-                };
+
+                        join e in _dbContext.Email.Where(email => email.EmaPrincipal == 1)
+                            on p.Id equals e.PerId into emailGroup
+                        from email in emailGroup.DefaultIfEmpty()
+                        join t in _dbContext.Telefono.Where(tel => tel.TelPrincipal == 1)
+                            on p.Id equals t.perId into telGroup
+                        from telefono in telGroup.DefaultIfEmpty()
+                        where p.TpeId == 3
+                        orderby p.PerNombres
+                        select new PersonaDTO
+                        {
+                            Email = email.EmaEmail,
+                            Telefono = telefono.telNumero,
+                            Persona = p
+                        };
 
             return await query.ToListAsync();
         }

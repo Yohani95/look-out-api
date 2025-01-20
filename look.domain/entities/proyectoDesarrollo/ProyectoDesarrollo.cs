@@ -30,6 +30,7 @@ namespace look.domain.entities.proyectoDesarrollo
         public double? Monto { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public int? IdJefeProyecto { get; set; }
+        public double? AvanceEsperado { get; set; }
         public virtual EstadoProyectoDesarrollo? Estado { get; set; }
         public virtual Moneda? Moneda { get; set; }
         public virtual EtapaProyectoDesarrollo? Etapa { get; set; }
@@ -38,6 +39,7 @@ namespace look.domain.entities.proyectoDesarrollo
         public virtual EmpresaPrestadora? EmpresaPrestadora{ get; set; }
 
         public virtual Persona? Kam { get; set; }
+        public virtual Persona? JefeProyecto { get; set; }
 
     }
 }

@@ -41,5 +41,10 @@ namespace look.domain.interfaces.factura
         Task<List<FacturaPeriodo>> GetAllEntitiesByIdLicense(int id);
         Task<List<FacturaPeriodo>> GetAllEntitiesByIdProyectoDesarrollo(int id);
         Task<Boolean> ChangeEstadoByProyectoDesarrollo(int idProyectoDesarrollo, int estado);
+        /// <summary>
+        /// resumen de cantidad de facturas por estados de la base de datos
+        /// </summary>
+        /// <returns>retorna una lista de estados con la cantidad</returns>
+        Task<Dictionary<string, int>> GetFacturasResumenAsync();
     }
 }

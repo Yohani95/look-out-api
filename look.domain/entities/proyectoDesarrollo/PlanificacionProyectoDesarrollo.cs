@@ -21,6 +21,7 @@ namespace look.domain.entities.proyectoDesarrollo
         public DateTime? FechaActividad { get; set; }
         public DateTime? FechaTerminoReal { get; set; }
         public bool? Terminado { get; set; }
+        public double? AvanceEsperado { get; set; }
 
         public virtual EtapaPlanificacionProyectoDesarrollo? Etapa { get; set; }
     }
