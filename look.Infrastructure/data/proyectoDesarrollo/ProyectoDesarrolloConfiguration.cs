@@ -99,6 +99,11 @@ namespace look.Infrastructure.data.proyectoDesarrollo
                    .HasColumnName("fecha_creacion")
                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            builder.Property(p => p.AvanceEsperado)
+                   .HasColumnType("double")
+                   .HasColumnName("avance_esperado")
+                   .IsRequired(false);
+
             // Configuración de las relaciones y claves foráneas
             builder.HasOne(p => p.Kam)
                    .WithMany()
