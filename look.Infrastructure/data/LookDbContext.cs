@@ -9,6 +9,7 @@ using look.domain.entities.proyecto;
 using look.domain.entities.proyectoDesarrollo;
 using look.domain.entities.soporte;
 using look.domain.entities.world;
+using look.domain.interfaces.factura;
 using look.Infrastructure.data.admin;
 using look.Infrastructure.data.factura;
 using look.Infrastructure.data.licencia;
@@ -131,6 +132,8 @@ namespace look.Infrastructure.data
         public DbSet<EstadoReunionProspecto> EstadoReunionProspecto { get; set; }
         public DbSet<Funcionalidad> Funcionalidad { get; set; }
         public DbSet<RolFuncionalidad> RolFuncionalidad { get; set; }
+        public DbSet<EstadoFacturaPeriodo> EstadoFacturaPeriodos { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
