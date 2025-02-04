@@ -133,6 +133,8 @@ namespace look.Infrastructure.data
         public DbSet<Funcionalidad> Funcionalidad { get; set; }
         public DbSet<RolFuncionalidad> RolFuncionalidad { get; set; }
         public DbSet<EstadoFacturaPeriodo> EstadoFacturaPeriodos { get; set; }
+        public DbSet<ProfesionalesProyectoDesarrollo> ProfesionalesProyectoDesarrollo { get; set; }
+        public DbSet<RegistroHorasProyectoDesarrollo> RegistroHorasProyectoDesarrollo { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -185,6 +187,8 @@ namespace look.Infrastructure.data
             modelBuilder.ApplyConfiguration(new EstadoReunionProspectoConfiguration());
             modelBuilder.ApplyConfiguration(new FuncionalidadConfiguration());
             modelBuilder.ApplyConfiguration(new RolFuncionalidadConfiguration());
+            modelBuilder.ApplyConfiguration(new ProfesionalProyectoDesarrolloConfiguration());
+            modelBuilder.ApplyConfiguration(new RegistroHorasProyectoDesarrolloConfiguration());
 
             modelBuilder.Entity<Usuario>(entity =>
             {
