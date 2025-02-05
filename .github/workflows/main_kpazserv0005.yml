@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3  # Actualización de v2 a v3
+        uses: actions/download-artifact@v4  # Actualización de v3 a v4
         with:
           name: .net-app
 
