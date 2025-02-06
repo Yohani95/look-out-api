@@ -32,7 +32,6 @@ namespace look.Infrastructure.repository.factura
                 .Where(p => p.IdEstado != EstadoFacturaPeriodo.ConstantesEstadoFactura.PENDIENTE)
                 .Select(p => new FacturaPeriodo
                 {
-                    // Todos los campos de FacturaPeriodo se incluyen como están
                     Id = p.Id,
                     Rut = p.Rut,
                     RazonSocial = p.RazonSocial,
@@ -55,11 +54,26 @@ namespace look.Infrastructure.repository.factura
                     FechaPago = p.FechaPago,
                     Soporte = p.Soporte,
                     Periodo = p.Periodo,
-                    HorasUtilizadas = p.HorasUtilizadas,
                     VentaLicencia = p.VentaLicencia,
                     Estado = p.Estado,
                     HitoProyectoDesarrollo = p.HitoProyectoDesarrollo,
                     Banco = p.Banco,
+                    HorasUtilizadas = p.HorasUtilizadas != null ? new HorasUtilizadas
+                    {
+                        Id = p.HorasUtilizadas.Id,
+                        NombreDocumento = p.HorasUtilizadas.NombreDocumento,
+                        Horas = p.HorasUtilizadas.Horas,
+                        IdSoporte = p.HorasUtilizadas.IdSoporte,
+                        FechaPeriodoDesde = p.HorasUtilizadas.FechaPeriodoDesde,
+                        FechaPeriodoHasta = p.HorasUtilizadas.FechaPeriodoHasta,
+                        Estado = p.HorasUtilizadas.Estado,
+                        Monto = p.HorasUtilizadas.Monto,
+                        MontoHorasExtras = p.HorasUtilizadas.MontoHorasExtras,
+                        HorasExtras = p.HorasUtilizadas.HorasExtras,
+                        HorasAcumuladas = p.HorasUtilizadas.HorasAcumuladas,
+                        Soporte = p.HorasUtilizadas.Soporte
+                    } : null,
+
                     // Proyección específica para DocumentosFactura
                     DocumentosFactura = p.DocumentosFactura.Select(df => new DocumentosFactura
                     {
