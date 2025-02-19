@@ -11,15 +11,15 @@ using Serilog;
 
 namespace look.Application.services.admin;
 
-public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyectoParticipanteService
+public class ProyectoParticipanteService : Service<ProyectoParticipante>, IProyectoParticipanteService
 {
-    
+
     private readonly IProyectoParticipanteRepository _proyectoParticipanteRepository;
     private readonly IPersonaRepository _personaRepository;
     private readonly ILogger _logger = Logger.GetLogger();
     private readonly IUnitOfWork _unitOfWork;
 
-    public ProyectoParticipanteService(IProyectoParticipanteRepository repository,IUnitOfWork unitOfWork, IPersonaRepository personaRepository) : base(repository)
+    public ProyectoParticipanteService(IProyectoParticipanteRepository repository, IUnitOfWork unitOfWork, IPersonaRepository personaRepository) : base(repository)
     {
         _proyectoParticipanteRepository = repository;
         _unitOfWork = unitOfWork;
@@ -32,7 +32,7 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
         {
             _logger.Information(Message.ParticipanteCrear);
 
-            if(profesional == null)
+            if (profesional == null)
             {
                 return new ServiceResult
                 {
@@ -62,7 +62,7 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
             return new ServiceResult
             {
                 IsSuccess = false,
-                Message = Message.ErrorServidor+ex.Message,
+                Message = Message.ErrorServidor + ex.Message,
                 MessageCode = ServiceResultMessage.InternalServerError
             };
         }
@@ -74,7 +74,7 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
         {
             _logger.Information(Message.GetParticipanteById);
             await _unitOfWork.BeginTransactionAsync();
-            var personas= await _personaRepository.GetAllAsync();
+            var personas = await _personaRepository.GetAllAsync();
             var persona = personas.FirstOrDefault(p => p.PerIdNacional == rut);
             if (persona == null)
             {
@@ -85,7 +85,7 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
                     Message = Message.EntidadNull,
                 };
             }
-            var profecionales=await _proyectoParticipanteRepository.GetAllAsync();
+            var profecionales = await _proyectoParticipanteRepository.GetAllAsync();
             var profesional = profecionales.FirstOrDefault(p => p.PerId == persona.Id);
             await _proyectoParticipanteRepository.DeleteAsync(profesional);
             await _personaRepository.DeleteAsync(persona);
@@ -111,6 +111,20 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
         }
     }
 
+    public async Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids)
+    {
+        try
+        {
+            return await _proyectoParticipanteRepository.GetAllEntitiesByIdsProject(ids);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(Message.ErrorServidor + e.Message);
+            return null;
+        }
+
+    }
+
     public async Task<ResponseGeneric<List<ProyectoParticipante>>> GetByIdProyecto(int id)
     {
         try
@@ -118,10 +132,10 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
             _logger.Information(Message.GetParticipanteById);
             await _unitOfWork.BeginTransactionAsync();
             var profecionales = await _proyectoParticipanteRepository.GetComplete();
-            var profesional = profecionales.Where(p => p.PryId==id).ToList();
+            var profesional = profecionales.Where(p => p.PryId == id).ToList();
             if (profesional == null)
             {
-                var service= new ServiceResult
+                var service = new ServiceResult
                 {
                     IsSuccess = false,
                     MessageCode = ServiceResultMessage.NotFound,
@@ -166,8 +180,22 @@ public class ProyectoParticipanteService: Service<ProyectoParticipante>, IProyec
         }
     }
 
-    public async Task<List<ProyectoParticipante>> ListComplete()
+    public async Task<List<ProyectoParticipante>> ListComplete(List<int> ids)
     {
-        return await _proyectoParticipanteRepository.GetComplete();
+        try
+        {
+            return await _proyectoParticipanteRepository.GetAllEntitiesByIdsProject(ids);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(Message.ErrorServidor + e.Message);
+            return null;
+        }
+
+    }
+
+    public Task<List<ProyectoParticipante>> ListComplete()
+    {
+        throw new NotImplementedException();
     }
 }

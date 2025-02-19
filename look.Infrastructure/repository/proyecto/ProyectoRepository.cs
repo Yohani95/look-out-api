@@ -1,4 +1,5 @@
-﻿using look.domain.entities.proyecto;
+﻿using look.domain.entities.cuentas;
+using look.domain.entities.proyecto;
 using look.domain.interfaces.proyecto;
 using look.Infrastructure.data;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +18,19 @@ namespace look.Infrastructure.repository.proyecto
         {
         }
 
+        public async Task<List<Proyecto>> GetAllByClientId(int clientId)
+        {
+            return await _dbContext.Proyecto
+                    .Where(p => p.PryIdCliente == clientId)
+                    .ToListAsync();
+        }
         public async Task<List<Proyecto>> GetComplete()
         {
             return await _dbContext.Proyecto
-                .Include(p=>p.Cliente)
-                .Include(p=>p.TipoServicio)
-                .Include(p=>p.Pais)
-                .Include(p=>p.EmpresaPrestadora)
+                .Include(p => p.Cliente)
+                .Include(p => p.TipoServicio)
+                .Include(p => p.Pais)
+                .Include(p => p.EmpresaPrestadora)
                 .ToListAsync();
         }
     }

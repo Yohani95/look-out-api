@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace look.domain.interfaces.proyecto
 {
-    public interface IPeriodoProfesionalesRepository:IRepository<PeriodoProfesionales>
+    public interface IPeriodoProfesionalesRepository : IRepository<PeriodoProfesionales>
     {
         Task<List<PeriodoProfesionales>> GetAllEntitiesByIdPeriod(int idPeriodo);
     }

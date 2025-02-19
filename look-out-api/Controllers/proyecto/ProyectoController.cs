@@ -146,5 +146,12 @@ namespace look_out_api.Controllers.proyecto
 
             return proyectosDocumentos;
         }
+        [HttpGet("GetAllProyectoByClientId/{id}")]
+        public async Task<ActionResult<IEnumerable<Proyecto>>> GetAllProyectoByClientId(int id)
+        {
+            var proyectos = await _proyectoService.GetAllByClientId(id);
+
+            return Ok(proyectos);
+        }
     }
 }

@@ -202,6 +202,20 @@ namespace look.Application.services.proyecto
             }
         }
 
+        public async Task<List<Proyecto>> GetAllByClientId(int clientId)
+        {
+            try
+            {
+                return await _proyectoRepository.GetAllByClientId(clientId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(Message.ErrorServidor + ex.Message);
+                await _unitOfWork.RollbackAsync();
+                return null;
+            }
+        }
+
         public async Task<ResponseGeneric<Proyecto>> GetByIdAllEntities(int id)
         {
 
