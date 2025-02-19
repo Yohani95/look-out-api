@@ -25,5 +25,11 @@ public interface IProyectoParticipanteService: IService<ProyectoParticipante>
     /// <param name="id"></param>
     /// <returns></returns>
     Task<ResponseGeneric<List<ProyectoParticipante>>> GetByIdProyecto(int id);
+    /// <summary>
+    /// obtain a list of participants
+    /// </summary>
+    /// <param name="ids">identificadores de proyectos</param>
+    /// <returns>retorna una lista de participantes seguns los ids entregados de proyecto</returns>
+    Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids);
 
 }
