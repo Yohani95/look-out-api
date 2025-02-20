@@ -8,7 +8,8 @@ namespace look.domain.interfaces.admin
         Task<List<ProyectoParticipante>> GetComplete();
         Task<List<ProyectoParticipante>> GetParticipanteByIdProAndDate(PeriodoProyecto periodo);
 
-        
+        Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids);
+
     }
 }
 

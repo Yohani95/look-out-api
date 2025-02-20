@@ -53,5 +53,11 @@ namespace look.Application.interfaces.proyecto
         /// <param name="id">id de proyecto</param>
         /// <returns>retorna una respuesta generica con la data</returns>
         Task<ResponseGeneric<Proyecto>> GetByIdAllEntities(int id);
+        /// <summary>
+        /// Get all entities
+        /// </summary>
+        /// <param name="clientId"> id cliente</param>
+        /// <returns>retorna una lista de proyecto segun id cliente</returns>
+        Task<List<Proyecto>> GetAllByClientId(int clientId);
     }
 }
