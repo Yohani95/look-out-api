@@ -16,6 +16,7 @@ namespace look.domain.entities.admin
         public string SenderName { get; set; }
         public string ResponsableDelevery { get; set; }
         public string CopiaFija { get; set; }
+        public string SupervisorFacturas { get; set; }
 
     }
 }

@@ -1,6 +1,8 @@
-﻿using look.Application.interfaces.factura;
+﻿using look.Application.interfaces.admin;
+using look.Application.interfaces.factura;
 using look.domain.entities.Common;
 using look.domain.entities.factura;
+using look.domain.entities.proyecto;
 using look.domain.entities.proyectoDesarrollo;
 using look.domain.entities.soporte;
 using look.domain.interfaces;
@@ -25,7 +27,7 @@ namespace look.Application.services.factura
         private readonly IPeriodoProyectoRepository _periodoProyectoRepository;
         private readonly IHorasUtilizadasRepository _horasUtilizadasRepository;
         private readonly IFacturaAdaptacionRepository _facturaAdaptacionRepository;
-        public FacturaPeriodoService(IFacturaPeriodoRepository repository, IUnitOfWork unitOfWork, IPeriodoProyectoRepository periodoProyectoRepository, 
+        public FacturaPeriodoService(IFacturaPeriodoRepository repository, IUnitOfWork unitOfWork, IPeriodoProyectoRepository periodoProyectoRepository,
             IHorasUtilizadasRepository horasUtilizadasRepository, IFacturaAdaptacionRepository facturaAdaptacionRepository) : base(repository)
         {
             _repository = repository;
@@ -44,7 +46,7 @@ namespace look.Application.services.factura
                 await _repository.ChangeEstado(idPeriodo, estado);
                 var facturaAdaptacion = await _facturaAdaptacionRepository.GetAllEntitiesByIdPeriod(idPeriodo);
                 if (facturaAdaptacion != null) facturaAdaptacion.Solicitada = true;
-                var periodo = await _periodoProyectoRepository.GetByIdAsync(idPeriodo);
+                var periodo = await _periodoProyectoRepository.GetPeriodoProyectoById(idPeriodo);
                 if (periodo != null)
                 {
                     periodo.estado = 1;
