@@ -1,6 +1,7 @@
 ﻿using look.Application.interfaces;
 using look.Application.interfaces.admin;
 using look.domain.dto.admin;
+using look.domain.dto.proyecto;
 using look.domain.entities.admin;
 using look.domain.entities.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -87,6 +88,17 @@ namespace look_out_api.Controllers.admin
                 // Manejo de errores
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+        [HttpPost("enviar-email-factura")]
+        public async Task<IActionResult> EnviarEmailFactura(PeriodoProyectoDto periodoProyectoDto)
+        {
+            if (periodoProyectoDto == null)
+            {
+                return BadRequest("Los datos enviados son inválidos.");
+            }
+
+            await _emailService.EnviarEmailSuporvisorFacturas(periodoProyectoDto);
+            return Ok("Correo enviado exitosamente.");
         }
         public class EmailRequest
         {

@@ -13,6 +13,10 @@ using Serilog;
 using Microsoft.Extensions.Options;
 using look.domain.entities.oportunidad;
 using System.Reflection.Metadata.Ecma335;
+using look.domain.entities.cuentas;
+using look.domain.entities.factura;
+using look.domain.entities.proyecto;
+using look.domain.dto.proyecto;
 
 namespace look.Application.services.admin
 {
@@ -120,8 +124,6 @@ namespace look.Application.services.admin
                 return new ServiceResult { IsSuccess = false, MessageCode = ServiceResultMessage.InternalServerError, Message = $"Error interno del servidor: {ex.Message}" };
             }
         }
-
-
 
         public async Task<List<Email>> ListComplete()
         {
@@ -241,6 +243,22 @@ namespace look.Application.services.admin
         public async Task<Email> GetEmailByPersona(int id)
         {
             return await _emailRepository.GetyEmailByPersona(id);
+        }
+
+        public async Task EnviarEmailSuporvisorFacturas(PeriodoProyectoDto periodoProyecto)
+        {
+            var fechaPeriodo = $"{periodoProyecto.FechaPeriodoDesde:dd/MM/yyyy} - {periodoProyecto.FechaPeriodoHasta:dd/MM/yyyy}";
+
+            var body = $@"
+            <p><strong>Nueva Solicitud de Facturas para ser gestionada.</strong></p>
+            <p><strong>Cliente:</strong> {periodoProyecto.Proyecto?.Cliente?.CliNombre ?? "N/A"}</p>
+            <p><strong>RUT:</strong> {periodoProyecto.Proyecto?.Cliente?.CliNif ?? "N/A"}</p>
+            <p><strong>Nombre Proyecto:</strong> {periodoProyecto.Proyecto?.PryNombre ?? "N/A"}</p>
+            <p><strong>Monto:</strong> {periodoProyecto.Monto:C}</p>
+            <p><strong>Período Facturación:</strong> {fechaPeriodo}</p>
+        ";
+
+            await SendEmailAsync("Responsable de Facturas", _emailSettings.SupervisorFacturas, "Solicitud de facturas.", body);
         }
     }
 }

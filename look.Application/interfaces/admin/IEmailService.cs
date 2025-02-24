@@ -1,6 +1,9 @@
-﻿using look.domain.entities.admin;
+﻿using look.domain.dto.proyecto;
+using look.domain.entities.admin;
 using look.domain.entities.Common;
+using look.domain.entities.factura;
 using look.domain.entities.oportunidad;
+using look.domain.entities.proyecto;
 
 namespace look.Application.interfaces.admin
 {
@@ -31,5 +34,7 @@ namespace look.Application.interfaces.admin
         Task EnviarEmailDelevery(Oportunidad oportunidad);
 
         Task EnviarEmailKam(int id, Oportunidad oportunidad);
+
+        Task EnviarEmailSuporvisorFacturas(PeriodoProyectoDto periodoProyecto);
     }
 }
