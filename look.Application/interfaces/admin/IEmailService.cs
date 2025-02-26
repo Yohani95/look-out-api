@@ -25,7 +25,7 @@ namespace look.Application.interfaces.admin
         /// <param name="subject">asunto</param>
         /// <param name="body">cuerpo</param>
         /// <returns></returns>
-        Task SendEmailAsync(string toName, string toEmail, string subject, string body);
+        Task SendEmailAsync(string toName, string toEmail, string subject, string body, bool copiaFija = true);
         /// <summary>
         /// envia un email  a responsable delevery
         /// </summary>
