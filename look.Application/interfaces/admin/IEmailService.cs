@@ -1,6 +1,9 @@
-﻿using look.domain.entities.admin;
+﻿using look.domain.dto.proyecto;
+using look.domain.entities.admin;
 using look.domain.entities.Common;
+using look.domain.entities.factura;
 using look.domain.entities.oportunidad;
+using look.domain.entities.proyecto;
 
 namespace look.Application.interfaces.admin
 {
@@ -22,7 +25,7 @@ namespace look.Application.interfaces.admin
         /// <param name="subject">asunto</param>
         /// <param name="body">cuerpo</param>
         /// <returns></returns>
-        Task SendEmailAsync(string toName, string toEmail, string subject, string body);
+        Task SendEmailAsync(string toName, string toEmail, string subject, string body, bool copiaFija = true);
         /// <summary>
         /// envia un email  a responsable delevery
         /// </summary>
@@ -31,5 +34,7 @@ namespace look.Application.interfaces.admin
         Task EnviarEmailDelevery(Oportunidad oportunidad);
 
         Task EnviarEmailKam(int id, Oportunidad oportunidad);
+
+        Task EnviarEmailSuporvisorFacturas(PeriodoProyectoDto periodoProyecto);
     }
 }
