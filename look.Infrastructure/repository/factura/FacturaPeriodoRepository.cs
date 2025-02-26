@@ -78,7 +78,8 @@ namespace look.Infrastructure.repository.factura
                     DocumentosFactura = p.DocumentosFactura.Select(df => new DocumentosFactura
                     {
                         Id = df.Id,
-                        idTipoDocumento = df.idTipoDocumento
+                        idTipoDocumento = df.idTipoDocumento,
+                        NombreDocumento= df.NombreDocumento
                     }).ToList()
                 })
                 .ToListAsync();

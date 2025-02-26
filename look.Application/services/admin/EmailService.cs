@@ -152,12 +152,12 @@ namespace look.Application.services.admin
             }
         }
 
-        public async Task SendEmailAsync(string toName, string toEmail, string subject, string body)
+        public async Task SendEmailAsync(string toName, string toEmail, string subject, string body,bool copiaFija=true)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
             message.To.Add(new MailboxAddress(toName, toEmail));
-            message.Cc.Add(new MailboxAddress("Copia Responsable de Delivery", _emailSettings.CopiaFija));
+            if (copiaFija) message.Cc.Add(new MailboxAddress("Copia Responsable de Delivery", _emailSettings.CopiaFija));
             message.Subject = subject;
 
             // Crear el cuerpo del correo en HTML
@@ -258,7 +258,7 @@ namespace look.Application.services.admin
             <p><strong>Período Facturación:</strong> {fechaPeriodo}</p>
         ";
 
-            await SendEmailAsync("Responsable de Facturas", _emailSettings.SupervisorFacturas, "Solicitud de facturas.", body);
+            await SendEmailAsync("Responsable de Facturas", _emailSettings.SupervisorFacturas, "Solicitud de facturas.", body,false);
         }
     }
 }
