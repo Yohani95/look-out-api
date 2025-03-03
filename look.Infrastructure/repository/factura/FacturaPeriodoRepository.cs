@@ -79,7 +79,7 @@ namespace look.Infrastructure.repository.factura
                     {
                         Id = df.Id,
                         idTipoDocumento = df.idTipoDocumento,
-                        NombreDocumento= df.NombreDocumento
+                        NombreDocumento = df.NombreDocumento
                     }).ToList()
                 })
                 .ToListAsync();
@@ -248,11 +248,11 @@ namespace look.Infrastructure.repository.factura
 
             // Conteos adicionales con condiciones específicas
             var enviadas = await _dbContext.FacturaPeriodo
-                .Where(fp => fp.IdEstado == 5 && fp.FechaVencimiento < now)
+                .Where(fp => fp.IdEstado == 5 && fp.FechaVencimiento >= now)
                 .CountAsync();
 
             var vencidas = await _dbContext.FacturaPeriodo
-                .Where(fp => fp.IdEstado == 5 && fp.FechaVencimiento >= now)
+                .Where(fp => fp.IdEstado == 5 && fp.FechaVencimiento < now)
                 .CountAsync();
 
             // Mapeo a un diccionario para simplificar el acceso
