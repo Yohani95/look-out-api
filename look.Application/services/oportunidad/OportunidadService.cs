@@ -63,24 +63,25 @@ namespace look.Application.services.oportunidad
 
                 // Guardar cambios en el repositorio
                 await _repository.UpdateAsync(result);
-                //enviar emails seegun corresponda
+                var resultChange = await _repository.GetByIdAsync(oportunidad.Id);
+                //enviar emails segun corresponda
                 if (idEstado != oportunidad.IdEstadoOportunidad)
                 {
                     _logger.Information("Enviando el Email");
                     if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEnPreparacion.Id)
                     {
-                        await _emailService.EnviarEmailDelevery(oportunidad);
+                        await _emailService.EnviarEmailDelevery(resultChange);
                         _logger.Information("Email enviado a Encargado Delevery");
                     }
-                    else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.PropuestaEntregadaComercial.Id)
+                    else if (result.IdEstadoOportunidad == EstadoOportunidad.PropuestaEntregadaComercial.Id)
                     {
-                        await _emailService.EnviarEmailKam((int)result.IdKam, oportunidad);
+                        await _emailService.EnviarEmailKam((int)result.IdKam, resultChange);
                         _logger.Information("Email enviado a Encargado Kam");
 
                     }
-                    else if (oportunidad.IdEstadoOportunidad == EstadoOportunidad.CerradaPerdida.Id || oportunidad.IdEstadoOportunidad == EstadoOportunidad.CerradaGanada.Id)
+                    else if (result.IdEstadoOportunidad == EstadoOportunidad.CerradaPerdida.Id || result.IdEstadoOportunidad == EstadoOportunidad.CerradaGanada.Id)
                     {
-                        await _emailService.EnviarEmailDelevery(oportunidad);
+                        await _emailService.EnviarEmailDelevery(resultChange);
                         _logger.Information("Email enviado a Encargado Delevery");
                     }
                 }
