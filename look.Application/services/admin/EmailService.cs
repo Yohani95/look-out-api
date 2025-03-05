@@ -228,7 +228,7 @@ namespace look.Application.services.admin
                        "<p><strong>Tipo Negocio :</strong> " + oportunidad.TipoOportunidad?.Nombre + "</p>" +
                        "<p><strong>Moneda: </strong> " + oportunidad.Moneda?.MonNombre + "</p>" +
                        "<p><strong>Monto: </strong> $" + oportunidad.Monto + "</p>" +
-                       "<p><strong>Estado: </strong> $" + oportunidad.EstadoOportunidad?.Nombre + "</p>" +
+                       "<p><strong>Estado: </strong> " + oportunidad.EstadoOportunidad?.Nombre + "</p>" +
                        "<p> La propuesta está lista para ser enviada a cliente.</p>";
 
             await SendEmailAsync(
