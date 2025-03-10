@@ -15,7 +15,7 @@ namespace look.domain.entities.soporte
         public int? IdSoporte { get; set; }
         public DateTime? FechaPeriodoDesde { get; set; }
         public DateTime? FechaPeriodoHasta { get; set; }
-        public bool? Estado { get; set; }
+        public int? Estado { get; set; }
 
         public double? Monto { get; set; }
         public double? MontoHorasExtras { get; set; }

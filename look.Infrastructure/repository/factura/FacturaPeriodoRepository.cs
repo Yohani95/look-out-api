@@ -262,7 +262,8 @@ namespace look.Infrastructure.repository.factura
         { "Facturadas", resumen.FirstOrDefault(r => r.Estado == 3)?.Count ?? 0 },
         { "Enviadas", enviadas },
         { "Vencidas", vencidas },
-        { "Pagadas", resumen.FirstOrDefault(r => r.Estado == 4)?.Count ?? 0 }
+        { "Pagadas", resumen.FirstOrDefault(r => r.Estado == 4)?.Count ?? 0 },
+        { "Anuladas", resumen.FirstOrDefault(r => r.Estado == 6)?.Count ?? 0 }
     };
 
             return resultado;
