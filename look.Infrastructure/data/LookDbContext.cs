@@ -1317,6 +1317,9 @@ namespace look.Infrastructure.data
                 entity.Property(e => e.Monto)
                 .HasColumnType("double")
                 .HasColumnName("monto");
+                entity.Property(e => e.Fecha)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha");
                 entity.HasOne(d => d.FacturaPeriodo)
                     .WithMany(d => d.DocumentosFactura)
                     .HasForeignKey(d => d.IdFactura)

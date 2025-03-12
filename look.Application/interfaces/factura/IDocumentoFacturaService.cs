@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace look.Application.interfaces.factura
 {
-    public interface IDocumentoFacturaService:IService<DocumentosFactura>
+    public interface IDocumentoFacturaService : IService<DocumentosFactura>
     {
-        Task<DocumentosFactura> AddDocumento(DocumentosFactura entity,DateTime fecha,int idFacturaPeriodo);
+        Task<DocumentosFactura> AddDocumento(DocumentosFactura entity, DateTime fecha, int idFacturaPeriodo);
+
+        Task<DocumentosFactura> AddDocumentoAnulado(DocumentosFactura entity, int idFacturaPeriodo);
     }
 }
