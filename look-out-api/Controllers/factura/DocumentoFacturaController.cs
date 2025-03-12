@@ -16,10 +16,17 @@ namespace look_out_api.Controllers.factura
             _service = service;
         }
         [HttpPost("AddDocumento/{fecha}/{idFacturaPeriodo}")]
-        public async Task<ActionResult<DocumentosFactura>> AddDocumento(DocumentosFactura entity,DateTime fecha,int idFacturaPeriodo)
+        public async Task<ActionResult<DocumentosFactura>> AddDocumento(DocumentosFactura entity, DateTime fecha, int idFacturaPeriodo)
         {
             Log.Information("[AddDocumento] Solicitud agregar documento factura");
-            var data = await _service.AddDocumento(entity,fecha, idFacturaPeriodo);
+            var data = await _service.AddDocumento(entity, fecha, idFacturaPeriodo);
+            return Ok(data);
+        }
+        [HttpPost("AddDocumentoAnulado/{idFacturaPeriodo}")]
+        public async Task<ActionResult<DocumentosFactura>> AddDocumentoAnulado(DocumentosFactura entity, int idFacturaPeriodo)
+        {
+            Log.Information("[AddDocumento] Solicitud agregar documento  factura anulado");
+            var data = await _service.AddDocumentoAnulado(entity, idFacturaPeriodo);
             return Ok(data);
         }
         protected override int GetEntityId(DocumentosFactura entity)
