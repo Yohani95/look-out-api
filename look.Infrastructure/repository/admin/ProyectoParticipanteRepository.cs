@@ -13,11 +13,24 @@ namespace look.Infrastructure.repository.admin
         {
         }
 
+        public async Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime inicio, DateTime termino)
+        {
+            var filteredData = await _dbContext.ProyectoParticipante
+           .Where(p =>
+                (p.FechaTermino == null && p.FechaAsignacion.HasValue && p.FechaAsignacion.Value.Date <= termino.Date)
+                ||
+                (p.FechaAsignacion.HasValue && p.FechaAsignacion.Value.Date <= termino.Date &&
+                p.FechaTermino.HasValue && p.FechaTermino.Value.Date >= inicio.Date))
+           .ToListAsync();
+
+            return filteredData;
+        }
+
         public async Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids)
         {
             var data = await _dbContext.ProyectoParticipante
-                .Include(p=>p.Persona)
-                .Include(p=>p.Proyecto)
+                .Include(p => p.Persona)
+                .Include(p => p.Proyecto)
                 .Where(p => ids.Contains((int)p.PryId))
                     .ToListAsync();
             return data;
