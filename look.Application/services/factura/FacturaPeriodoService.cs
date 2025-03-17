@@ -43,7 +43,6 @@ namespace look.Application.services.factura
             {
                 _logger.Information("Solicitando factura, id Periodo: " + idPeriodo);
                 await _unitOfWork.BeginTransactionAsync();
-                await _repository.ChangeEstado(idPeriodo, estado);
                 var facturaAdaptacion = await _facturaAdaptacionRepository.GetAllEntitiesByIdPeriod(idPeriodo);
                 if (facturaAdaptacion != null) facturaAdaptacion.Solicitada = true;
                 var periodo = await _periodoProyectoRepository.GetPeriodoProyectoById(idPeriodo);
@@ -52,6 +51,7 @@ namespace look.Application.services.factura
                     periodo.estado = 1;
                     await _periodoProyectoRepository.UpdateAsync(periodo);
                 }
+                await _repository.ChangeEstado(idPeriodo, estado);
                 await _unitOfWork.CommitAsync();
                 return true;
             }
@@ -71,13 +71,13 @@ namespace look.Application.services.factura
                 await _unitOfWork.BeginTransactionAsync();
                 var facturaAdaptacion = await _facturaAdaptacionRepository.GetAllByIdHoras(idHoras);
                 if (facturaAdaptacion != null) facturaAdaptacion.Solicitada = true;
-                await _repository.ChangeEstadoHoras(idHoras, estado);
                 var horasPeriodo = await _horasUtilizadasRepository.GetByIdAsync(idHoras);
                 if (horasPeriodo != null)
                 {
-                    horasPeriodo.Estado = true;
+                    horasPeriodo.Estado = 1;
                     await _horasUtilizadasRepository.UpdateAsync(horasPeriodo);
                 }
+                await _repository.ChangeEstadoHoras(idHoras, estado);
                 await _unitOfWork.CommitAsync();
                 return true;
             }

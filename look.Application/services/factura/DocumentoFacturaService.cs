@@ -19,14 +19,14 @@ namespace look.Application.services.factura
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDocumentosFacturaRepository _repository;
         private readonly IFacturaPeriodoRepository _repositoryFacturaPeriodo;
-        public DocumentoFacturaService(IDocumentosFacturaRepository repository,IUnitOfWork unitOfWork, IFacturaPeriodoRepository repositoryFacturaPeriodo) : base(repository)
+        public DocumentoFacturaService(IDocumentosFacturaRepository repository, IUnitOfWork unitOfWork, IFacturaPeriodoRepository repositoryFacturaPeriodo) : base(repository)
         {
             _unitOfWork = unitOfWork;
             _repository = repository;
             _repositoryFacturaPeriodo = repositoryFacturaPeriodo;
         }
 
-        public async Task<DocumentosFactura> AddDocumento(DocumentosFactura entity,DateTime fecha, int idFacturaPeriodo)
+        public async Task<DocumentosFactura> AddDocumento(DocumentosFactura entity, DateTime fecha, int idFacturaPeriodo)
         {
             try
             {
@@ -37,12 +37,44 @@ namespace look.Application.services.factura
                     _logger.Error(Message.ErrorServidor, "El archivo no puede ser nulo.");
                     throw new Exception("El archivo no puede ser nulo.");
                 }
-                entity.IdFactura= idFacturaPeriodo;
-                var factura=await _repositoryFacturaPeriodo.GetByIdAsync(idFacturaPeriodo);
-                factura.IdEstado=EstadoFacturaPeriodo.ConstantesEstadoFactura.FACTURADA;
-                factura.FechaVencimiento=fecha;
+                entity.IdFactura = idFacturaPeriodo;
+                var factura = await _repositoryFacturaPeriodo.GetByIdAsync(idFacturaPeriodo);
+                factura.IdEstado = EstadoFacturaPeriodo.ConstantesEstadoFactura.FACTURADA;
+                factura.FechaVencimiento = fecha;
                 await _repositoryFacturaPeriodo.UpdateAsync(factura);
-                var nuevoDocumento=await _repository.AddAsync(entity);
+                var nuevoDocumento = await _repository.AddAsync(entity);
+
+                // Guardar los cambios en el contexto de base de datos
+                await _unitOfWork.CommitAsync();
+
+                // Devolver la entidad creada
+                return nuevoDocumento;
+
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                _logger.Error(Message.ErrorServidor, ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<DocumentosFactura> AddDocumentoAnulado(DocumentosFactura entity, int idFacturaPeriodo)
+        {
+            try
+            {
+                _logger.Information("Agregando Documento anulado de factura", "DocumentoFacturaService, AddDocumento");
+                await _unitOfWork.BeginTransactionAsync();
+                if (entity.ContenidoDocumento == null)
+                {
+                    _logger.Error(Message.ErrorServidor, "El archivo no puede ser nulo.");
+                    throw new Exception("El archivo no puede ser nulo.");
+                }
+                entity.IdFactura = idFacturaPeriodo;
+                var factura = await _repositoryFacturaPeriodo.GetByIdAsync(idFacturaPeriodo);
+                factura.IdEstado = EstadoFacturaPeriodo.ConstantesEstadoFactura.Anulada;
+                await _repositoryFacturaPeriodo.UpdateAsync(factura);
+                var nuevoDocumento = await _repository.AddAsync(entity);
 
                 // Guardar los cambios en el contexto de base de datos
                 await _unitOfWork.CommitAsync();
