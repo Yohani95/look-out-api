@@ -112,11 +112,11 @@ public class ProyectoParticipanteService : Service<ProyectoParticipante>, IProye
         }
     }
 
-    public async Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime inicio, DateTime termino)
+    public async Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime fechaSeleccionada)
     {
         try
         {
-            return await _proyectoParticipanteRepository.GetAllEntitiesByDate(inicio,termino);
+            return await _proyectoParticipanteRepository.GetAllEntitiesByDate(fechaSeleccionada);
         }
         catch (Exception e)
         {

@@ -98,9 +98,9 @@ namespace look_out_api.Controllers.admin
         }
 
         [HttpPost("GetAllByDate")]
-        public async Task<ActionResult<IEnumerable<ProyectoParticipante>>> GetAllByDate(DateTime inicio, DateTime termino)
+        public async Task<ActionResult<IEnumerable<ProyectoParticipante>>> GetAllByDate([FromBody] DateTime fechaSeleccionada)
         {
-            var proyectosParticipantes = await _participanteService.GetAllEntitiesByDate(inicio, termino);
+            var proyectosParticipantes = await _participanteService.GetAllEntitiesByDate(fechaSeleccionada);
 
             if (proyectosParticipantes == null)
             {

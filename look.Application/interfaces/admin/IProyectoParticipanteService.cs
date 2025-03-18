@@ -32,6 +32,6 @@ public interface IProyectoParticipanteService: IService<ProyectoParticipante>
     /// <returns>retorna una lista de participantes seguns los ids entregados de proyecto</returns>
     Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids);
 
-    Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime inicio, DateTime termino);
+    Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime fechaSeleccionada);
 
 }
