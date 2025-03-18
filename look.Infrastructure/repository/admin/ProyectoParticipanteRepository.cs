@@ -13,11 +13,29 @@ namespace look.Infrastructure.repository.admin
         {
         }
 
+        public async Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime fechaSeleccionada)
+        {
+            var filteredData = await _dbContext.ProyectoParticipante
+                .Where(p =>
+                    // Se asume que FechaAsignacion es obligatorio, y se compara solo la parte de la fecha (sin horas)
+                    p.FechaAsignacion.Value.Date <= fechaSeleccionada.Date &&
+                    // Si hay fecha de término, ésta debe ser mayor o igual que la fecha seleccionada;
+                    // de lo contrario, se incluye la entidad
+                    (p.FechaTermino == null || p.FechaTermino.Value.Date >= fechaSeleccionada.Date)
+                )
+                .Include(e => e.Persona)
+                .Include(e => e.Proyecto)
+                .Include(e => e.Perfil)
+                .ToListAsync();
+
+            return filteredData;
+        }
+
         public async Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids)
         {
             var data = await _dbContext.ProyectoParticipante
-                .Include(p=>p.Persona)
-                .Include(p=>p.Proyecto)
+                .Include(p => p.Persona)
+                .Include(p => p.Proyecto)
                 .Where(p => ids.Contains((int)p.PryId))
                     .ToListAsync();
             return data;

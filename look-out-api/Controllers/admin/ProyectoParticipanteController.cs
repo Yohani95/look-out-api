@@ -97,7 +97,18 @@ namespace look_out_api.Controllers.admin
             return Ok(data);
         }
 
+        [HttpPost("GetAllByDate")]
+        public async Task<ActionResult<IEnumerable<ProyectoParticipante>>> GetAllByDate([FromBody] DateTime fechaSeleccionada)
+        {
+            var proyectosParticipantes = await _participanteService.GetAllEntitiesByDate(fechaSeleccionada);
 
+            if (proyectosParticipantes == null)
+            {
+                return NotFound();
+            }
+
+            return proyectosParticipantes;
+        }
 
         protected override int GetEntityId(ProyectoParticipante entity)
         {

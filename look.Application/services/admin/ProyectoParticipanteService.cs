@@ -7,6 +7,7 @@ using look.domain.interfaces;
 using look.domain.interfaces.admin;
 using look.domain.interfaces.unitOfWork;
 using Microsoft.SharePoint.News.DataModel;
+using Org.BouncyCastle.Crypto;
 using Serilog;
 
 namespace look.Application.services.admin;
@@ -111,6 +112,19 @@ public class ProyectoParticipanteService : Service<ProyectoParticipante>, IProye
         }
     }
 
+    public async Task<List<ProyectoParticipante>> GetAllEntitiesByDate(DateTime fechaSeleccionada)
+    {
+        try
+        {
+            return await _proyectoParticipanteRepository.GetAllEntitiesByDate(fechaSeleccionada);
+        }
+        catch (Exception e)
+        {
+            _logger.Error(Message.ErrorServidor + e.Message);
+            return null;
+        }
+    }
+
     public async Task<List<ProyectoParticipante>> GetAllEntitiesByIdsProject(List<int> ids)
     {
         try
@@ -194,8 +208,17 @@ public class ProyectoParticipanteService : Service<ProyectoParticipante>, IProye
 
     }
 
-    public Task<List<ProyectoParticipante>> ListComplete()
+    public async Task<List<ProyectoParticipante>> ListComplete()
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _proyectoParticipanteRepository.GetComplete();
+        }
+        catch (Exception e)
+        {
+            _logger.Error(Message.ErrorServidor + e.Message);
+            return null;
+        }
+
     }
 }
